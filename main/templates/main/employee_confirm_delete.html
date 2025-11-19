@@ -1,0 +1,11 @@
+<!-- Restored: main/employee_confirm_delete.html -->
+<!doctype html>
+<meta charset="utf-8">
+<title>ยืนยันการลบ</title>
+<h1>ลบพนักงาน: {{ employee.display_name }}</h1>
+<form method="post">
+  {% csrf_token %}
+  <p>ยืนยันการลบ?</p>
+  <button type="submit">ลบ</button>
+  <a href="{% url 'employee_list' %}">ยกเลิก</a>
+</form>

@@ -1,0 +1,72 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "Promotion" %} - Chokdee Thai Massage</title>
+    <link rel="stylesheet" href="{% static 'css/promotion.css' %}">
+</head>
+
+<body>
+
+    <!-- NAVBAR แบบเดียวกับหน้า Home -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <img src="{% static 'images/logo.png' %}" alt="{% trans 'Logo' %}" class="logo">
+
+            <ul class="nav-menu">
+                <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'massages' %}">{% trans "Massages" %}</a></li>
+                <li><a href="{% url 'price' %}">{% trans "Price" %}</a></li>
+                <li><a href="{% url 'promotion' %}">{% trans "Promotion" %}</a></li>
+                <li><a href="{% url 'gallery' %}">{% trans "Gallery" %}</a></li>
+                <li><a href="{% url 'team' %}">{% trans "Team" %}</a></li>
+                <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <!-- TITLE -->
+    <div class="price-title">{% trans "Promotion" %}</div>
+
+    <!-- CONTENT BOX -->
+    <div class="price-table-wrapper">
+        <div style="padding:24px; text-align:center;">
+
+            <img src="{% static 'images/po1.png' %}" 
+                 alt="{% trans 'Promotion Banner' %}" 
+                 style="max-width:520px; width:100%; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+
+            <h3 style="margin-top:18px; color:#176a3a; font-size:1.8rem; font-weight:800;">
+                {% trans "Promotion 5 + 1" %}
+            </h3>
+
+            <p style="max-width:800px; margin:12px auto; color:#222; font-size:1.05rem;">
+                {% trans "Get 1 free massage of your choice when purchasing a 5-session massage card." %}
+            </p>
+
+            <p style="max-width:800px; margin:6px auto; color:#333;">
+                {% trans "How to use: Bring your completed 5-stamp card and present it to the staff to receive your free session." %}
+            </p>
+
+            <div style="margin-top:12px; font-weight:700; color:#176a3a;">
+                {% trans "Contact" %}: +3630-5814854
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ADDRESS BOX -->
+    <section class="address-box">
+        <div class="address-container">
+            <span class="map-icon"></span>
+
+            <a href="https://www.google.com/maps/place/Chokdee+Thai+Massage+in+Hévíz/@46.7897703,17.1889173,17z" target="_blank">
+                8380 HEVIZ RAKOCZI UTCA 10. +3630-5814854
+            </a>
+        </div>
+    </section>
+
+</body>
+</html>

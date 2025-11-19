@@ -1,0 +1,145 @@
+body {
+  background: #ffffff;
+  font-family: 'Fredoka', 'Kanit', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------------- NAVBAR ---------------- */
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* ✅ จัดให้อยู่ตรงกลาง */
+  gap: 30px;
+  max-width: 90%;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 20px;
+  padding: 10px 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  height: 80px;
+  width: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #138034;
+}
+
+.nav-menu { /* ปรับเมนูให้อยู่ตรงกลาง */
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.nav-menu li a { /* ปรับขนาดข้อความเมนู */
+  text-decoration: none;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 43px;
+  color: black;
+  transition: color 0.3s;
+}
+
+.nav-menu li a:hover {
+  color: #138034;
+}
+
+.navbar {
+  background-image: url("../images/p2.png"); /* << บรรทัดนี้คือตัวที่สร้างลายไทย */
+  background-repeat: repeat-x;
+  background-size: contain;
+  padding: 25px 0;
+}
+
+body {
+  background: #f7f3e9;
+  font-family: 'Fredoka', 'Kanit', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------------- TEAM SECTION ---------------- */
+.team-title {
+  background: #ffe88a;
+  color: #222;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 16px;
+  margin: 32px auto 24px auto;
+  padding: 18px 40px;
+  max-width: 320px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  letter-spacing: 2px;
+}
+
+.team-box {
+  background: #fff;
+  border-radius: 24px;
+  max-width: 600px;
+  margin: 0 auto 32px auto;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  padding: 32px 0 24px 0;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px 24px;
+  justify-items: center;
+}
+
+.team-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f7f7f7;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 16px 12px 12px 12px;
+  width: 180px;
+}
+
+.team-card img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.team-name {
+  background: #176a3a;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: bold;
+  border-radius: 24px;
+  padding: 6px 24px;
+  margin-top: 8px;
+  letter-spacing: 2px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* ---------------- ADDRESS BOX ---------------- */
+.address-box {
+  background-image: url("../images/bg-pattern.png");
+  background-color: #004b29;
+  text-align: center;
+  padding: 15px 0;
+  margin-top: 60px;
+}
+
+.address-container a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.address-container a:hover {
+  text-decoration: underline;
+}

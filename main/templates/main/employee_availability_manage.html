@@ -1,0 +1,271 @@
+{% load static %}
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8">
+    <title>เวลาคิวว่างของ {{ employee.display_name }}</title>
+    <style>
+      body {
+        font-family: 'Kanit', sans-serif;
+        margin: 0;
+        background: linear-gradient(135deg, #f2fff5, #e9f8ef);
+        color: #08361b;
+      }
+
+      .shell {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* Sidebar */
+      .side {
+        width: 230px;
+        background: #052d15;
+        color: #fff;
+        padding: 2rem 1rem;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav a {
+        display: block;
+        color: #d1d5db;
+        padding: 10px 14px;
+        text-decoration: none;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .nav a:hover, .nav a.active {
+        background: linear-gradient(90deg, #15803d, #16a34a);
+        color: #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        transform: translateX(4px);
+      }
+
+      /* Main Area */
+      .main {
+        flex: 1;
+        padding: 3rem 2rem;
+      }
+
+      .page {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        max-width: 950px;
+        margin: auto;
+        backdrop-filter: blur(10px);
+      }
+
+      h1 {
+        text-align: center;
+        color: #064e3b;
+        font-size: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      /* Back button */
+      .back-btn {
+        background: #e2e8f0;
+        color: #334155;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.25s ease;
+      }
+
+      .back-btn:hover {
+        background: #cbd5e1;
+      }
+
+      /* Form */
+      .add-slot-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+      }
+
+      .input-row {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .input {
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-family: 'Kanit', sans-serif;
+        font-size: 1rem;
+      }
+
+      .input:focus {
+        outline: none;
+        border-color: #15803d;
+        box-shadow: 0 0 0 2px rgba(21,128,61,0.2);
+      }
+
+      .btn-save {
+        background: linear-gradient(90deg, #15803d, #16a34a);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 1rem;
+        cursor: pointer;
+        font-family: 'Kanit', sans-serif;
+        transition: all 0.25s ease;
+      }
+
+      .btn-save:hover {
+        background: linear-gradient(90deg, #166534, #22c55e);
+        transform: scale(1.05);
+      }
+
+      /* Table */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+      }
+
+      th, td {
+        text-align: center;
+        padding: 10px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      th {
+        background: #d1fae5;
+        color: #065f46;
+      }
+
+      tr:hover {
+        background: #f0fdf4;
+      }
+
+      .danger-btn {
+        background: #dc2626;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s ease;
+      }
+
+      .danger-btn:hover {
+        background: #b91c1c;
+      }
+
+      .empty {
+        text-align: center;
+        color: #6b7280;
+        padding: 1rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="shell">
+      <!-- Sidebar -->
+      <aside class="side">
+        <nav class="nav">
+          <a href="{% url 'employee_list' %}">จัดการพนักงาน</a>
+          <a href="{% url 'employee_availability_list' %}" class="active">เวลาคิวว่าง</a>
+          <a href="{% url 'gallery_crud' %}">เพิ่มรูปภาพ</a>
+          <a href="{% url 'admin_bookings' %}">คิวจอง</a>
+          <a href="{% url 'logout' %}">ออกจากระบบ</a>
+        </nav>
+      </aside>
+
+      <!-- Main content -->
+      <main class="main">
+        <div class="page">
+          <a href="{% url 'employee_availability_list' %}" class="back-btn">← กลับหน้าพนักงาน</a>
+          <h1>เวลาว่างของ {{ employee.display_name }}</h1>
+
+          <!-- Form เพิ่มเวลาว่าง -->
+          <form method="post" class="add-slot-form">
+            {% csrf_token %}
+            <div class="input-row">
+              <input type="date" name="date" class="input" required>
+              <input type="time" name="start_time" class="input" required>
+              <input type="time" name="end_time" class="input" required>
+            </div>
+            <button type="submit" class="btn-save">💾 บันทึกเวลาว่าง</button>
+          </form>
+
+          <!-- ตารางเวลาว่าง -->
+          <table>
+            <thead>
+              <tr>
+                <th>วันที่</th>
+                <th>เวลาเริ่ม</th>
+                <th>เวลาสิ้นสุด</th>
+                <th>สถานะ</th>
+                <th>การจัดการ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if slots %}
+                {% for slot in slots %}
+                  <tr>
+                    <td>{{ slot.date }}</td>
+                    <td>{{ slot.start_time }}</td>
+                    <td>
+                      {% with end_time=slot.start_time|add:slot.duration_minutes %}
+                        {{ slot.start_time|time:"H:i" }} - {{ end_time }}
+                      {% endwith %}
+                    </td>
+                    <td>{% if slot.is_booked %}❌ ไม่ว่าง{% else %}✅ ว่าง{% endif %}</td>
+                    <td>
+                      <a href="{% url 'employee_availability_delete' slot.id %}" class="danger-btn" onclick="return confirm('ยืนยันการลบเวลานี้หรือไม่?')">ลบ</a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="5" class="empty">ยังไม่มีเวลาว่าง</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <!-- ✅ ฟังก์ชันเพิ่มเวลาเลิกอัตโนมัติ -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const startInput = document.querySelector("input[name='start_time']");
+        const endInput = document.querySelector("input[name='end_time']");
+
+        startInput.addEventListener("change", function () {
+          if (this.value) {
+            const [hours, minutes] = this.value.split(":").map(Number);
+            const end = new Date();
+            end.setHours(hours + 1, minutes); // +1 ชั่วโมง
+
+            const endHours = String(end.getHours()).padStart(2, "0");
+            const endMinutes = String(end.getMinutes()).padStart(2, "0");
+            endInput.value = `${endHours}:${endMinutes}`;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

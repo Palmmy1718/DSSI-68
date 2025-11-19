@@ -1,0 +1,71 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="UTF-8">
+  <title>{% trans "Team" %} - Chokdee Thai Massage</title>
+  <link rel="stylesheet" href="{% static 'css/team.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Kanit:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body style="background-color:#ffffff; min-height:100vh; margin:0;">
+
+  <!-- NAVBAR (เหมือนหน้า Home) -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <img src="{% static 'images/logo.png' %}" alt="{% trans 'Logo' %}" class="logo">
+
+      <ul class="nav-menu">
+        <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+        <li><a href="{% url 'massages' %}">{% trans "Massages" %}</a></li>
+        <li><a href="{% url 'price' %}">{% trans "Price" %}</a></li>
+        <li><a href="{% url 'promotion' %}">{% trans "Promotion" %}</a></li>
+        <li><a href="{% url 'gallery' %}">{% trans "Gallery" %}</a></li>
+        <li><a href="{% url 'team' %}">{% trans "Team" %}</a></li>
+        <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- TITLE -->
+  <div class="team-title">{% trans "Team" %}</div>
+
+  <div class="team-box">
+    <div class="team-grid">
+
+      <div class="team-card">
+        <img src="{% static 'images/C1.jpg' %}" alt="NING">
+        <div class="team-name">NING</div>
+      </div>
+
+      <div class="team-card">
+        <img src="{% static 'images/C2.jpg' %}" alt="EVA">
+        <div class="team-name">EVA</div>
+      </div>
+
+      <div class="team-card">
+        <img src="{% static 'images/C3.jpg' %}" alt="JULI">
+        <div class="team-name">JULI</div>
+      </div>
+
+      <div class="team-card">
+        <img src="{% static 'images/C4.jpg' %}" alt="IRENE">
+        <div class="team-name">IRENE</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ADDRESS -->
+  <section class="address-box">
+    <div class="address-container">
+      <span class="map-icon"></span>
+      <a href="https://www.google.com/maps/place/Chokdee+Thai+Massage+in+Hévíz/@46.7897703,17.1889173,17z"
+         target="_blank">
+        8380 HEVIZ RAKOCZI UTCA 10. +3630-5814854
+      </a>
+    </div>
+  </section>
+
+</body>
+</html>

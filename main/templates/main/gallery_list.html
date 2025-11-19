@@ -1,0 +1,173 @@
+{% load static %}
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8">
+    <title>Gallery</title>
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+    <style>
+      body {
+        font-family: 'Kanit', sans-serif;
+        margin: 0;
+        background: #f8fff9;
+      }
+
+      /* Layout */
+      .shell { display: flex; min-height: 100vh; }
+      .side {
+        width: 220px;
+        background: #07210f;
+        color: #fff;
+        padding: 2rem 1rem;
+        display: flex;
+        flex-direction: column;
+      }
+      .nav a {
+        display: block;
+        color: #d1d5db;
+        padding: 10px 14px;
+        text-decoration: none;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        transition: all 0.2s ease;
+      }
+      .nav a:hover, .nav a.active {
+        background: #14532d;
+        color: #fff;
+      }
+
+      .main { flex: 1; padding: 2rem; }
+
+      /* Header */
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+      .page-header h1 {
+        color: #0f172a;
+        margin: 0;
+      }
+      .add-btn {
+        background: #14532d;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+      }
+      .add-btn:hover { background: #166534; }
+
+      /* Gallery grid */
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 24px;
+      }
+
+      .gallery-item {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        overflow: hidden;
+        text-align: center;
+        padding-bottom: 10px;
+        transition: transform 0.2s ease;
+      }
+
+      .gallery-item:hover {
+        transform: translateY(-4px);
+      }
+
+      .gallery-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 1px solid #eee;
+      }
+
+      .gallery-name {
+        font-weight: 600;
+        font-size: 1.05rem;
+        color: #111;
+        margin: 10px 0 5px;
+      }
+
+      .gallery-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .action-btn {
+        background: #f8fafc;
+        border: 1px solid #ccc;
+        padding: 5px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.2s;
+        font-family: 'Kanit', sans-serif;
+      }
+      .action-btn:hover {
+        background: #e2f0dc;
+      }
+      .danger {
+        background: #f8d7da;
+        border-color: #f5c2c7;
+        color: #842029;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="shell">
+
+      <!-- Sidebar -->
+      <aside class="side">
+        <nav class="nav">
+          <a href="{% url 'employee_list' %}">จัดการพนักงาน</a>
+          <a href="{% url 'employee_availability_list' %}">เวลาคิวว่าง</a>
+          <a href="{% url 'gallery_crud' %}" class="active">เพิ่มรูปภาพ</a>
+          <a href="{% url 'admin_bookings' %}">คิวจอง</a>
+          <a href="{% url 'logout' %}">ออกจากระบบ</a>
+        </nav>
+      </aside>
+
+      <!-- Main content -->
+      <main class="main">
+        <header class="page-header">
+          <h1>Gallery</h1>
+          <a href="{% url 'gallery_add' %}" class="add-btn">+ อัปโหลดรูปภาพ</a>
+        </header>
+
+        <section class="gallery-grid">
+          {% for photo in gallery %}
+            <div class="gallery-item">
+              {% if photo.image %}
+                <img src="{{ photo.image.url }}" alt="{{ photo.name }}">
+              {% else %}
+                <div style="height:200px;background:#eee;display:flex;align-items:center;justify-content:center;color:#666;">ไม่มีรูปภาพ</div>
+              {% endif %}
+              <div class="gallery-name">
+                {% if photo.name %}{{ photo.name }}{% else %}(ไม่มีชื่อ){% endif %}
+              </div>
+              <div class="gallery-actions">
+                <a href="{% url 'gallery_edit' photo.id %}" class="action-btn">✏️ Edit</a>
+                <form method="post" action="{% url 'gallery_delete' photo.id %}" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="action-btn danger">🗑️ Delete</button>
+                </form>
+              </div>
+            </div>
+          {% empty %}
+            <p>ยังไม่มีรูปในแกลเลอรี</p>
+          {% endfor %}
+        </section>
+      </main>
+
+    </div>
+  </body>
+</html>

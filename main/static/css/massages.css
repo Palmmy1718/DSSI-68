@@ -1,0 +1,133 @@
+/* ภาพในหน้า Massages ให้เต็มขอบจอ */
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* ✅ จัดให้อยู่ตรงกลาง */
+  gap: 30px;
+  max-width: 90%;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 20px;
+  padding: 10px 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  height: 80px;
+  width: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #138034;
+}
+
+.nav-menu { /* ปรับเมนูให้อยู่ตรงกลาง */
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.nav-menu li a { /* ปรับขนาดข้อความเมนู */
+  text-decoration: none;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 43px;
+  color: black;
+  transition: color 0.3s;
+}
+
+.nav-menu li a:hover {
+  color: #138034;
+}
+
+.navbar {
+  background-image: url("../images/p2.png"); /* << บรรทัดนี้คือตัวที่สร้างลายไทย */
+  background-repeat: repeat-x;
+  background-size: contain;
+  padding: 25px 0;
+}
+
+body {
+  background: #f7f3e9;
+  font-family: 'Fredoka', 'Kanit', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.massages-hero {
+  background: rgba(255,255,255,0.95);
+  border-radius: 18px;
+  margin: 40px auto;
+  max-width: 900px;
+  padding: 40px 30px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  text-align: center; 
+}
+
+.hero-title { 
+  font-family: 'Fredoka', 'Kanit', sans-serif;
+  font-size: 4rem;
+  color: #138034;
+  margin-bottom: 18px;
+}
+.lead {
+  font-size: 1.3rem;
+  color: #333;
+  margin-bottom: 30px;
+}
+.section-title {
+  font-size: 1.7rem;
+  color: #138034;
+  margin-bottom: 24px;
+}
+.services-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.service-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 24px;
+}
+.service-photo {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.service-text h3 {
+  font-size: 1.3rem;
+  color: #138034;
+  margin-bottom: 10px;
+}
+.service-text p {
+  font-size: 1.1rem;
+  color: #222;
+}
+
+/* --- 5. ส่วนแผนที่และที่อยู่ (Map & Address) --- */
+.address-box {
+  background-image: url("../images/bg-pattern.png");
+  background-color: #004b29;
+  text-align: center;
+  padding: 15px 0;
+  margin-top: 60px;
+}
+
+.address-container a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.address-container a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,53 @@
+{% load static %}
+<!doctype html>
+<meta charset="utf-8">
+<title>เวลาว่าง - {{ employee.display_name }}</title>
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+
+<div class="shell">
+  <aside class="side">
+    <div class="brand"><img src="{% static 'images/logo.png' %}" class="side-logo"></div>
+    <nav class="nav">
+      <a href="{% url 'employee_list' %}">จัดการพนักงาน</a>
+      <a href="#">เวลาคิวว่าง</a>
+      <a href="#">เพิ่มรูปภาพ</a>
+      <a href="#">คิวจอง</a>
+      <a href="#">ออกจากระบบ</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="page-header">
+      <h1>เวลาว่าง: {{ employee.display_name }}</h1>
+      <a class="add-btn" href="{% url 'employee_list' %}">ย้อนกลับ</a>
+    </header>
+
+    <section class="card">
+      <form method="post" class="availability-form">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="add">
+        <label>วันที่ <input type="date" name="date" required></label>
+        <label>จาก <input type="time" name="start_time" required></label>
+        <label>ถึง <input type="time" name="end_time" required></label>
+        <button class="btn" type="submit">เพิ่มเวลาว่าง</button>
+      </form>
+    </section>
+
+    <section style="margin-top:18px">
+      {% for s in slots %}
+        <div class="card">
+          <div style="flex:0 0 180px">{{ s.date }} {{ s.start_time }} - {{ s.duration_minutes }} นาที{% if s.is_booked %} (จองแล้ว){% endif %}</div>
+          <div style="flex:1"></div>
+          <form method="post" style="margin:0">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" name="slot_id" value="{{ s.pk }}">
+            <button class="small-btn danger" type="submit">ลบ</button>
+          </form>
+        </div>
+      {% empty %}
+        <p style="color:#666;">ไม่มีข้อมูลเวลา</p>
+      {% endfor %}
+    </section>
+  </main>
+</div>

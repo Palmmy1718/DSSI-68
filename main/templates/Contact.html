@@ -1,0 +1,87 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "Contact" %} - Chokdee Thai Massage</title>
+
+    <!-- โหลด navbar ของ Home -->
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+    <!-- CSS เฉพาะหน้าปัจจุบัน -->
+    <link rel="stylesheet" href="{% static 'css/contact.css' %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- NAVBAR แบบหน้า Home (ไม่มีพื้นหลังเขียวแล้ว) -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <img src="{% static 'images/logo.png' %}" alt="{% trans 'Logo' %}" class="logo">
+            <ul class="nav-menu">
+                <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'massages' %}">{% trans "Massages" %}</a></li>
+                <li><a href="{% url 'price' %}">{% trans "Price" %}</a></li>
+                <li><a href="{% url 'promotion' %}">{% trans "Promotion" %}</a></li>
+                <li><a href="{% url 'gallery' %}">{% trans "Gallery" %}</a></li>
+                <li><a href="{% url 'team' %}">{% trans "Team" %}</a></li>
+                <li><a class="active" href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- CONTACT TITLE -->
+    <div class="price-title">{% trans "Contact" %}</div>
+
+    <!-- MAP -->
+    <div class="map-wrapper">
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2785.135838640763!2d17.186348!3d46.789773!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x476910dbf8eeab7b%3A0x8675b098e284fea4!2sChokdee%20Thai%20Massage%20in%20H%C3%A9v%C3%ADz!5e0!3m2!1sth!2hu!4v1721467100000!5m2!1sth!2hu"
+            allowfullscreen=""
+            loading="lazy">
+        </iframe>
+    </div>
+
+    <!-- CONTACT INFO -->
+    <div class="contact-info">
+
+        <div class="contact-item">
+            <img src="{% static 'images/address.png' %}" alt="{% trans 'Address' %}">
+            <p>8380 HEVIZ RAKOCZI UTCA 10.</p>
+        </div>
+
+        <div class="contact-item">
+            <img src="{% static 'images/email.png' %}" alt="{% trans 'Email' %}">
+            <p><a href="mailto:amonrat12@live.com">amonrat12@live.com</a></p>
+        </div>
+
+        <div class="contact-item">
+            <img src="{% static 'images/facebook.png' %}" alt="Facebook">
+            <p>
+                <a href="https://www.facebook.com/share/p/1Ban5g1PL1/" target="_blank">
+                    https://www.facebook.com/
+                </a>
+            </p>
+        </div>
+
+        <div class="contact-item">
+            <img src="{% static 'images/phone.png' %}" alt="{% trans 'Phone' %}">
+            <p><a href="tel:+36305814854">+3630-5814854</a></p>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <section class="address-box">
+        <div class="address-container">
+            <span class="map-icon"></span>
+            <a href="https://www.google.com/maps/place/Chokdee+Thai+Massage+in+H%C3%A9v%C3%ADz/" target="_blank">
+                8380 HEVIZ RAKOCZI UTCA 10. +3630-5814854
+            </a>
+        </div>
+    </section>
+
+</body>
+</html>

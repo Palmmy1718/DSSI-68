@@ -1,0 +1,42 @@
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+media/
+staticfiles/
+*.sqlite3
+
+# VS Code
+.vscode/
+
+# Python
+*.py[cod]
+*~
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+palm_env/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Test & Coverage
+.coverage
+htmlcov/
+coverage.xml
+nosetests.xml
+test-results/
+
+# Migrations (optional, if you want to ignore compiled migrations)
+**/migrations/*.pyc
+chokdeemassage/__pycache__/__init__.cpython-313.pyc

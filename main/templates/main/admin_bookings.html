@@ -1,0 +1,183 @@
+{% load static %}
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8">
+    <title>จัดการคิวจองลูกค้า</title>
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+    <style>
+      body {
+        font-family: 'Kanit', sans-serif;
+        margin: 0;
+        background: #f8fff9;
+      }
+
+      /* Layout */
+      .shell { display: flex; min-height: 100vh; }
+
+      /* Sidebar */
+      .side {
+        width: 220px;
+        background: #07210f;
+        color: #fff;
+        padding: 2rem 1rem;
+        display: flex;
+        flex-direction: column;
+      }
+      .nav a {
+        display: block;
+        color: #d1d5db;
+        padding: 10px 14px;
+        text-decoration: none;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        transition: all 0.2s ease;
+      }
+      .nav a:hover, .nav a.active {
+        background: #14532d;
+        color: #fff;
+      }
+
+      /* Main content */
+      .main { flex: 1; padding: 2rem; }
+
+      .page {
+        background: #fff;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        max-width: 900px;
+        margin: auto;
+      }
+
+      h1 {
+        text-align: center;
+        color: #064e3b;
+        margin-bottom: 1.5rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+      }
+      th {
+        background: #d9f1e1;
+        padding: 10px;
+      }
+      td {
+        border-bottom: 1px solid #eee;
+        padding: 10px;
+      }
+
+      .badge {
+        padding: 6px 10px;
+        border-radius: 6px;
+        color: white;
+        font-size: 0.9rem;
+      }
+      .pending { background: #facc15; color: #111; }
+      .confirmed { background: #22c55e; }
+      .cancelled { background: #ef4444; }
+
+      .btn {
+        padding: 5px 10px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-family: 'Kanit', sans-serif;
+      }
+      .btn-green { background: #16a34a; color: white; }
+      .btn-red { background: #dc2626; color: white; }
+      .btn-blue { background: #2563eb; color: white; }
+
+      .filter {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+      .filter input {
+        padding: 6px 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+      }
+      .filter button {
+        background: #14532d;
+        color: white;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 8px;
+        margin-left: 6px;
+        cursor: pointer;
+      }
+      .filter button:hover {
+        background: #166534;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="shell">
+      <!-- Sidebar -->
+      <aside class="side">
+        <nav class="nav">
+          <a href="{% url 'employee_list' %}">จัดการพนักงาน</a>
+          <a href="{% url 'employee_availability_list' %}">เวลาคิวว่าง</a>
+          <a href="{% url 'gallery_crud' %}">เพิ่มรูปภาพ</a>
+          <a href="{% url 'admin_bookings' %}" class="active">คิวจอง</a>
+          <a href="{% url 'logout' %}">ออกจากระบบ</a>
+        </nav>
+      </aside>
+
+      <!-- Main content -->
+      <main class="main">
+        <div class="page">
+          <h1>จัดการคิวจองลูกค้า</h1>
+
+          <div class="filter">
+            <form method="get">
+              <input type="date" name="date" value="{{ request.GET.date|default:today }}">
+              <button type="submit">ค้นหา</button>
+            </form>
+          </div>
+
+          <table>
+            <tr>
+              <th>เวลา</th>
+              <th>ชื่อลูกค้า</th>
+              <th>พนักงาน</th>
+              <th>สถานะ</th>
+              <th>การจัดการ</th>
+            </tr>
+
+            {% for b in bookings %}
+            <tr>
+              <td>{{ b.time }}</td>
+              <td>{{ b.customer_name }}</td>
+              <td>{{ b.employee.display_name }}</td>
+              <td>
+                {% if b.status == 'pending' %}
+                  <span class="badge pending">รอคอนเฟิร์ม</span>
+                {% elif b.status == 'confirmed' %}
+                  <span class="badge confirmed">ยืนยันแล้ว</span>
+                {% else %}
+                  <span class="badge cancelled">ยกเลิกแล้ว</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if b.status == 'pending' %}
+                  <button class="btn btn-green">ยืนยัน</button>
+                  <button class="btn btn-red">ยกเลิก</button>
+                {% elif b.status == 'confirmed' %}
+                  <button class="btn btn-blue">ดูรายละเอียด</button>
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

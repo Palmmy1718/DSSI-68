@@ -1,0 +1,112 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "Heviz Massage Prices" %}</title>
+    <link rel="stylesheet" href="{% static 'css/price.css' %}">
+</head>
+<body>
+
+    <nav class="navbar">
+      <div class="nav-container">
+        <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+        <ul class="nav-menu">
+          <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+          <li><a href="{% url 'massages' %}">{% trans "Massages" %}</a></li>
+          <li><a href="{% url 'price' %}">{% trans "Prices" %}</a></li>
+          <li><a href="{% url 'promotion' %}">{% trans "Promotion" %}</a></li>
+          <li><a href="{% url 'gallery' %}">{% trans "Gallery" %}</a></li>
+          <li><a href="{% url 'team' %}">{% trans "Team" %}</a></li>
+          <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="price-title">
+      {% trans "Heviz Massage Prices" %}
+    </div>
+
+    <div class="price-table-wrapper">
+      <table class="price-table">
+        <thead>
+          <tr>
+            <!-- ตารางนี้คงเดิม ไม่แปล -->
+            <th>Árlista - Price List<br>Preisliste - ценник</th>
+            <th>30'</th>
+            <th>60'</th>
+            <th>90'</th>
+            <th>120'</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Tradicionális<br>Traditional<br>Traditionelle<br>Традиционный</td>
+            <td>6 000</td>
+            <td>9 000</td>
+            <td>15 000</td>
+            <td>17 000</td>
+          </tr>
+
+          <tr>
+            <td>Olajmasszázs<br>Oil massage<br>Öl massage<br>Масляный массаж</td>
+            <td>6 000</td>
+            <td>10 000</td>
+            <td>17 000</td>
+            <td>19 000</td>
+          </tr>
+
+          <tr>
+            <td>Lábmasszázs<br>Foot massage<br>Fußmassage<br>Массаж ног</td>
+            <td>6 000</td>
+            <td>9 000</td>
+            <td>15 000</td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td>Gyógynövényes<br>Herbal<br>Kräuter<br>Травяной массаж</td>
+            <td></td>
+            <td>15 000</td>
+            <td>18 000</td>
+            <td>22 000</td>
+          </tr>
+
+          <tr>
+            <td>Hát-, nyak- és fejmasszázs<br>Back, neck and head massage<br>
+                Rücken, Nacken und kopfmassage<br>Массаж спины, шеи и головы</td>
+            <td>6 000</td>
+            <td>9 000</td>
+            <td>15 000</td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td>Tradicionális + olaj + gyógynövény<br>
+                Traditional + oil + herbal<br>
+                Traditionelle + Öl + Kräuter<br>
+                Традиционный, масло, трава</td>
+            <td></td>
+            <td></td>
+            <td>25 000</td>
+            <td>30 000</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <section class="address-box">
+      <div class="address-container">
+        <span class="map-icon"></span>
+        <a href="https://www.google.com/maps/place/Chokdee+Thai+Massage+in+Hévíz/"
+           target="_blank">
+          {% trans "8380 HEVIZ RAKOCZI UTCA 10. Phone: +3630-5814854" %}
+        </a>
+      </div>
+    </section>
+
+</body>
+</html>

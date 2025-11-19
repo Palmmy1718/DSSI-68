@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Chokdee Chatbot</title>
+    <style>
+        #chat-box { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; }
+        .user { color: blue; margin: 5px 0; }
+        .bot { color: green; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h2>💬 Chokdee Chatbot</h2>
+    <div id="chat-box"></div>
+    <input type="text" id="message" placeholder="พิมพ์ข้อความ..." />
+    <button onclick="sendMessage()">ส่ง</button>
+
+    <script>
+        async function sendMessage() {
+            const message = document.getElementById("message").value;
+            if (!message) return;
+
+            const chatBox = document.getElementById("chat-box");
+            chatBox.innerHTML += `<div class="user">คุณ: ${message}</div>`;
+
+            const res = await fetch("/chat/", {
+                method: "POST",
+                headers: { "X-CSRFToken": "{{ csrf_token }}"},
+                body: new URLSearchParams({ message })
+            });
+
+            const data = await res.json();
+            if (data.reply) {
+                chatBox.innerHTML += `<div class="bot">บอท: ${data.reply}</div>`;
+            } else {
+                chatBox.innerHTML += `<div class="bot" style="color:red;">เกิดข้อผิดพลาด: ${data.error}</div>`;
+            }
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+            document.getElementById("message").value = "";
+        }
+    </script>
+</body>
+</html>

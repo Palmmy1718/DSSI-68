@@ -1,0 +1,146 @@
+body {
+  background: #eafbe2;
+  font-family: 'Fredoka', 'Kanit', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* ✅ จัดให้อยู่ตรงกลาง */
+  gap: 30px;
+  max-width: 90%;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 20px;
+  padding: 10px 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  height: 80px;
+  width: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #138034;
+}
+
+.nav-menu { /* ปรับเมนูให้อยู่ตรงกลาง */
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.nav-menu li a { /* ปรับขนาดข้อความเมนู */
+  text-decoration: none;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 43px;
+  color: black;
+  transition: color 0.3s;
+}
+
+.nav-menu li a:hover {
+  color: #138034;
+}
+
+.navbar {
+  background-image: url("../images/p2.png"); /* << บรรทัดนี้คือตัวที่สร้างลายไทย */
+  background-repeat: repeat-x;
+  background-size: contain;
+  padding: 25px 0;
+}
+.promotion-title {
+  background: #ffe88a;
+  color: #222;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 16px;
+  margin: 32px auto 24px auto;
+  padding: 18px 40px;
+  max-width: 320px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  letter-spacing: 2px;
+}
+.promotion-box {
+  background: #fff;
+  border-radius: 24px;
+  max-width: 600px;
+  margin: 0 auto 32px auto;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  padding: 32px 0 24px 0;
+  text-align: center;
+}
+.promotion-banner {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 16px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.promotion-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 24px 18px;
+  margin: 0 auto;
+  max-width: 400px;
+}
+.promotion-main {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #176a3a;
+  margin-bottom: 12px;
+}
+.promotion-desc {
+  font-size: 1.2rem;
+  color: #222;
+  margin-bottom: 18px;
+}
+.promotion-how {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 18px;
+}
+.promotion-contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #176a3a;
+}
+.promotion-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+.promotion-phone {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/* --- 5. ส่วนแผนที่และที่อยู่ (Map & Address) --- */
+
+.address-box {
+  background-image: url("../images/bg-pattern.png");
+  background-color: #004b29;
+  text-align: center;
+  padding: 15px 0;
+  margin-top: 60px;
+}
+
+.address-container a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.address-container a:hover {
+  text-decoration: underline;
+}

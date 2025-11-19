@@ -1,0 +1,145 @@
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* ✅ จัดให้อยู่ตรงกลาง */
+  gap: 30px;
+  max-width: 90%;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 20px;
+  padding: 10px 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  height: 80px;
+  width: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #138034;
+}
+
+.nav-menu { /* ปรับเมนูให้อยู่ตรงกลาง */
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.nav-menu li a { /* ปรับขนาดข้อความเมนู */
+  text-decoration: none;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 43px;
+  color: black;
+  transition: color 0.3s;
+}
+
+.nav-menu li a:hover {
+  color: #138034;
+}
+
+.navbar {
+  background-image: url("../images/p2.png"); /* << บรรทัดนี้คือตัวที่สร้างลายไทย */
+  background-repeat: repeat-x;
+  background-size: contain;
+  padding: 25px 0;
+}
+
+body {
+  background: #f7f3e9;
+  font-family: 'Fredoka', 'Kanit', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.gallery-title {
+  background: #ffe88a;
+  color: #222;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 16px;
+  margin: 32px auto 24px auto;
+  padding: 18px 40px;
+  max-width: 320px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  letter-spacing: 2px;
+}
+
+.gallery-box {
+  background: #fff;
+  border-radius: 24px;
+  max-width: 1200px;           /* ✅ ขยายจาก 600 → 1200 ให้พอดีกับเส้นแดง */
+  width: 90%;                  /* ใช้ 90% ของหน้าจอเพื่อคงระยะขอบซ้ายขวา */
+  margin: 0 auto 32px auto;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  padding: 40px 0 32px 0;
+  text-align: center;
+}
+
+.gallery-desc {
+  font-size: 2.0rem;           /* ✅ ขยายขนาดตัวอักษร (จาก 2 → 2.2rem) */
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 40px;         /* ✅ เพิ่มช่องว่างระหว่างข้อความกับรูปภาพ */
+  margin-top: 10px;            /* ✅ เพิ่มช่องว่างเล็กน้อยจากหัวข้อ Gallery */
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* ✅ ให้รูปแถวล่ะ 2 รูป */
+  gap: 28px 20px;
+  justify-items: center;
+}
+
+.gallery-grid img {
+  width: 100%;
+  max-width: 340px;            /* ✅ ให้แต่ละรูปขยายเต็มช่อง แต่ไม่เกินขนาดนี้ */
+  height: 280px;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+
+.gallery-item {
+  background: #fff;
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 350px;   /* ✅ กรอบใหญ่กว่ารูป */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+
+.gallery-item figcaption {
+  margin-top: 10px;
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 700;
+}
+
+.address-box {
+  background-image: url("../images/bg-pattern.png");
+  background-color: #004b29;
+  text-align: center;
+  padding: 15px 0;
+  margin-top: 60px;
+}
+
+.address-container a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.address-container a:hover {
+  text-decoration: underline;
+}

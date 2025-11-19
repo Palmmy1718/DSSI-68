@@ -1,0 +1,31 @@
+body{font-family: 'Kanit', Arial, sans-serif; background:#f4f8f3; margin:0; color:#123}
+.navbar{background-image:url('../images/p2.png'); padding:18px 0}
+.nav-container{max-width:1200px;margin:0 auto;background:transparent;padding:8px 18px;display:flex;align-items:center}
+.logo{height:64px;margin-right:18px}
+.nav-menu{list-style:none;margin:0;padding:0;display:flex;gap:18px}
+.nav-menu a{text-decoration:none;font-weight:700;color:#111}
+
+/* Hero */
+.hero{background:linear-gradient(180deg, rgba(255,232,138,0.9), rgba(255,255,255,0.6)); padding:36px 0; display:flex; justify-content:center}
+.hero-inner{max-width:900px;text-align:center}
+.hero-title{font-size:34px;margin:0;color:#1b5e36;letter-spacing:0.6px}
+.hero-sub{margin:8px 0 0;color:#345;opacity:0.9}
+
+.container{max-width:920px;margin:18px auto;padding:0 18px}
+.card{background:#fff;border-radius:14px;box-shadow:0 10px 30px rgba(16,30,20,0.06);padding:22px}
+.signup-card{display:flex;justify-content:center;margin-top:16px}
+
+.signup-frame{width:100%;max-width:720px;border:6px solid #e6f3ea;border-radius:16px;padding:26px;background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(250,255,250,0.9))}
+
+.signup-form{width:420px;margin:0 auto}
+.form-row{margin-bottom:12px;display:flex;flex-direction:column}
+.form-row label{font-weight:700;margin-bottom:6px;color:#234}
+.form-row input{width:100%;padding:12px;border:1px solid #e3e7e2;border-radius:8px;font-size:15px}
+
+.form-actions{margin-top:10px}
+.btn-submit{background:#ff9f1c;color:#fff;border:none;padding:14px 18px;border-radius:10px;font-weight:800;cursor:pointer;width:100%;font-size:16px}
+
+@media (max-width:520px){
+	.signup-form{width:100%}
+	.hero-title{font-size:26px}
+}

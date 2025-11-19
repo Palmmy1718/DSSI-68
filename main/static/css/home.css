@@ -1,0 +1,395 @@
+/* --- 1. การตั้งค่าพื้นฐานและฟอนต์ --- */
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&display=swap" rel="stylesheet');
+
+:root {
+  --title-font: "Fredoka", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+}
+
+body {
+  background-image: url("../images/p1.jpg"); /* << เลือกใช้พื้นหลังนี้เป็นหลัก */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  font-family: 'Fredoka', 'Kanit', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+section {
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+section img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* --- 2. ส่วนเมนูนำทาง--- */
+.navbar {
+  position: relative;
+  background-image: url("../images/p2.png");
+  background-repeat: repeat-x;
+  background-size: contain;
+  padding: 25px 0;
+  overflow: visible; /* ✅ ปล่อยให้เห็นธงที่อยู่นอกกรอบ */
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: 90%;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 20px;
+  padding: 10px 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  height: 80px;
+  width: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #138034;
+}
+
+.nav-menu {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.nav-menu li a {
+  text-decoration: none;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 43px;
+  color: black;
+  transition: color 0.3s;
+}
+
+.nav-menu li a:hover {
+  color: #138034;
+}
+
+/* --- ธงย้ายไปมุมซ้ายล่างกรอบเขียวแบบขนาดปกติ --- */
+.lang-flags {
+  position: absolute;
+  left: 40px;
+  bottom: -50px;
+  display: flex;
+  gap: 14px;
+  z-index: 999;
+}
+
+.flag {
+  width: 45px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  object-fit: cover;
+  object-position: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease;
+}
+
+.flag:hover {
+  transform: scale(1.1);
+}
+
+.flag-btn{border:none;padding:0;background:transparent;cursor:pointer}
+
+/* --- รูปแอดมินอยู่ขวาใต้กรอบเขียว --- */
+.admin-btn {
+  position: absolute;
+  top: 165px;
+  right: 30px;
+  z-index: 999;
+}
+
+.admin-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  background-color: #ffffff;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.admin-icon:hover {
+  transform: scale(1.1);
+}
+
+/* --- ปรับช่องว่างระหว่าง navbar กับรูปให้น้อยลงอีกนิด --- */
+section img {
+  margin-top: 44px;
+}
+
+/* ปุ่มสมัครสมาชิก (โทนแดงโดดเด่น) */
+.register-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.register-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #e53935, #d32f2f); /* ✅ ไล่เฉดแดงสด */
+  color: white;
+  font-family: 'Kanit', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 18px 70px;
+  border-radius: 50px;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(229, 57, 53, 0.4); /* ✅ เงาแดง */
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  border: 3px solid #fff; /* ✅ ขอบขาวตัดพื้นหลัง */
+}
+
+/* เอฟเฟกต์ตอน hover */
+.register-btn:hover {
+  background: linear-gradient(135deg, #b71c1c, #d32f2f);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(229, 57, 53, 0.6);
+}
+
+/* แสงพาดผ่านแบบสวย */
+.register-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: skewX(-25deg);
+  transition: 0.5s;
+}
+
+.register-btn:hover::after {
+  left: 125%;
+}
+
+/* --- 3. ส่วนแสดงรายชื่อหมอนวด--- */
+.therapist-section {
+  padding: 40px 10px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.therapist-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.therapist-card {
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-width: 240px;
+  transition: transform 0.3s ease;
+  text-align: center;
+}
+
+.therapist-card:hover {
+  transform: translateY(-10px);
+}
+
+.therapist-card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+}
+
+.therapist-card h4 {
+  margin: 15px 0;
+  font-size: 24px;
+  color: #222;
+  font-weight: bold;
+}
+
+/* --- 4. ส่วนกล่องข้อมูลและปุ่มแชท (Info Box & Chat) --- */
+.info-box {
+  background-color: white;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  margin: 80px auto;
+}
+
+.title {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 20px;
+  margin: 5px 0;
+}
+
+.chat-button {
+  width: 80%;
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 18px 24px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 25px;
+  border: none;
+  background-color: #074526;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease-in-out;
+}
+
+.chat-icon {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.chat-text {
+  font-size: 40px;
+  line-height: 1.2;
+}
+
+/* --- 5. ส่วนแผนที่และที่อยู่ (Map & Address) --- */
+.address-box {
+  background-image: url("../images/bg-pattern.png");
+  background-color: #004b29;
+  text-align: center;
+  padding: 15px 0;
+  margin-top: 60px;
+}
+
+.address-container a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.address-container a:hover {
+  text-decoration: underline;
+}
+
+/* --- 6. ส่วนตารางเวลา (Schedule) --- */
+.schedule-title {
+  background: none;
+  padding: 60px 0;
+  text-align: center;
+}
+
+.schedule-box {
+  background-color: white;
+  border-radius: 25px;
+  padding: 30px 90px;
+  max-width: 90%;
+  display: inline-block;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.schedule-box h1 {
+  font-size: 35px;
+  font-weight: bold;
+  margin: 0;
+  font-family: 'Kanit', sans-serif;
+  color: black;
+}
+
+section img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* --- 7. ส่วนทีมงาน (Team Showcase) --- */
+.team-showcase .container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.staff-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 240px);
+  justify-content: center;
+  gap: 24px;
+}
+
+.staff-card {
+  width: 240px;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 30px rgba(0,0,0,.08);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.staff-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 44px rgba(0,0,0,.12);
+}
+
+.staff-photo-frame { margin: 0; }
+
+.staff-photo-frame img {
+  display: block;
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.staff-name {
+  background: #fff;
+  text-align: center;
+  padding: 16px 12px 20px;
+  font-family: "Fredoka", sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: 1.1px;
+  box-shadow: inset 0 8px 24px rgba(0,0,0,.05);
+  border-top: 1px solid #f1f5f9;
+}
+
+@media (max-width: 520px) {
+  .staff-gallery {
+    grid-template-columns: repeat(auto-fit, 180px);
+    gap: 18px;
+  }
+  .staff-card { width: 180px; }
+  .staff-photo-frame img { height: 240px; }
+}

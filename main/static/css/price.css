@@ -1,0 +1,135 @@
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* ✅ จัดให้อยู่ตรงกลาง */
+  gap: 30px;
+  max-width: 90%;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 20px;
+  padding: 10px 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  height: 80px;
+  width: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #138034;
+}
+
+.nav-menu { /* ปรับเมนูให้อยู่ตรงกลาง */
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.nav-menu li a { /* ปรับขนาดข้อความเมนู */
+  text-decoration: none;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 43px;
+  color: black;
+  transition: color 0.3s;
+}
+
+.nav-menu li a:hover {
+  color: #138034;
+}
+
+.navbar {
+  background-image: url("../images/p2.png"); /* << บรรทัดนี้คือตัวที่สร้างลายไทย */
+  background-repeat: repeat-x;
+  background-size: contain;
+  padding: 25px 0;
+}
+
+body {
+  background: #f7f3e9;
+  font-family: 'Fredoka', 'Kanit', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.price-title {
+  background: #ffe88a;
+  color: #222;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 16px;
+  margin: 32px auto 24px auto;
+  padding: 18px 40px;
+  max-width: 480px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  letter-spacing: 2px;
+}
+
+.price-table-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.price-table {
+  background: #222;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  overflow: hidden;
+  color: #fff;
+  font-size: 1.15rem;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.price-table th {
+  background: #7a8c3a;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 16px 18px;
+  text-align: center;
+}
+.price-table td {
+  background: #b48c8c;
+  color: #222;
+  font-weight: 500;
+  padding: 14px 18px;
+  text-align: center;
+}
+.price-table td:first-child {
+  background: #444;
+  color: #fff;
+  font-weight: 600;
+  text-align: left;
+  padding-left: 22px;
+}
+.price-table tr {
+  border-bottom: 2px solid #fff;
+}
+.price-table tr:last-child {
+  border-bottom: none;
+}
+
+/* ---------------- ADDRESS BOX ---------------- */
+.address-box {
+  background-image: url("../images/bg-pattern.png");
+  background-color: #004b29;
+  text-align: center;
+  padding: 15px 0;
+  margin-top: 60px;
+}
+
+.address-container a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.address-container a:hover {
+  text-decoration: underline;
+}

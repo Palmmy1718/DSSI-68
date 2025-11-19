@@ -1,0 +1,109 @@
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="UTF-8">
+  <title>{% trans "Chokdee Thai Massage" %}</title>
+  <link rel="stylesheet" href="{% static 'css/massages.css' %}">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <img src="{% static 'images/logo.png' %}" alt="{% trans 'Logo' %}" class="logo">
+      <ul class="nav-menu">
+        <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+        <li><a href="{% url 'massages' %}">{% trans "Massages" %}</a></li>
+        <li><a href="{% url 'price' %}">{% trans "Price" %}</a></li>
+        <li><a href="{% url 'promotion' %}">{% trans "Promotion" %}</a></li>
+        <li><a href="{% url 'gallery' %}">{% trans "Gallery" %}</a></li>
+        <li><a href="{% url 'team' %}">{% trans "Team" %}</a></li>
+        <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Banner -->
+  <section>
+    <img src="{% static 'images/N6.png' %}" alt="{% trans 'Chokdee Thai Massage' %}" class="massages-banner">
+  </section>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
+
+  <section class="massages-hero">
+    <div class="container">
+      <h1 class="hero-title">{% trans "Massages" %}</h1>
+
+      <p>{% blocktrans %}ที่ร้านนวดของเราในเมืองเฮวีซ (Hévíz) คุณจะได้พบกับการนวดทั้งแบบแผนไทยดั้งเดิม และแบบทันสมัยซึ่งจะช่วยเติมพลังให้กับชีวิตประจำวันของคุณ ไม่ว่าจะเป็นการนวดแผนไทย นวดเท้า นวดน้ำมัน คุณจะได้สัมผัสกับความผ่อนคลายและการฟื้นฟูร่างกายอย่างสมบูรณ์แบบ ที่ CHOKDEE THAI MASSAGE{% endblocktrans %}</p>
+
+      <h2 class="section-title">{% trans "Please choose from the following massage services." %}</h2>
+
+      <section class="services-stack container">
+
+        <!-- Service 1 -->
+        <div class="service-row">
+          <img class="service-photo" src="{% static 'images/N1.png' %}" alt="{% trans 'Traditional Thai Massage' %}">
+          <div class="service-text">
+            <h3>{% trans "Traditional Thai Massage" %}</h3>
+            <p>{% blocktrans %}เป็นการผสมผสานท่ายืดเหยียดแบบโยคะ การกดจุด และการเคลื่อนไหวข้อต่อ โดยเน้นการกดจุดพลังงานสำคัญ 10 จุดด้วยจังหวะที่นุ่มนวลเพื่อช่วยกระตุ้นพลังงานและผ่อนคลายร่างกายอย่างล้ำลึก{% endblocktrans %}</p>
+          </div>
+        </div>
+
+        <!-- Service 2 -->
+        <div class="service-row">
+          <img class="service-photo" src="{% static 'images/N2.png' %}" alt="{% trans 'Aroma Oil Massage' %}">
+          <div class="service-text">
+            <h3>{% trans "Aroma Oil Massage" %}</h3>
+            <p>{% blocktrans %}การนวดน้ำมันแบบไทยช่วยผ่อนคลายทั้งร่างกายและจิตใจอย่างล้ำลึก มอบความรู้สึกสบายอย่างเต็มที่ ช่วยลดความเครียด ขับสารพิษ กระตุ้นพลังงาน ฟื้นฟูร่างกายจากความเหนื่อยล้า และทำให้ผิวเนียนนุ่ม ชุ่มชื้น แลดูมีชีวิตชีวา{% endblocktrans %}</p>
+          </div>
+        </div>
+
+        <!-- Service 3 -->
+        <div class="service-row">
+          <img class="service-photo" src="{% static 'images/N3.png' %}" alt="{% trans 'Herbal Compress Massage' %}">
+          <div class="service-text">
+            <h3>{% trans "Herbal Compress Massage" %}</h3>
+            <p>{% blocktrans %}การนวดชนิดนี้เหมาะสำหรับบรรเทาอาการปวดกล้ามเนื้อ ปวดข้อ อาการบาดเจ็บจากการออกกำลังกาย อาการเกร็ง และช่วยกระตุ้นการไหลเวียนโลหิต อีกทั้งยังช่วยบำรุงผิวพรรณให้แข็งแรงและสดใสขึ้นอีกด้วย{% endblocktrans %}</p>
+          </div>
+        </div>
+
+        <!-- Service 4 -->
+        <div class="service-row">
+          <img class="service-photo" src="{% static 'images/N4.png' %}" alt="{% trans 'Head Neck Back Massage' %}">
+          <div class="service-text">
+            <h3>{% trans "Head Neck Back Massage" %}</h3>
+            <p>{% blocktrans %}การนวดนี้ช่วยบรรเทาอาการปวดศีรษะและความตึงบริเวณต้นคอโดยเน้นคลายความเครียดและจุดตึงของกล้ามเนื้อในส่วนที่ใช้งานหนัก ให้รู้สึกผ่อนคลายและโล่งสบาย{% endblocktrans %}</p>
+          </div>
+        </div>
+
+        <!-- Service 5 -->
+        <div class="service-row">
+          <img class="service-photo" src="{% static 'images/N5.png' %}" alt="{% trans 'Foot Reflexology Massage' %}">
+          <div class="service-text">
+            <h3>{% trans "Foot Reflexology Massage" %}</h3>
+            <p>{% blocktrans %}การนวดนี้มีพื้นฐานจากแนวคิดที่ว่าอวัยวะต่าง ๆ ของร่างกายเชื่อมโยงกับจุดสะท้อนบนฝ่าเท้า การนวดจุดเหล่านี้จะช่วยกระตุ้นการไหลเวียนพลังงานภายในร่างกาย ฟื้นฟูความสดชื่นให้ขาและเท้าที่เมื่อยล้า พร้อมมอบความผ่อนคลายอย่างล้ำลึก{% endblocktrans %}</p>
+          </div>
+        </div>
+
+      </section>
+
+    </div>  <!-- 🔥 ปิด container สีขาวตรงนี้ -->
+  </section>
+
+  <!-- 🔥 footer ออกมานอกกล่องแล้ว -->
+  <section class="address-box">
+    <div class="address-container">
+      <span class="map-icon"></span>
+      <a href="https://www.google.com/maps/place/Chokdee+Thai+Massage+in+Hévíz/"
+         target="_blank">
+        {% trans "8380 HEVIZ RAKOCZI UTCA 10. +3630-5814854" %}
+      </a>
+    </div>
+  </section>
+
+</body>
+</html>

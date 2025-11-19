@@ -1,0 +1,16 @@
+body{font-family: 'Kanit', Arial, sans-serif;background:#f6fbf7;color:#123;margin:0}
+.navbar{background-image:url('../images/p2.png');padding:14px 0}
+.nav-container{max-width:1100px;margin:0 auto;display:flex;align-items:center;padding:8px 18px}
+.logo{height:64px}
+.container{max-width:920px;margin:26px auto;padding:0 18px}
+.card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 8px 20px rgba(0,0,0,0.06)}
+.card h2{color:#123;margin-bottom:4px}
+.fc .fc-toolbar-title{font-weight:800;color:#fff}
+.fc .fc-toolbar{background:#1b5e36;border-radius:8px;padding:8px}
+.slot-day{margin-bottom:14px}
+.slot-day h3{margin:0 0 8px;background:#1b5e36;color:#fff;padding:8px 12px;border-radius:8px;display:inline-block}
+.slots{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.slot{padding:10px 12px;border-radius:8px;border:1px solid #e6efe6;background:#f7fff7;color:#123}
+.slot.booked{background:#f8e6e6;border-color:#f0b1b1;color:#a33}
+.muted{color:#666}
+@media (max-width:520px){.slots{gap:8px}.slot{padding:8px 10px}}

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สมัครสมาชิก</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: linear-gradient(135deg, #f6f9f6, #c6ebd9);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .register-container {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+            border-radius: 20px;
+            padding: 40px 50px;
+            width: 400px;
+            text-align: center;
+        }
+
+        .register-container h2 {
+            color: #1b4d3e;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #2a8c57, #1b4d3e);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(42, 140, 87, 0.3);
+        }
+
+        p {
+            margin-top: 20px;
+        }
+
+        a {
+            color: #1b4d3e;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h2>สมัครสมาชิก</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="ชื่อผู้ใช้" required>
+            <input type="email" name="email" placeholder="อีเมล" required>
+            <input type="password" name="password" placeholder="รหัสผ่าน" required>
+            <input type="password" name="confirm" placeholder="ยืนยันรหัสผ่าน" required>
+            <button type="submit">สมัครสมาชิก</button>
+        </form>
+        <p>มีบัญชีแล้ว? <a href="{% url 'customer_login' %}">เข้าสู่ระบบ</a></p>
+    </div>
+</body>
+</html>

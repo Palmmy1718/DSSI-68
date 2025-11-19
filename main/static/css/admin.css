@@ -1,0 +1,211 @@
+:root {
+  --bg: #f5f7f8;
+  --panel: #fff;
+  --ink: #111827;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --green: #166534;
+  --red: #b91c1c;
+}
+
+*,
+.btn,
+.chip {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  font: system-ui, Segoe UI, Arial, sans-serif;
+  color: var(--ink);
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+.side {
+  background: #134d2b; /* green sidebar */
+  color: #e5e7eb;
+  padding: 18px 14px;
+}
+
+.side h2 {
+  margin: 6px 10px 14px;
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+}
+
+.nav a {
+  display: block;
+  padding: 10px 12px;
+  margin: 6px 4px;
+  border-radius: 10px;
+  color: #e2e8eb;
+  text-decoration: none;
+}
+
+.nav a.active {
+  background: #1e293b;
+  color: #fff;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nav a:hover {
+  background: #243447;
+}
+
+.main {
+  padding: 22px 26px;
+}
+
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.page-header h1{margin:0;font-size:28px}
+.add-btn{background:#fff;border-radius:20px;padding:8px 14px;border:2px solid #fff;color:#134d2b;font-weight:700;text-decoration:none}
+
+.list{display:flex;flex-direction:column;gap:12px}
+.card{display:flex;align-items:center;padding:12px 14px;border:1px solid #cfcfcf}
+.card-left{flex:0 0 80px}
+.card-mid{flex:1}
+.card-right{flex:0 0 220px;display:flex;gap:8px;align-items:center;justify-content:flex-end}
+.name-wrap{display:flex;align-items:center;height:72px}
+.name{font-size:22px;font-weight:900;letter-spacing:2px}
+.small-btn{padding:8px 12px;border-radius:8px;border:1px solid #cfcfcf;background:#fff;color:#134d2b;cursor:pointer}
+.small-btn.danger{border-color:#f4c7c7;color:#b91c1c}
+.inline-forms{display:none;margin-top:8px}
+
+.side-logo{width:48px;height:48px;border-radius:8px;margin-bottom:8px}
+
+.bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+.btn {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.btn:hover,
+.chip:hover {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.card-left{flex:0 0 110px}
+.card-mid{flex:1}
+.card-right{flex:0 0 220px;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+
+.pic {
+  width:110px;height:110px;border-radius:12px;object-fit:cover;border:1px solid var(--line);background:#f3f4f6;padding:6px
+}
+.pic.placeholder{display:flex;align-items:center;justify-content:center;font-weight:800;background:#eef2f7;color:#6b7280}
+
+.name{font-size:20px;font-weight:800;margin:0 0 6px}
+
+.action-btn{display:inline-block;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);text-decoration:none;color:var(--green);font-weight:700}
+.action-btn.danger{border-color:#f3c3c3;color:var(--red)}
+
+.small-forms{margin-top:8px}
+
+.name {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin: 0 0 6px;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.grow {
+  flex: 1;
+}
+
+.actions {
+  display: none;
+  gap: 8px;
+}
+
+.chip {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 10px;
+  padding: 7px 12px;
+  cursor: pointer;
+}
+
+.chip.red {
+  border-color: #f3c3c3;
+}
+
+.inline {
+  display: none;
+  margin-top: 8px;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.input {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 10px;
+  min-width: 220px;
+}
+
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .card-right{align-items:flex-start}
+}
+
+.msgs {
+  margin-bottom: 10px;
+}
+
+.msg {
+  background: #ecfdf5;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: #065f46;
+  margin-bottom: 6px;
+}

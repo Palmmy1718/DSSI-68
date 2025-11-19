@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เข้าสู่ระบบ | Chokdee Thai Massage</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Itim', cursive;
+      background: #ffffff;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* ขอบเขียวรอบหน้าจอ */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #006b47 0%, #006b47 10%, #ffffff 10%, #ffffff 90%, #006b47 90%, #006b47 100%);
+      z-index: -1;
+    }
+
+    .login-container {
+      background-color: #fff;
+      width: 380px;
+      border-radius: 20px;
+      text-align: center;
+      padding: 50px 40px 60px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+      position: relative;
+    }
+
+    /* โลโก้กลมขอบขาว */
+    .logo {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 6px solid #fff;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+      margin-top: -80px;
+      background-color: white;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin: 20px 0 25px;
+      color: #006b47;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      color: #555;
+      margin-bottom: 5px;
+      font-size: 16px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 2px solid #ccc;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      background-color: #f5f9ff;
+    }
+
+    input:focus {
+      border-color: #0c3b2e;
+      box-shadow: 0 0 5px rgba(12, 59, 46, 0.4);
+      outline: none;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+    }
+
+    .btn {
+      flex: 1;
+      margin: 0 5px;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 0;
+      font-size: 18px;
+      cursor: pointer;
+      font-family: 'Itim', cursive;
+      transition: all 0.2s ease;
+    }
+
+    .btn-login {
+      background-color: #0c3b2e;
+      color: white;
+    }
+
+    .btn-login:hover {
+      background-color: #145a42;
+      transform: scale(1.03);
+    }
+
+    .btn-home {
+      background-color: #c4913f;
+      color: white;
+    }
+
+    .btn-home:hover {
+      background-color: #d6a34e;
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <img src="{% static 'images/logo.png' %}" alt="CHOKDEE Thai Massage" class="logo">
+    <h2>Admin</h2>
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="input-group">
+        <label for="username">username :</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div class="input-group">
+        <label for="password">password :</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+
+      <div class="button-group">
+        <a href="{% url 'home' %}" class="btn btn-home">หน้าหลัก</a>
+        <button type="submit" class="btn btn-login">Login</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
