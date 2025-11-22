@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <title>{% trans "Team" %} - Chokdee Thai Massage</title>
   <link rel="stylesheet" href="{% static 'css/team.css' %}">
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Kanit:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Kanit:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>body { font-family: 'Fredoka', 'Kanit', sans-serif; }</style>
 </head>
 
 <body style="background-color:#ffffff; min-height:100vh; margin:0;">
@@ -33,25 +34,19 @@
   <div class="team-box">
     <div class="team-grid">
 
-      <div class="team-card">
-        <img src="{% static 'images/C1.jpg' %}" alt="NING">
-        <div class="team-name">NING</div>
-      </div>
 
+      {% for e in employees %}
       <div class="team-card">
-        <img src="{% static 'images/C2.jpg' %}" alt="EVA">
-        <div class="team-name">EVA</div>
+        {% if e.photo_url %}
+          <img src="{{ e.photo_url }}" alt="{{ e.display_name }}">
+        {% else %}
+          <img src="{% static 'images/placeholder.png' %}" alt="{{ e.display_name }}">
+        {% endif %}
+        <div class="team-name">{{ e.display_name|upper }}</div>
       </div>
-
-      <div class="team-card">
-        <img src="{% static 'images/C3.jpg' %}" alt="JULI">
-        <div class="team-name">JULI</div>
-      </div>
-
-      <div class="team-card">
-        <img src="{% static 'images/C4.jpg' %}" alt="IRENE">
-        <div class="team-name">IRENE</div>
-      </div>
+      {% empty %}
+        <div>ไม่มีข้อมูลพนักงาน</div>
+      {% endfor %}
 
     </div>
   </div>

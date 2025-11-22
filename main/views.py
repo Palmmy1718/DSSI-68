@@ -38,7 +38,7 @@ def load_service_data():
 # ---------------------- FRONTEND PAGES ----------------------
 
 def site_home(request):
-    employees = Employee.objects.filter(is_active=True).order_by('display_name')
+    employees = Employee.objects.all().order_by('display_name')
     for e in employees:
         e.photo_url = _photo_url(e)
     return render(request, 'home.html', {'employees': employees})
@@ -121,7 +121,10 @@ def site_price(request):
     return render(request, 'Price.html')
 
 def site_team(request):
-    return render(request, 'team.html')
+    employees = Employee.objects.all().order_by('display_name')
+    for e in employees:
+        e.photo_url = _photo_url(e)
+    return render(request, 'team.html', {'employees': employees})
 
 def site_promotion(request):
     return render(request, 'Promotion.html')

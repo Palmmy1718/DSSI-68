@@ -35,9 +35,8 @@
 
         </div>
 
-        <!-- Language Flags -->
+        <!-- Language Flags (prefix redirect) -->
         <div class="lang-flags">
-
             <form action="{% url 'set_language' %}" method="post" style="display:inline">
                 {% csrf_token %}
                 <input type="hidden" name="language" value="th">
@@ -64,7 +63,6 @@
                     <img src="{% static 'images/flag_de.png' %}" alt="DE" class="flag">
                 </button>
             </form>
-
         </div>
     </nav>
 

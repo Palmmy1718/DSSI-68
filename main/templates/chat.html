@@ -3,42 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <title>Chokdee Chatbot</title>
-    <style>
-        #chat-box { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; }
-        .user { color: blue; margin: 5px 0; }
-        .bot { color: green; margin: 5px 0; }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/chat.css' %}">
 </head>
 <body>
-    <h2>💬 Chokdee Chatbot</h2>
-    <div id="chat-box"></div>
-    <input type="text" id="message" placeholder="พิมพ์ข้อความ..." />
-    <button onclick="sendMessage()">ส่ง</button>
+    <div id="chat-widget">
+        <div id="chat-panel" style="display:none;">
+            <div id="chat-header">
+                <span style="font-size:1.5rem;">🤖</span>
+                <span>Chokdee Thai Massage</span>
+                <span style="flex:1"></span>
+                <button onclick="closeChat()" style="background:none;border:none;font-size:1.3rem;color:#fff;cursor:pointer;">×</button>
+            </div>
+            <div id="chat-box"></div>
+            <div id="chat-input-row">
+                <input type="text" id="chat-input" placeholder="พิมพ์ข้อความ..." onkeydown="if(event.key==='Enter'){sendMessage()}" autocomplete="off" />
+                <button id="chat-send-btn" onclick="sendMessage()">ส่ง</button>
+            </div>
+        </div>
+        <div id="chat-bubble" onclick="openChat()" title="คุยกับแชตบอท">
+            💬
+        </div>
+    </div>
 
     <script>
-        async function sendMessage() {
-            const message = document.getElementById("message").value;
-            if (!message) return;
-
-            const chatBox = document.getElementById("chat-box");
-            chatBox.innerHTML += `<div class="user">คุณ: ${message}</div>`;
-
+    const chatPanel = document.getElementById('chat-panel');
+    const chatBubble = document.getElementById('chat-bubble');
+    function openChat() {
+        chatPanel.style.display = 'flex';
+        chatBubble.style.display = 'none';
+        setTimeout(() => document.getElementById('chat-input').focus(), 200);
+    }
+    function closeChat() {
+        chatPanel.style.display = 'none';
+        chatBubble.style.display = 'flex';
+    }
+    // แปลง markdown/ข้อความยาวเป็น HTML อ่านง่าย
+    function formatBotReply(text) {
+        // แปลง **bold** เป็น <b>
+        text = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+        // แปลง * bullet เป็น <li>
+        text = text.replace(/\n\* /g, '<br>• ');
+        // แปลง \n เป็น <br>
+        text = text.replace(/\n/g, '<br>');
+        return text;
+    }
+    async function sendMessage() {
+        const input = document.getElementById('chat-input');
+        const message = input.value.trim();
+        if (!message) return;
+        const chatBox = document.getElementById('chat-box');
+        chatBox.innerHTML += `<div class=\"message user\"><b>คุณ:</b> ${message}</div>`;
+        input.value = '';
+        chatBox.scrollTop = chatBox.scrollHeight;
+        try {
             const res = await fetch("/chat/", {
                 method: "POST",
                 headers: { "X-CSRFToken": "{{ csrf_token }}"},
                 body: new URLSearchParams({ message })
             });
-
             const data = await res.json();
             if (data.reply) {
-                chatBox.innerHTML += `<div class="bot">บอท: ${data.reply}</div>`;
+                chatBox.innerHTML += `<div class=\"message bot\"><b>Chokdee:</b> ${formatBotReply(data.reply)}</div>`;
             } else {
-                chatBox.innerHTML += `<div class="bot" style="color:red;">เกิดข้อผิดพลาด: ${data.error}</div>`;
+                chatBox.innerHTML += `<div class=\"message bot\" style=\"color:red;\">เกิดข้อผิดพลาด: ${data.error}</div>`;
             }
-
-            chatBox.scrollTop = chatBox.scrollHeight;
-            document.getElementById("message").value = "";
+        } catch (e) {
+            chatBox.innerHTML += `<div class=\"message bot\" style=\"color:red;\">เกิดข้อผิดพลาด: ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์</div>`;
         }
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
     </script>
 </body>
 </html>

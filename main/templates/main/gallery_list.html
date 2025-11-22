@@ -152,7 +152,7 @@
                 <div style="height:200px;background:#eee;display:flex;align-items:center;justify-content:center;color:#666;">ไม่มีรูปภาพ</div>
               {% endif %}
               <div class="gallery-name">
-                {% if photo.name %}{{ photo.name }}{% else %}(ไม่มีชื่อ){% endif %}
+                {% if photo.name %}{{ photo.name }}{% endif %}
               </div>
               <div class="gallery-actions">
                 <a href="{% url 'gallery_edit' photo.id %}" class="action-btn">✏️ Edit</a>

@@ -53,16 +53,25 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chokdeemassage.wsgi.application'
 
-# -------------------- Database (MariaDB 10.4 from XAMPP) --------------------
+# -------------------- Database ( MySQL ) ---------
+import pymysql
+pymysql.install_as_MySQLdb()
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('DB_NAME', 'dssi68_db'),
+        'USER': os.getenv('DB_USER', 'dssi68_user'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
+        'PORT': os.getenv('DB_PORT', '3306'),
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        },
     }
 }
 
-
-# ------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
