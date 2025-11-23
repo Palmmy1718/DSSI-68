@@ -1,0 +1,171 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>จัดการข้อมูลนวด - Admin</title>
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+    <style>
+        body { font-family: 'Kanit', sans-serif; background: #f6fbf7; margin: 0; }
+        .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.08); padding: 32px; }
+        h1 { color: #176a3a; font-size: 2.2rem; margin-bottom: 24px; text-align: center; }
+        .muted { color: #888; text-align: center; margin-top: 24px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>จัดการข้อมูลนวด (Massage Admin)</h1>
+        <div class="muted">หน้านี้สำหรับแอดมินจัดการข้อมูลบริการนวด สามารถเพิ่ม/แก้ไข/ลบข้อมูลได้ที่นี่</div>
+
+        <div class="page-wrapper">
+
+            <header class="page-header">
+                <div class="page-title-group">
+                    <h1>จัดการบริการนวด</h1>
+                    <p>เพิ่มรูป, ชื่อบริการ และคำอธิบายสำหรับแสดงบนหน้า Massages</p>
+                </div>
+                <a href="{% url 'massages' %}" class="back-home-link">ดูหน้าแสดงผล</a>
+            </header>
+
+            {% if messages %}
+            <div class="messages-area">
+                {% for message in messages %}
+                    <div class="msg-box {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <main class="content-grid">
+
+                <!-- ฟอร์มเพิ่ม/แก้ไข -->
+                <section class="form-card">
+                    <h2>{{ form_title|default:"เพิ่มบริการนวดใหม่" }}</h2>
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label for="id_name">ชื่อบริการนวด</label>
+                            {{ form.name }}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_duration">ระยะเวลา (นาที)</label>
+                            {{ form.duration }}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_price">ราคา (Ft)</label>
+                            {{ form.price }}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_description">คำอธิบายบริการนวด</label>
+                            {{ form.description }}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_image">รูปภาพประกอบบริการนวด</label>
+
+                            {% if form.instance.pk and form.instance.image %}
+                                <div class="image-preview">
+                                    <img src="{{ form.instance.image.url }}" alt="{{ form.instance.name }}">
+                                    <span class="image-preview-text">รูปปัจจุบัน</span>
+                                </div>
+                            {% endif %}
+
+                            {{ form.image }}
+                            <small class="help-text">แนะนำรูปแนวนอน ขนาดประมาณ 1200×800 px</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_is_active">แสดงบนหน้าเว็บ</label>
+                            {{ form.is_active }}
+                        </div>
+
+                        {% for error in form.non_field_errors %}
+                            <div class="field-error">{{ error }}</div>
+                        {% endfor %}
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                {% if is_edit %}บันทึกการแก้ไข{% else %}เพิ่มบริการนวด{% endif %}
+                            </button>
+
+                            {% if is_edit %}
+                                <a href="{% url 'massage_admin' %}" class="btn-secondary">ยกเลิก</a>
+                            {% endif %}
+                        </div>
+                    </form>
+                </section>
+
+                <!-- ตารางรายการนวด -->
+                <section class="table-card">
+                    <div class="table-card-header">
+                        <h2>รายการบริการนวดทั้งหมด</h2>
+                        <span class="badge-count">{{ massages|length }} รายการ</span>
+                    </div>
+
+                    {% if massages %}
+                    <div class="table-wrapper">
+                        <table class="massage-table">
+                            <thead>
+                                <tr>
+                                    <th>รูป</th>
+                                    <th>บริการนวด</th>
+                                    <th>เวลา</th>
+                                    <th>ราคา</th>
+                                    <th>สถานะ</th>
+                                    <th style="width: 150px;">การจัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for m in massages %}
+                                <tr>
+                                    <td class="col-image">
+                                        {% if m.image %}
+                                            <img src="{{ m.image.url }}" alt="{{ m.name }}">
+                                        {% else %}
+                                            <div class="no-image">No image</div>
+                                        {% endif %}
+                                    </td>
+                                    <td class="col-name">
+                                        <div class="name-main">{{ m.name }}</div>
+                                        {% if m.description %}
+                                            <div class="name-sub">
+                                                {{ m.description|truncatechars:80 }}
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ m.duration }} นาที</td>
+                                    <td>{{ m.price }} Ft</td>
+                                    <td>
+                                        {% if m.is_active %}
+                                            <span class="status-pill status-on">แสดงบนเว็บ</span>
+                                        {% else %}
+                                            <span class="status-pill status-off">ซ่อน</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="col-actions">
+                                        <a href="{% url 'massage_edit' m.id %}" class="btn-table edit">แก้ไข</a>
+                                        <a href="{% url 'massage_delete' m.id %}"
+                                           class="btn-table delete"
+                                           onclick="return confirm('ลบบริการนวด “{{ m.name }}” ?');">
+                                           ลบ
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                        <p class="empty-text">ยังไม่มีบริการนวดในระบบ</p>
+                    {% endif %}
+                </section>
+
+            </main>
+        </div>
+    </div>
+</body>
+</html>

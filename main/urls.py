@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+        path('massage-admin/', views.massage_admin_view, name='massage_admin'),
     # ------------------ หน้าเว็บทั่วไป ------------------
     path('', views.site_home, name='home'),
     path('massages/', views.site_massages, name='massages'),

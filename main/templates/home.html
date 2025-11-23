@@ -41,25 +41,23 @@
                 {% csrf_token %}
                 <input type="hidden" name="language" value="th">
                 <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                <button type="submit" class="flag-btn">
+                <button type="submit" class="flag-btn" title="ภาษาไทย">
                     <img src="{% static 'images/flag_thai.png' %}" alt="TH" class="flag">
                 </button>
             </form>
-
             <form action="{% url 'set_language' %}" method="post" style="display:inline">
                 {% csrf_token %}
                 <input type="hidden" name="language" value="en">
                 <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                <button type="submit" class="flag-btn">
+                <button type="submit" class="flag-btn" title="English">
                     <img src="{% static 'images/flag_uk.png' %}" alt="EN" class="flag">
                 </button>
             </form>
-
             <form action="{% url 'set_language' %}" method="post" style="display:inline">
                 {% csrf_token %}
                 <input type="hidden" name="language" value="de">
                 <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                <button type="submit" class="flag-btn">
+                <button type="submit" class="flag-btn" title="Deutsch">
                     <img src="{% static 'images/flag_de.png' %}" alt="DE" class="flag">
                 </button>
             </form>
@@ -79,7 +77,6 @@
             <p class="subtitle">{% trans "By appointment only" %}</p>
             <p class="subtitle">{% trans "Monday – Sunday" %}</p>
             <p class="subtitle">09.00 - 19.00</p>
-            <p class="subtitle">Chokdeethaimassage</p>
         </div>
     </section>
 
@@ -127,16 +124,19 @@
 
     <!-- Map Section -->
     <section class="map-section">
-        <div class="title-box">
-            <h1>{% trans "CHOKDEE THAI MASSAGE" %}</h1>
-        </div>
+        <div class="map-wrapper">
+            <div class="title-box">
+                <h1>{% trans "CHOKDEE THAI MASSAGE" %}</h1>
+            </div>
 
-        <div class="map-container">
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2785.135838640763!2d17.186348!3d46.789773!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x476910dbf8eeab7b%3A0x8675b098e284fea4!2sChokdee%20Thai%20Massage%20in%20H%C3%A9v%C3%ADz!5e0!3m2!1sth!2shu!4v1721467100000!5m2!1sth!2shu"
-                width="100%" height="450" style="border:0;" allowfullscreen loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
+            <div class="map-card">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2785.135838640763!2d17.186348!3d46.789773!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x476910dbf8eeab7b%3A0x8675b098e284fea4!2sChokdee%20Thai%20Massage%20in%20H%C3%A9v%C3%ADz!5e0!3m2!1sth!2shu!4v1721467100000!5m2!1sth!2shu"
+                    allowfullscreen
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
         </div>
     </section>
 
@@ -164,7 +164,7 @@
                box-shadow:0 4px 8px rgba(0,0,0,0.2); z-index:1000;">
 
         <div style="background:#3B7A57; color:white; padding:10px; border-radius:10px 10px 0 0;">
-            🤖 {% trans "Chatbot" %}
+               Chokdee Thai Massage
         </div>
 
         <div id="chat-messages" style="height:300px; overflow-y:auto; padding:10px; font-size:14px;"></div>

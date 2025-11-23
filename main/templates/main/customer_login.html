@@ -4,70 +4,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เข้าสู่ระบบ - Chokdee Thai Massage</title>
+    <title>เข้าสู่ระบบ</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Kanit', sans-serif;
-            background: linear-gradient(135deg, #f6f9f6, #c6ebd9);
-            height: 100vh;
+            margin: 0;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 24px;
+
+            /* ใช้พื้นหลังลายดอกบัวเหมือนหน้า register */
+            background-image: url("{% static 'images/pt.1.png' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
 
         .login-container {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
-            border-radius: 20px;
-            padding: 40px 50px;
-            width: 380px;
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            padding: 34px 32px 28px;
+            border-radius: 28px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.30), rgba(255,255,255,0.08));
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow:
+                0 24px 40px rgba(0,0,0,0.25),
+                inset 0 0 0 1px rgba(255,255,255,0.35);
             text-align: center;
+            color: #123827;
+        }
+
+        .logo-wrap {
+            margin-bottom: 14px;
+        }
+
+        .logo-wrap img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #1b8a57;
         }
 
         .login-container h2 {
-            color: #1b4d3e;
-            margin-bottom: 30px;
+            color: #123827;
+            margin: 0 0 6px;
             font-weight: 600;
+            font-size: 30px;
         }
 
-        input {
+        .subtitle {
+            margin: 0 0 22px;
+            font-size: 14px;
+            color: rgba(18, 56, 39, 0.85);
+        }
+
+        form {
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: rgba(18, 56, 39, 0.9);
+        }
+
+        .form-group input {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.7);
-            font-size: 16px;
+            padding: 11px 12px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.8);
+            background: rgba(255,255,255,0.9);
+            font-size: 15px;
             outline: none;
+            color: #123827;
+        }
+
+        .form-group input:focus {
+            border-color: #1b8a57;
+            box-shadow: 0 0 0 2px rgba(27,138,87,0.25);
+        }
+
+        /* กล่องข้อความจาก Django messages */
+        .messages-box {
+            margin-bottom: 14px;
+        }
+
+        .message {
+            font-size: 14px;
+            padding: 9px 12px;
+            border-radius: 12px;
+            margin: 0 0 8px;
+            text-align: center;
+        }
+
+        .message.success {
+            background: #d7fbdc;
+            color: #0a5a29;
+        }
+
+        .message.error,
+        .message.danger {
+            background: #ffe1e1;
+            color: #8b0000;
+        }
+
+        .message.info {
+            background: #e1f3ff;
+            color: #055d8b;
         }
 
         button {
             width: 100%;
-            padding: 12px;
+            padding: 13px;
+            margin-top: 6px;
             border: none;
-            border-radius: 10px;
+            border-radius: 16px;
             background: linear-gradient(135deg, #2a8c57, #1b4d3e);
             color: white;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.25s;
+            box-shadow: 0 12px 26px rgba(19, 92, 63, 0.45);
         }
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(42, 140, 87, 0.3);
+            box-shadow: 0 16px 32px rgba(19, 92, 63, 0.55);
         }
 
         p {
-            margin-top: 20px;
-            font-size: 1rem;
-            color: #333;
+            margin-top: 18px;
+            font-size: 14px;
         }
 
         a {
-            color: #1b4d3e;
+            color: #0f6a40;
             text-decoration: none;
             font-weight: 600;
         }
@@ -76,48 +166,54 @@
             text-decoration: underline;
         }
 
-        .messages {
-            list-style: none;
-            padding: 0;
-            margin-bottom: 20px;
-        }
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 28px 22px 24px;
+                border-radius: 22px;
+            }
 
-        .messages li {
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: 600;
-        }
-
-        .messages .error {
-            background-color: #ffd4d4;
-            color: #a60000;
-        }
-
-        .messages .success {
-            background-color: #d6ffda;
-            color: #176a3a;
+            .login-container h2 {
+                font-size: 26px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="login-container">
+
+        <div class="logo-wrap">
+            <img src="{% static 'images/logo.png' %}" alt="Chokdee Thai Massage">
+        </div>
+
         <h2>เข้าสู่ระบบ</h2>
+        <p class="subtitle">กรอกอีเมลและรหัสผ่านเพื่อเข้าสู่ระบบ</p>
 
         {% if messages %}
-        <ul class="messages">
+        <div class="messages-box">
             {% for message in messages %}
-                <li class="{{ message.tags }}">{{ message }}</li>
+                <p class="message {{ message.tags }}">{{ message }}</p>
             {% endfor %}
-        </ul>
+        </div>
         {% endif %}
 
         <form method="POST">
             {% csrf_token %}
-            <input type="text" name="username" placeholder="ชื่อผู้ใช้" required>
-            <input type="password" name="password" placeholder="รหัสผ่าน" required>
+
+            <div class="form-group">
+                <label for="id_email">อีเมล</label>
+                <input id="id_email" type="email" name="email"
+                       placeholder="example@email.com"
+                       value="{{ request.POST.email|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">รหัสผ่าน</label>
+                <input id="id_password" type="password" name="password" placeholder="กรอกรหัสผ่าน">
+            </div>
+
             <button type="submit">เข้าสู่ระบบ</button>
         </form>
+
         <p>ยังไม่มีบัญชี? <a href="{% url 'customer_register' %}">สมัครสมาชิก</a></p>
     </div>
 </body>

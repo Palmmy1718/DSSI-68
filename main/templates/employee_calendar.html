@@ -10,37 +10,52 @@
   <style>
     body {
       font-family: 'Kanit', sans-serif;
-      background-color: #eef4ef;
+      background: linear-gradient(120deg, #eafaf1 0%, #f6f8fc 100%);
+      min-height: 100vh;
     }
-
     .calendar-container {
       max-width: 900px;
-      margin: 2rem auto;
-      background: #ffffffb3;
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      margin: 2.5rem auto;
+      background: #fff;
+      border-radius: 28px;
+      padding: 2.5rem 2rem 2rem 2rem;
+      box-shadow: 0 10px 32px rgba(0,0,0,0.10);
+      position: relative;
     }
-
     .employee-header {
       text-align: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
     }
-
     .employee-header img {
       width: 120px;
       height: 120px;
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 1rem;
-      border: 3px solid #074e2e;
+      border: 4px solid #138034;
+      box-shadow: 0 2px 12px rgba(19,128,52,0.08);
     }
-
-    h2 {
-      color: #073d25;
-      font-weight: 600;
+    .employee-header h2 {
+      color: #138034;
+      font-size: 2.1rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+      letter-spacing: 1px;
     }
-
+    .calendar-title {
+      text-align: center;
+      font-size: 1.3rem;
+      color: #14532d;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+    /* Calendar FullCalendar overrides */
+    #calendar {
+      background: #f8fff9;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(19,128,52,0.04);
+      padding: 1.2rem;
+    }
     /* Modal */
     .modal {
       display: none;
@@ -51,45 +66,60 @@
       width: 100%;
       height: 100%;
       overflow: auto;
-      background-color: rgba(0,0,0,0.4);
+      background-color: rgba(0,0,0,0.18);
     }
-
     .modal-content {
       background-color: #fff;
-      margin: 15% auto;
-      padding: 20px;
-      border-radius: 12px;
-      width: 360px;
+      margin: 12% auto;
+      padding: 28px 24px 20px 24px;
+      border-radius: 18px;
+      width: 340px;
       text-align: center;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 32px rgba(19,128,52,0.10);
     }
-
     .modal h3 {
       margin-bottom: 10px;
-      color: #083d27;
-    }
-
-    .close-btn {
-      background-color: #0f683c;
-      border: none;
-      color: white;
-      padding: 8px 18px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .close-btn:hover {
-      background-color: #094a2b;
-    }
-
-    a.call-link {
-      color: #0f683c;
-      text-decoration: none;
+      color: #138034;
+      font-size: 1.2rem;
       font-weight: 600;
     }
-
+    .close-btn {
+      background-color: #138034;
+      border: none;
+      color: white;
+      padding: 10px 28px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-family: inherit;
+      margin-top: 10px;
+      box-shadow: 0 2px 8px rgba(19,128,52,0.08);
+      transition: background 0.18s;
+    }
+    .close-btn:hover {
+      background-color: #0f683c;
+    }
+    a.call-link {
+      color: #138034;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.08rem;
+    }
     a.call-link:hover {
       text-decoration: underline;
+      color: #0f683c;
+    }
+    @media (max-width: 600px) {
+      .calendar-container {
+        padding: 1rem;
+      }
+      .modal-content {
+        width: 95vw;
+        padding: 18px 6vw;
+      }
+      #calendar {
+        padding: 0.5rem;
+      }
     }
   </style>
 </head>
@@ -103,12 +133,12 @@
 
   <div class="calendar-container">
     <div class="employee-header">
-      {% if employee.photo %}
-        <img src="{{ employee.photo.url }}" alt="{{ employee.display_name }}">
+      {% if emp.photo_url %}
+        <img src="{{ emp.photo_url }}" alt="{{ emp.display_name }}">
       {% endif %}
-      <h2>{{ employee.display_name }}</h2>
+      <h2>{{ emp.display_name }}</h2>
     </div>
-
+    <div class="calendar-title">ตารางนัดหมายเดือนนี้</div>
     <div id="calendar"></div>
   </div>
 

@@ -1,3 +1,5 @@
+def massage_admin_view(request):
+    return render(request, 'main/massage_admin.html')
 # main/views.py
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -46,7 +48,7 @@ def site_home(request):
 
 def employee_calendar(request, pk):
     """Render the employee calendar page (FullCalendar)."""
-    emp = get_object_or_404(Employee, pk=pk, is_active=True)
+    emp = get_object_or_404(Employee, pk=pk)
     emp.photo_url = _photo_url(emp)
     # Template file is located at main/templates/employee_calendar.html (root of app templates)
     return render(request, 'employee_calendar.html', {'emp': emp})
@@ -569,30 +571,41 @@ def chat_api(request):
     # โหลดข้อมูลบริการจากไฟล์
     service_info = load_service_data()
 
-    # โหลดโปรโมชั่นจากฐานข้อมูล
-    promo = Promotion.objects.filter(is_active=True).order_by("-updated_at").first()
+    # ตรวจสอบว่าคำถามเกี่ยวกับโปรโมชั่นหรือไม่
+    promo_keywords = ["โปร", "promotion", "โปรโมชั่น", "โปรโมชัน", "ส่วนลด", "offer", "deal"]
+    is_promo_question = any(word in user_message.lower() for word in promo_keywords)
 
-    if promo:
-        promo_text = f"- {promo.title}: {promo.description}"
-    else:
-        promo_text = "ขณะนี้ยังไม่มีโปรโมชั่นพิเศษค่ะ"
-
-    # Prompt ที่ส่งให้ Gemini
-    final_prompt = f"""
-คุณคือแชตบอทของร้าน Chokdee Thai Massage in Hévíz  
-ตอบเฉพาะข้อมูลที่ร้านมีจริง ห้ามแต่งเรื่อง  
-
-ข้อมูลบริการทั้งหมดมีดังนี้:
-{service_info}
+    if is_promo_question:
+        promos = Promotion.objects.filter(is_active=True).order_by("-updated_at")
+        if promos.exists():
+            promo_text = "\n".join([f"- {p.title}: {p.description}" for p in promos])
+        else:
+            promo_text = "ขณะนี้ยังไม่มีโปรโมชั่นพิเศษค่ะ"
+        final_prompt = f"""
+คุณคือแชตบอทของร้าน Chokdee Thai Massage in Hévíz
+ตอบเฉพาะข้อมูลที่ร้านมีจริง ห้ามแต่งเรื่อง
 
 ข้อมูลโปรโมชั่นปัจจุบัน:
 {promo_text}
 
-ตอนนี้ลูกค้าถามว่า: "{user_message}"
+ตอนนี้ลูกค้าถามว่า: \"{user_message}\"
 
-กรุณาตอบด้วยภาษาสุภาพ กระชับ เข้าใจง่าย  
-ห้ามแต่งข้อมูลเกินจากสิ่งที่ให้ไว้ด้านบน  
-    """
+กรุณาตอบด้วยภาษาสุภาพ กระชับ เข้าใจง่าย
+ห้ามแต่งข้อมูลเกินจากสิ่งที่ให้ไว้ด้านบน
+        """
+    else:
+        final_prompt = f"""
+คุณคือแชตบอทของร้าน Chokdee Thai Massage in Hévíz
+ตอบเฉพาะข้อมูลที่ร้านมีจริง ห้ามแต่งเรื่อง
+
+ข้อมูลบริการทั้งหมดมีดังนี้:
+{service_info}
+
+ตอนนี้ลูกค้าถามว่า: \"{user_message}\"
+
+กรุณาตอบด้วยภาษาสุภาพ กระชับ เข้าใจง่าย
+ห้ามแต่งข้อมูลเกินจากสิ่งที่ให้ไว้ด้านบน
+        """
 
     try:
         response = client.models.generate_content(
@@ -696,14 +709,21 @@ def customer_login_view(request):
         pass
 
     if request.method == "POST":
-        username = request.POST.get("username")
+        email = request.POST.get("email")
         password = request.POST.get("password")
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            messages.success(request, f"ยินดีต้อนรับ {username}!")
-            return redirect('home')  # ไปหน้าโฮมของลูกค้า
-        else:
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        user_objs = User.objects.filter(email=email)
+        found = False
+        for user_obj in user_objs:
+            user = authenticate(request, username=user_obj.username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, f"ยินดีต้อนรับ {user_obj.username}!")
+                return redirect('home')  # ไปหน้าโฮมของลูกค้า
+                found = True
+                break
+        if not found:
             messages.error(request, "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง")
 
     return render(request, 'main/customer_login.html')
