@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>เลือกเวลานัดหมาย</title>
+
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: #e8f0ec;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .time-slot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            margin-bottom: 10px;
+            background: #f7f9f8;
+            border-radius: 12px;
+            border: 1px solid #d3ddd9;
+        }
+
+        .time-text {
+            font-size: 18px;
+        }
+
+        .btn-book {
+            padding: 10px 18px;
+            background: #1d7f43;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .btn-book:hover {
+            background: #176c37;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #888;
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+
+        .btn-back:hover {
+            background: #666;
+        }
+
+        .full {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <h2>{{ employee.display_name }} – {{ date }}</h2>
+
+    <hr style="margin-bottom:20px;">
+
+    {% for slot in slots %}
+        <div class="time-slot">
+
+            <div class="time-text">
+                ⏰ {{ slot.time }}
+            </div>
+
+            {% if slot.available %}
+                <a class="btn-book"
+                   href="/booking-form/?employee={{ employee.id }}&date={{ date }}&time={{ slot.time }}&duration={{ duration }}">
+                    จอง
+                </a>
+            {% else %}
+                <span class="full">เต็มแล้ว</span>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <div style="text-align:center; margin-top:20px;">
+        <a href="javascript:history.back()" class="btn-back">← กลับ</a>
+    </div>
+
+</div>
+
+</body>
+</html>

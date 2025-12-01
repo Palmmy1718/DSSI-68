@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <title>จัดการคิวจองลูกค้า</title>
-    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+
     <style>
       body {
         font-family: 'Kanit', sans-serif;
@@ -12,10 +12,8 @@
         background: #f8fff9;
       }
 
-      /* Layout */
       .shell { display: flex; min-height: 100vh; }
 
-      /* Sidebar */
       .side {
         width: 220px;
         background: #07210f;
@@ -38,7 +36,6 @@
         color: #fff;
       }
 
-      /* Main content */
       .main { flex: 1; padding: 2rem; }
 
       .page {
@@ -113,24 +110,26 @@
         background: #166534;
       }
     </style>
+
   </head>
 
   <body>
     <div class="shell">
-      <!-- Sidebar -->
+
       <aside class="side">
         <nav class="nav">
           <a href="{% url 'employee_list' %}">จัดการพนักงาน</a>
           <a href="{% url 'employee_availability_list' %}">เวลาคิวว่าง</a>
+          <a href="{% url 'massage_admin' %}">รายการนวด</a>
           <a href="{% url 'gallery_crud' %}">เพิ่มรูปภาพ</a>
-          <a href="{% url 'admin_bookings' %}" class="active">คิวจอง</a>
+          <a class="active" href="{% url 'admin_bookings' %}">คิวจอง</a>
           <a href="{% url 'logout' %}">ออกจากระบบ</a>
         </nav>
       </aside>
 
-      <!-- Main content -->
       <main class="main">
         <div class="page">
+
           <h1>จัดการคิวจองลูกค้า</h1>
 
           <div class="filter">
@@ -143,6 +142,7 @@
           <table>
             <tr>
               <th>เวลา</th>
+              <th>วันที่</th>
               <th>ชื่อลูกค้า</th>
               <th>พนักงาน</th>
               <th>สถานะ</th>
@@ -151,31 +151,43 @@
 
             {% for b in bookings %}
             <tr>
-              <td>{{ b.time }}</td>
+              <td>{{ b.start_time|time:"H:i" }}</td>
+              <td>{{ b.date }}</td>
               <td>{{ b.customer_name }}</td>
               <td>{{ b.employee.display_name }}</td>
+
               <td>
-                {% if b.status == 'pending' %}
-                  <span class="badge pending">รอคอนเฟิร์ม</span>
-                {% elif b.status == 'confirmed' %}
-                  <span class="badge confirmed">ยืนยันแล้ว</span>
+                {% if b.status %}
+                    {% if b.status == "confirmed" %}
+                      <span class="badge confirmed">ยืนยันแล้ว</span>
+                    {% elif b.status == "cancelled" %}
+                      <span class="badge cancelled">ยกเลิกแล้ว</span>
+                    {% else %}
+                      <span class="badge pending">รอคอนเฟิร์ม</span>
+                    {% endif %}
                 {% else %}
-                  <span class="badge cancelled">ยกเลิกแล้ว</span>
+                    <!-- fallback → pending -->
+                    <span class="badge pending">รอคอนเฟิร์ม</span>
                 {% endif %}
               </td>
+
               <td>
-                {% if b.status == 'pending' %}
+                {% if b.status == "confirmed" %}
+                  <button class="btn btn-blue">ดูรายละเอียด</button>
+
+                {% elif b.status == "cancelled" %}
+                  -
+                {% else %}
                   <button class="btn btn-green">ยืนยัน</button>
                   <button class="btn btn-red">ยกเลิก</button>
-                {% elif b.status == 'confirmed' %}
-                  <button class="btn btn-blue">ดูรายละเอียด</button>
-                {% else %}
-                  -
                 {% endif %}
               </td>
+
             </tr>
             {% endfor %}
+
           </table>
+
         </div>
       </main>
     </div>

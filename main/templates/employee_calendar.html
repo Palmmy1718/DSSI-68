@@ -2,185 +2,157 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ตารางนัดของ {{ employee.display_name }}</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <style>
-    body {
-      font-family: 'Kanit', sans-serif;
-      background: linear-gradient(120deg, #eafaf1 0%, #f6f8fc 100%);
-      min-height: 100vh;
-    }
-    .calendar-container {
-      max-width: 900px;
-      margin: 2.5rem auto;
-      background: #fff;
-      border-radius: 28px;
-      padding: 2.5rem 2rem 2rem 2rem;
-      box-shadow: 0 10px 32px rgba(0,0,0,0.10);
-      position: relative;
-    }
-    .employee-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .employee-header img {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 1rem;
-      border: 4px solid #138034;
-      box-shadow: 0 2px 12px rgba(19,128,52,0.08);
-    }
-    .employee-header h2 {
-      color: #138034;
-      font-size: 2.1rem;
-      font-weight: 700;
-      margin-bottom: 0.2rem;
-      letter-spacing: 1px;
-    }
-    .calendar-title {
-      text-align: center;
-      font-size: 1.3rem;
-      color: #14532d;
-      margin-bottom: 1.5rem;
-      font-weight: 500;
-    }
-    /* Calendar FullCalendar overrides */
-    #calendar {
-      background: #f8fff9;
-      border-radius: 18px;
-      box-shadow: 0 2px 8px rgba(19,128,52,0.04);
-      padding: 1.2rem;
-    }
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.18);
-    }
-    .modal-content {
-      background-color: #fff;
-      margin: 12% auto;
-      padding: 28px 24px 20px 24px;
-      border-radius: 18px;
-      width: 340px;
-      text-align: center;
-      box-shadow: 0 8px 32px rgba(19,128,52,0.10);
-    }
-    .modal h3 {
-      margin-bottom: 10px;
-      color: #138034;
-      font-size: 1.2rem;
-      font-weight: 600;
-    }
-    .close-btn {
-      background-color: #138034;
-      border: none;
-      color: white;
-      padding: 10px 28px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1.1rem;
-      font-family: inherit;
-      margin-top: 10px;
-      box-shadow: 0 2px 8px rgba(19,128,52,0.08);
-      transition: background 0.18s;
-    }
-    .close-btn:hover {
-      background-color: #0f683c;
-    }
-    a.call-link {
-      color: #138034;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1.08rem;
-    }
-    a.call-link:hover {
-      text-decoration: underline;
-      color: #0f683c;
-    }
-    @media (max-width: 600px) {
-      .calendar-container {
-        padding: 1rem;
-      }
-      .modal-content {
-        width: 95vw;
-        padding: 18px 6vw;
-      }
-      #calendar {
-        padding: 0.5rem;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>ตารางงาน - {{ emp.display_name }}</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css">
+
+    <style>
+        body {
+            background: #e8f0ec;
+            font-family: 'Kanit', sans-serif;
+        }
+        .calendar-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .btn-back {
+            padding: 10px 20px;
+            background: #1d7f43;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+        .btn-back:hover {
+            background: #146234;
+        }
+        .modal-box {
+            padding: 20px;
+            text-align: center;
+        }
+        .modal-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background: #1d7f43;
+            color: white;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+        }
+        .modal-btn:hover {
+            background: #146234;
+        }
+
+        /* ---------- NEW MODAL FIX ---------- */
+        .modal-overlay {
+            display: none; /* ปิดตอนเริ่มต้น */
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+
+            /* จัดกลาง */
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+    </style>
+
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#074e2e;">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">Chokdee Thai Massage</a>
-    </div>
-  </nav>
 
-  <div class="calendar-container">
-    <div class="employee-header">
-      {% if emp.photo_url %}
-        <img src="{{ emp.photo_url }}" alt="{{ emp.display_name }}">
-      {% endif %}
-      <h2>{{ emp.display_name }}</h2>
-    </div>
-    <div class="calendar-title">ตารางนัดหมายเดือนนี้</div>
-    <div id="calendar"></div>
-  </div>
+<div class="calendar-container">
 
-  <!-- Modal -->
-  <div id="eventModal" class="modal">
+    <a href="{% url 'home' %}" class="btn-back">← กลับหน้าแรก</a>
+
+    <h2 style="text-align:center; margin-top:20px;">
+        ตารางงานของ {{ emp.display_name }}
+    </h2>
+
+    <div id="calendar" style="margin-top: 20px;"></div>
+</div>
+
+
+<!-- ---------- MODAL (เวอร์ชันใหม่ ทำงานถูกต้อง) ---------- -->
+<div id="dayModal" class="modal-overlay">
     <div class="modal-content">
-      <h3 id="modalDate"></h3>
-      <p id="modalInfo">ไม่มีข้อมูลเวลา</p>
-      <p>โทรจอง: <a href="tel:+3630-5814854" class="call-link">+3630-5814854</a></p>
-      <button class="close-btn" onclick="closeModal()">ปิด</button>
-    </div>
-  </div>
+        <div class="modal-box">
+            <h3>ตารางวันที่ <span id="selected_date"></span></h3>
 
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const calendarEl = document.getElementById('calendar');
-      const calendar = new FullCalendar.Calendar(calendarEl, {
+            <button id="goBooking" class="modal-btn" style="margin-top:20px;">
+                จองออนไลน์
+            </button>
+
+            <button onclick="closeModal()" class="modal-btn" style="margin-top:10px; background:#888;">
+                ปิด
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    let emp_id = "{{ emp.id }}";
+
+    let calendarEl = document.getElementById('calendar');
+
+    let calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: ''
-        },
+        selectable: true,
+
         dateClick: function(info) {
-          document.getElementById('modalDate').innerText = "ตารางวันที่ " + info.dateStr;
-          document.getElementById('modalInfo').innerText = "ไม่มีข้อมูลเวลา";
-          document.getElementById('eventModal').style.display = "block";
+            // เปิด modal แบบ flex
+            document.getElementById("selected_date").innerText = info.dateStr;
+            document.getElementById("dayModal").style.display = "flex";
         },
-        events: '/api/employee/{{ employee.id }}/slots/'
-      });
-      calendar.render();
+
+        events: `/employees/${emp_id}/events/`
     });
 
-    function closeModal() {
-      document.getElementById('eventModal').style.display = "none";
-    }
+    calendar.render();
 
-    window.onclick = function(event) {
-      const modal = document.getElementById('eventModal');
-      if (event.target === modal) modal.style.display = "none";
-    }
-  </script>
+    // ไปหน้า booking-slot
+    document.getElementById("goBooking").addEventListener("click", function () {
+        let date = document.getElementById("selected_date").innerText;
+
+        if (!date) {
+            alert("กรุณาเลือกวันที่ก่อน");
+            return;
+        }
+
+        window.location.href = `/booking-slots/${emp_id}/?date=${date}&duration=60`;
+    });
+
+});
+
+// ปิด Modal
+function closeModal() {
+    document.getElementById("dayModal").style.display = "none";
+}
+</script>
+
 </body>
 </html>

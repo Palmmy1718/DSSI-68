@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>ยืนยันการจอง</title>
+
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: #e8f0ec;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 550px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.12);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1d7f43;
+        }
+
+        .info-box {
+            background: #f2f8f5;
+            padding: 15px 18px;
+            border-radius: 15px;
+            border-left: 5px solid #1d7f43;
+            margin-bottom: 25px;
+        }
+
+        .info-item {
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        label {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: #1d7f43;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background: #166b38;
+        }
+
+        .btn-back {
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-top: 15px;
+            padding: 12px;
+            background: #888;
+            color: white;
+            border-radius: 12px;
+            text-decoration: none;
+        }
+
+        .btn-back:hover {
+            background: #666;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <h2>ยืนยันการจอง</h2>
+
+    <div class="info-box">
+        <div class="info-item">พนักงาน: <b>{{ employee }}</b></div>
+        <div class="info-item">วันที่: <b>{{ date }}</b></div>
+        <div class="info-item">เวลา: <b>{{ time }}</b></div>
+        <div class="info-item">ระยะเวลา: <b>{{ duration }} นาที</b></div>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <input type="hidden" name="employee" value="{{ employee }}">
+        <input type="hidden" name="date" value="{{ date }}">
+        <input type="hidden" name="time" value="{{ time }}">
+        <input type="hidden" name="duration" value="{{ duration }}">
+
+        <label>ชื่อ *</label>
+        <input type="text" name="customer_name" required placeholder="ชื่อผู้จอง">
+
+        <label>เบอร์โทร *</label>
+        <input type="text" name="customer_phone" required placeholder="เบอร์โทรติดต่อ">
+
+        <button type="submit" class="btn-submit">ยืนยันการจอง</button>
+    </form>
+
+    <a href="javascript:history.back()" class="btn-back">← กลับ</a>
+
+</div>
+
+</body>
+</html>

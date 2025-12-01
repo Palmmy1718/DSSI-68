@@ -23,3 +23,14 @@ RootPass123!
 
 # คำสั่งสร้างอีเมล รหัสแอดมิน
 python manage.py createsuperuser
+
+pip install PyMySQL
+
+# ใช้อ่านค่าจากไฟล์ .env มาเป็น environment variables
+pip install python-dotenv
+
+pip install google-genai
+
+# ใช้จัดการรูปภาพ เช่น save/resize/check รูปเวลาอัปโหลด
+pip install Pillow 
+

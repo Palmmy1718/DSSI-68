@@ -75,4 +75,36 @@ class Promotion(models.Model):
 
     def __str__(self):
         return self.title
-# ----------------------------------------------------------------
+# ---------------------- BOOKING MODEL + STATUS ----------------------
+class Booking(models.Model):
+
+    STATUS_CHOICES = (
+        ('pending', 'รออนุมัติ'),
+        ('confirmed', 'ยืนยันแล้ว'),
+        ('cancelled', 'ยกเลิกแล้ว'),
+    )
+
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, blank=True)
+    massage = models.ForeignKey(Massage, on_delete=models.CASCADE, null=True, blank=True)
+
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    customer_name = models.CharField(max_length=120)
+    customer_phone = models.CharField(max_length=40)
+
+    date = models.DateField()
+    start_time = models.TimeField()
+    duration_minutes = models.PositiveIntegerField(default=60)
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending'
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['date', 'start_time']
+
+    def __str__(self):
+        return f"{self.customer_name} - {self.date} {self.start_time}"

@@ -19,13 +19,12 @@
 
       /* Sidebar */
       .side {
-        width: 230px;
-        background: #052d15;
+        width: 220px;
+        background: #07210f;
         color: #fff;
         padding: 2rem 1rem;
         display: flex;
         flex-direction: column;
-        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
       }
 
       .nav a {
@@ -33,26 +32,20 @@
         color: #d1d5db;
         padding: 10px 14px;
         text-decoration: none;
-        border-radius: 8px;
-        margin-bottom: 10px;
-        font-weight: 500;
-        transition: all 0.3s ease;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        transition: all 0.2s ease;
       }
 
       .nav a:hover, .nav a.active {
-        background: linear-gradient(90deg, #15803d, #16a34a);
+        background: #14532d;
         color: #fff;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        transform: translateX(4px);
       }
 
       /* Main area */
       .main {
         flex: 1;
-        padding: 3rem 2rem;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
+        padding: 2rem;
       }
 
       .page {
@@ -158,6 +151,7 @@
         <nav class="nav">
           <a href="{% url 'employee_list' %}">จัดการพนักงาน</a>
           <a href="{% url 'employee_availability_list' %}" class="active">เวลาคิวว่าง</a>
+          <a href="{% url 'massage_admin' %}">รายการนวด</a>
           <a href="{% url 'gallery_crud' %}">เพิ่มรูปภาพ</a>
           <a href="{% url 'admin_bookings' %}">คิวจอง</a>
           <a href="{% url 'logout' %}">ออกจากระบบ</a>

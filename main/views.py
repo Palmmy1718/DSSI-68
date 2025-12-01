@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from django.utils.dateparse import parse_date
 from .forms import EmployeeForm
-from .models import Employee, AppointmentSlot
+from .models import Employee, AppointmentSlot, Booking
 import base64
 import os
 from django.conf import settings
@@ -430,7 +430,7 @@ from .models import Employee, AppointmentSlot
 @login_required
 def employee_availability_list(request):
     """หน้าแสดงพนักงานทั้งหมด"""
-    employees = Employee.objects.filter(is_active=True).order_by('display_name')
+    employees = Employee.objects.all().order_by('display_name')
     return render(request, 'main/employee_availability_list.html', {'employees': employees})
 
 
@@ -630,19 +630,17 @@ def chat_ui(request):
 
 from django.shortcuts import render
 from datetime import date
+from .models import Booking
 
 def admin_bookings_view(request):
-    # ตัวอย่างข้อมูลจำลอง (ยังไม่เชื่อม database จริง)
-    dummy_data = [
-        {"time": "09:00", "customer_name": "คุณพร", "employee": {"display_name": "Juli"}, "status": "pending"},
-        {"time": "10:30", "customer_name": "คุณณัฐ", "employee": {"display_name": "Mimi"}, "status": "confirmed"},
-        {"time": "13:00", "customer_name": "คุณแอน", "employee": {"display_name": "Aom"}, "status": "cancelled"},
-    ]
+    """ดึงรายการจองจากฐานข้อมูลจริง"""
+    bookings = Booking.objects.select_related("employee").order_by("date", "start_time")
 
     return render(request, "main/admin_bookings.html", {
-        "bookings": dummy_data,
+        "bookings": bookings,
         "today": date.today(),
     })
+
 
 #---------------------- login/logout views ----------------------
 
@@ -733,3 +731,105 @@ def customer_logout_view(request):
     logout(request)
     messages.success(request, "ออกจากระบบเรียบร้อยแล้ว")
     return redirect('customer_login')
+
+#---------------------- PUBLIC BOOKING SYSTEM ----------------------
+
+def is_conflict(employee, date_obj, start_time, duration):
+    """
+    ตรวจสอบว่าช่วงเวลานี้ทับกับเวลาที่มีอยู่แล้วหรือไม่
+    """
+    end_time = (datetime.combine(date_obj, start_time) + timedelta(minutes=duration)).time()
+
+    slots = AppointmentSlot.objects.filter(employee=employee, date=date_obj)
+
+    for s in slots:
+        s_end = (datetime.combine(s.date, s.start_time) + timedelta(minutes=s.duration_minutes)).time()
+
+        if start_time < s_end and end_time > s.start_time:
+            return True
+
+    return False
+
+# ---------------------- PUBLIC BOOKING SYSTEM ----------------------
+from datetime import time
+
+TIME_SLOTS = [
+    time(9,0), time(10,0), time(11,0), time(12,0),
+    time(13,0), time(14,0), time(15,0), time(16,0),
+    time(17,0), time(18,0), time(19,0),
+]
+
+def booking_slots(request, employee_id):
+    """
+    แสดงเวลาทั้งวันของพนักงาน (แบบในภาพ UI ที่คุณส่ง)
+    และเช็คว่าเต็มหรือจองได้
+    """
+    employee = get_object_or_404(Employee, pk=employee_id)
+
+    date_str = request.GET.get("date")
+    duration = int(request.GET.get("duration", 60))  # 60 หรือ 120 นาที
+
+    if not date_str:
+        return JsonResponse({"error": "missing date"}, status=400)
+
+    date_obj = datetime.strptime(date_str, "%Y-%m-%d").date()
+
+    slot_list = []
+    for slot in TIME_SLOTS:
+        conflict = is_conflict(employee, date_obj, slot, duration)
+        slot_list.append({
+            "time": slot.strftime("%H:%M"),
+            "available": not conflict
+        })
+
+    return render(request, "main/booking_slots.html", {
+        "employee": employee,
+        "date": date_str,
+        "duration": duration,
+        "slots": slot_list,
+    })
+
+
+def booking_form(request):
+    """
+    หน้าฟอร์มสุดท้ายก่อนบันทึกการจอง
+    """
+    if request.method == "POST":
+        employee = Employee.objects.get(pk=request.POST["employee"])
+        date_str = request.POST["date"]
+        time_str = request.POST["time"]
+        duration = int(request.POST["duration"])
+
+        date_obj = datetime.strptime(date_str, "%Y-%m-%d").date()
+        start_obj = datetime.strptime(time_str, "%H:%M").time()
+
+        # ป้องกันจองซ้ำ
+        if is_conflict(employee, date_obj, start_obj, duration):
+            return render(
+                request,
+                "main/booking_result.html",
+                {"success": False, "message": "ช่วงเวลานี้ถูกจองไปแล้ว"}
+            )
+
+        Booking.objects.create(
+            employee=employee,
+            customer_name=request.POST["customer_name"],
+            customer_phone=request.POST["customer_phone"],
+            date=date_obj,
+            start_time=start_obj,
+            duration_minutes=duration,
+        )
+
+        return render(
+            request,
+            "main/booking_result.html",
+            {"success": True, "message": "ทำการจองสำเร็จแล้ว!"}
+        )
+
+    # GET (แสดงฟอร์ม)
+    return render(request, "main/booking_form.html", {
+        "employee": request.GET.get("employee"),
+        "date": request.GET.get("date"),
+        "time": request.GET.get("time"),
+        "duration": request.GET.get("duration"),
+    })

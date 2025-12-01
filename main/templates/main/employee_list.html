@@ -163,6 +163,9 @@
           เวลาคิวว่าง
         </a>
 
+        <a href="{% url 'massage_admin' %}" class="{% if '/massage-admin/' in request.path %}active{% endif %}">
+          รายการนวด
+        </a>
 
         <!-- ✅ ปุ่มเพิ่มรูปภาพ (เชื่อมกับ Gallery CRUD) -->
         <a href="{% url 'gallery_crud' %}" class="{% if '/galleryx/' in request.path %}active{% endif %}">

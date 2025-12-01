@@ -65,7 +65,6 @@
     </nav>
 
     {% if request.user.is_staff %}
-        <li><a href="{% url 'employee_list' %}">{% trans "Manage" %}</a></li>
     {% endif %}
 
     <!-- Banner Section -->
