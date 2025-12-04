@@ -6,73 +6,26 @@
     <title>เลือกเวลานัดหมาย</title>
 
     <style>
-        body {
-            font-family: 'Kanit', sans-serif;
-            background: #e8f0ec;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 40px auto;
-            background: white;
-            padding: 25px;
-            border-radius: 18px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .time-slot {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 18px;
-            margin-bottom: 10px;
-            background: #f7f9f8;
-            border-radius: 12px;
-            border: 1px solid #d3ddd9;
-        }
-
-        .time-text {
-            font-size: 18px;
-        }
-
-        .btn-book {
-            padding: 10px 18px;
-            background: #1d7f43;
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 16px;
-        }
-
-        .btn-book:hover {
-            background: #176c37;
-        }
-
-        .btn-back {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #888;
-            color: white;
-            border-radius: 10px;
-            text-decoration: none;
-            margin-top: 20px;
-        }
-
-        .btn-back:hover {
-            background: #666;
-        }
-
-        .full {
-            color: red;
-            font-weight: bold;
-        }
+        :root { --green-700:#14532d; --green-600:#166534; --bg:#eef7f1; --card:#fff; --muted:#6b7280; }
+        body { font-family: 'Kanit', sans-serif; background: var(--bg); margin: 0; padding: 24px 0; }
+        .container { max-width: 720px; margin: 0 auto; background: var(--card); padding: 28px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        h2 { text-align: center; margin: 0; color: var(--green-700); font-size: 1.6rem; }
+        .sub { text-align:center; color: var(--muted); margin: 8px 0 16px 0; }
+        .toolbar { display:flex; justify-content: space-between; align-items:center; margin-bottom: 12px; }
+        .link-back { color: var(--muted); text-decoration:none; }
+        .link-back:hover { color: var(--green-600); }
+        .select-all { color: var(--green-700); cursor: pointer; }
+        .slot-list { display:flex; flex-direction:column; gap:12px; }
+        .time-slot { display:grid; grid-template-columns: 1fr auto; align-items:center; padding: 14px 18px; background:#f7faf9; border-radius: 14px; border:1px solid #e3ebe6; }
+        .time-text { font-size: 1.1rem; display:flex; align-items:center; gap:10px; color:#0f172a; }
+        .selector { display:flex; align-items:center; gap:8px; }
+        .selector input[type="checkbox"] { width:18px; height:18px; accent-color: var(--green-600); }
+        .full { color:#b91c1c; font-weight:700; }
+        .actions { position: sticky; bottom:0; background: var(--card); padding-top: 16px; text-align:right; }
+        .btn-book { display:inline-block; padding:10px 22px; background: var(--green-700); color:#fff; border-radius:999px; text-decoration:none; font-size:1rem; border:none; }
+        .btn-book[disabled] { opacity:.5; cursor:not-allowed; }
+        .btn-book:hover { background: var(--green-600); }
+        #selectedCount { color: var(--muted); margin-right:12px; }
     </style>
 
 </head>
@@ -81,30 +34,51 @@
 <div class="container">
 
     <h2>{{ employee.display_name }} – {{ date }}</h2>
-
-    <hr style="margin-bottom:20px;">
-
-    {% for slot in slots %}
-        <div class="time-slot">
-
-            <div class="time-text">
-                ⏰ {{ slot.time }}
-            </div>
-
-            {% if slot.available %}
-                <a class="btn-book"
-                   href="/booking-form/?employee={{ employee.id }}&date={{ date }}&time={{ slot.time }}&duration={{ duration }}">
-                    จอง
-                </a>
-            {% else %}
-                <span class="full">เต็มแล้ว</span>
-            {% endif %}
-        </div>
-    {% endfor %}
-
-    <div style="text-align:center; margin-top:20px;">
-        <a href="javascript:history.back()" class="btn-back">← กลับ</a>
+    <div class="sub">เลือกช่วงเวลาที่ต้องการจองได้มากกว่าหนึ่งช่วง</div>
+    <div class="toolbar">
+        <a href="javascript:history.back()" class="link-back">← กลับ</a>
+        <a id="toggleAll" class="select-all">เลือกทั้งหมด</a>
     </div>
+
+    <form action="{% url 'booking_form' %}" method="post" id="bookingForm">
+        {% csrf_token %}
+        <input type="hidden" name="employee" value="{{ employee.id }}">
+        <input type="hidden" name="date" value="{{ date }}">
+        <input type="hidden" name="duration" value="{{ duration }}">
+
+        <div class="slot-list">
+            {% for slot in slots %}
+            <div class="time-slot">
+                <div class="time-text">⏰ {{ slot.time }}</div>
+                {% if slot.available %}
+                <label class="selector">
+                    <input type="checkbox" name="times" value="{{ slot.time }}">
+                    <span>เลือก</span>
+                </label>
+                {% else %}
+                <span class="full">เต็มแล้ว</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="actions">
+            <span id="selectedCount">เลือก 0 ช่วง</span>
+            <button type="submit" class="btn-book" id="submitBtn" disabled>จองที่เลือก</button>
+        </div>
+    </form>
+
+    <script>
+      const form = document.getElementById('bookingForm');
+      const boxes = Array.from(form.querySelectorAll('input[type="checkbox"][name="times"]'));
+      const countEl = document.getElementById('selectedCount');
+      const submitBtn = document.getElementById('submitBtn');
+      const toggleAll = document.getElementById('toggleAll');
+      function update() { const n = boxes.filter(b => b.checked).length; countEl.textContent = `เลือก ${n} ช่วง`; submitBtn.disabled = n===0; }
+      boxes.forEach(b => b.addEventListener('change', update));
+      toggleAll.addEventListener('click', () => { const all = boxes.every(b=>b.checked); boxes.forEach(b=>b.checked=!all); update(); });
+      update();
+    </script>
 
 </div>
 

@@ -99,16 +99,33 @@
     <div class="info-box">
         <div class="info-item">พนักงาน: <b>{{ employee }}</b></div>
         <div class="info-item">วันที่: <b>{{ date }}</b></div>
-        <div class="info-item">เวลา: <b>{{ time }}</b></div>
+        {% if times and times|length > 0 %}
+            <div class="info-item">ช่วงเวลาที่เลือก:</div>
+            <div class="info-item">
+                <ul style="margin:6px 0 0 18px;">
+                    {% for t in times %}
+                        <li>{{ t }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="info-item">เวลา: <b>{{ time }}</b></div>
+        {% endif %}
         <div class="info-item">ระยะเวลา: <b>{{ duration }} นาที</b></div>
     </div>
 
     <form method="post">
         {% csrf_token %}
 
-        <input type="hidden" name="employee" value="{{ employee }}">
+        <input type="hidden" name="employee" value="{{ employee_id|default:employee }}">
         <input type="hidden" name="date" value="{{ date }}">
-        <input type="hidden" name="time" value="{{ time }}">
+        {% if times and times|length > 0 %}
+            {% for t in times %}
+                <input type="hidden" name="times" value="{{ t }}">
+            {% endfor %}
+        {% else %}
+            <input type="hidden" name="time" value="{{ time }}">
+        {% endif %}
         <input type="hidden" name="duration" value="{{ duration }}">
 
         <label>ชื่อ *</label>

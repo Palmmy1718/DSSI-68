@@ -1,13 +1,52 @@
-<div class="max-w-md mx-auto text-center mt-16 p-6">
-    {% if status == "success" %}
-        <h2 class="text-3xl font-bold text-green-700">จองสำเร็จ!</h2>
-        <p class="mt-4">ระบบบันทึกข้อมูลเรียบร้อยแล้ว</p>
-    {% else %}
-        <h2 class="text-3xl font-bold text-red-600">การจองล้มเหลว</h2>
-        <p class="mt-4">ช่วงเวลานี้ถูกจองไปแล้ว กรุณาเลือกเวลาใหม่</p>
-    {% endif %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>ผลการจอง</title>
+    <style>
+        body { font-family: 'Kanit', sans-serif; background: #e8f0ec; margin: 0; }
+        .container { max-width: 600px; margin: 60px auto; background: #fff; border-radius: 18px; box-shadow: 0 6px 20px rgba(0,0,0,0.12); overflow: hidden; }
+        .header { padding: 20px 24px; background: #1d7f43; color: #fff; }
+        .title { margin: 0; font-size: 22px; }
+        .content { padding: 26px; text-align: center; }
+        .status-icon { width: 80px; height: 80px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+        .status-success { background: #e6f5ec; color: #1d7f43; border: 2px solid #1d7f43; }
+        .status-fail { background: #fdecef; color: #d93025; border: 2px solid #d93025; }
+        .heading { font-size: 24px; margin: 8px 0 6px; }
+        .message { color: #444; font-size: 16px; margin-bottom: 22px; }
+        .actions { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+        .btn { padding: 12px 16px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-block; }
+        .btn-home { background: #1d7f43; color: #fff; }
+        .btn-home:hover { background: #166b38; }
+        .btn-back { background: #888; color: #fff; }
+        .btn-back:hover { background: #666; }
+    </style>
+    <script>
+        function goBack() { if (history.length > 1) { history.back(); } else { window.location.href = '/'; } }
+    </script>
+    </head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">ผลการจอง</h1>
+        </div>
+        <div class="content">
+            {% if success %}
+                <div class="status-icon status-success">✔</div>
+                <div class="heading">จองสำเร็จ</div>
+                <div class="message">{{ message }}</div>
+            {% else %}
+                <div class="status-icon status-fail">✖</div>
+                <div class="heading">การจองล้มเหลว</div>
+                <div class="message">{{ message }}</div>
+            {% endif %}
 
-    <a href="/" class="mt-8 inline-block px-4 py-2 bg-blue-600 text-white rounded">
-        กลับหน้าแรก
-    </a>
-</div>
+            <div class="actions">
+                <a class="btn btn-back" href="javascript:void(0)" onclick="goBack()">← กลับไปเลือกเวลา</a>
+                <a class="btn btn-home" href="/">กลับหน้าแรก</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

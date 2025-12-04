@@ -795,41 +795,111 @@ def booking_form(request):
     หน้าฟอร์มสุดท้ายก่อนบันทึกการจอง
     """
     if request.method == "POST":
-        employee = Employee.objects.get(pk=request.POST["employee"])
-        date_str = request.POST["date"]
-        time_str = request.POST["time"]
-        duration = int(request.POST["duration"])
+        employee_id = request.POST.get("employee")
+        date_str = request.POST.get("date")
+        duration = int(request.POST.get("duration", 60))
+        times = request.POST.getlist("times")
 
-        date_obj = datetime.strptime(date_str, "%Y-%m-%d").date()
-        start_obj = datetime.strptime(time_str, "%H:%M").time()
+        # รองรับฟอร์มเก่าที่ส่งครั้งเดียว
+        single_time = request.POST.get("time")
+        if single_time and not times:
+            times = [single_time]
 
-        # ป้องกันจองซ้ำ
-        if is_conflict(employee, date_obj, start_obj, duration):
+        # หากยังไม่มีการเลือกเวลา ให้แจ้งกลับไป
+        if not times:
             return render(
                 request,
                 "main/booking_result.html",
-                {"success": False, "message": "ช่วงเวลานี้ถูกจองไปแล้ว"}
+                {"success": False, "message": "กรุณาเลือกเวลาอย่างน้อย 1 ช่วง"}
             )
 
-        Booking.objects.create(
-            employee=employee,
-            customer_name=request.POST["customer_name"],
-            customer_phone=request.POST["customer_phone"],
-            date=date_obj,
-            start_time=start_obj,
-            duration_minutes=duration,
-        )
+        # หากยังไม่มีการกรอกชื่อ/เบอร์ ให้แสดงหน้าฟอร์มยืนยันเพื่อกรอก
+        customer_name = request.POST.get("customer_name")
+        customer_phone = request.POST.get("customer_phone")
+        if not customer_name or not customer_phone:
+            # หา employee object สำหรับแสดงชื่อสวย ๆ หากทำได้
+            employee_obj = None
+            if employee_id:
+                try:
+                    employee_obj = Employee.objects.get(pk=employee_id)
+                except Employee.DoesNotExist:
+                    employee_obj = None
+
+            return render(request, "main/booking_form.html", {
+                "employee": employee_obj.display_name if employee_obj else employee_id,
+                "employee_id": employee_id,
+                "date": date_str,
+                "duration": duration,
+                "times": times,
+                "error": None,
+            })
+
+        # ดำเนินการสร้างการจองเมื่อมีข้อมูลครบ
+        try:
+            employee = Employee.objects.get(pk=employee_id)
+        except Employee.DoesNotExist:
+            return render(
+                request,
+                "main/booking_result.html",
+                {"success": False, "message": "ไม่พบพนักงานที่เลือก"}
+            )
+
+        try:
+            date_obj = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except Exception:
+            return render(
+                request,
+                "main/booking_result.html",
+                {"success": False, "message": "รูปแบบวันที่ไม่ถูกต้อง"}
+            )
+
+        created_count = 0
+        conflicts = []
+
+        for t in times:
+            try:
+                start_obj = datetime.strptime(t, "%H:%M").time()
+            except ValueError:
+                conflicts.append(f"รูปแบบเวลาไม่ถูกต้อง: {t}")
+                continue
+
+            if is_conflict(employee, date_obj, start_obj, duration):
+                conflicts.append(f"คิวไม่ว่างที่เวลา {t}")
+                continue
+
+            Booking.objects.create(
+                employee=employee,
+                customer_name=customer_name,
+                customer_phone=customer_phone,
+                date=date_obj,
+                start_time=start_obj,
+                duration_minutes=duration,
+            )
+            created_count += 1
+
+        if created_count == 0:
+            return render(
+                request,
+                "main/booking_result.html",
+                {"success": False, "message": "ไม่สามารถจองได้ (คิวไม่ว่าง): " + "; ".join(conflicts)}
+            )
+
+        msg = f"จองสำเร็จ {created_count} รายการ"
+        if conflicts:
+            msg += f" (บางช่วงเวลาคิวไม่ว่าง: {'; '.join(conflicts)})"
 
         return render(
             request,
             "main/booking_result.html",
-            {"success": True, "message": "ทำการจองสำเร็จแล้ว!"}
+            {"success": True, "message": msg}
         )
 
     # GET (แสดงฟอร์ม)
     return render(request, "main/booking_form.html", {
         "employee": request.GET.get("employee"),
+        "employee_id": request.GET.get("employee"),
         "date": request.GET.get("date"),
         "time": request.GET.get("time"),
+        "times": request.GET.getlist("times"),
         "duration": request.GET.get("duration"),
     })
