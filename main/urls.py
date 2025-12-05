@@ -33,6 +33,9 @@ urlpatterns = [
     path('bookings/', views.booking_list, name='booking_list'),
     path('book-online/', views.book_online, name='book_online'),
     path('bookings/admin/', views.admin_bookings_view, name='admin_bookings'),
+    path('bookings/admin/<int:pk>/confirm/', views.admin_booking_confirm, name='admin_booking_confirm'),
+    path('bookings/admin/<int:pk>/cancel/', views.admin_booking_cancel, name='admin_booking_cancel'),
+    path('bookings/admin/<int:pk>/delete/', views.admin_booking_delete, name='admin_booking_delete'),
 
     # ------------------ Gemini API ------------------
     path('list-models/', views.list_models, name='list_models'),

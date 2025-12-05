@@ -632,14 +632,57 @@ from django.shortcuts import render
 from datetime import date
 from .models import Booking
 
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404, redirect
+
+
+@login_required
 def admin_bookings_view(request):
-    """ดึงรายการจองจากฐานข้อมูลจริง"""
-    bookings = Booking.objects.select_related("employee").order_by("date", "start_time")
+    """รายการจอง พร้อมตัวกรองวันที่"""
+    qs = Booking.objects.select_related("employee").order_by("date", "start_time")
+    q_date = request.GET.get("date")
+    if q_date:
+        try:
+            qd = datetime.strptime(q_date, "%Y-%m-%d").date()
+            qs = qs.filter(date=qd)
+        except Exception:
+            pass
 
     return render(request, "main/admin_bookings.html", {
-        "bookings": bookings,
+        "bookings": qs,
         "today": date.today(),
+        "q_date": q_date or "",
     })
+
+
+@login_required
+@require_POST
+def admin_booking_confirm(request, pk):
+    b = get_object_or_404(Booking, pk=pk)
+    b.status = "confirmed"
+    b.save()
+    messages.success(request, "ยืนยันการจองเรียบร้อย")
+    return redirect(request.POST.get("return") or "admin_bookings")
+
+
+@login_required
+@require_POST
+def admin_booking_cancel(request, pk):
+    b = get_object_or_404(Booking, pk=pk)
+    b.status = "cancelled"
+    b.save()
+    messages.success(request, "ยกเลิกการจองเรียบร้อย")
+    return redirect(request.POST.get("return") or "admin_bookings")
+
+
+@login_required
+@require_POST
+def admin_booking_delete(request, pk):
+    b = get_object_or_404(Booking, pk=pk)
+    b.delete()
+    messages.success(request, "ลบการจองแล้ว")
+    return redirect(request.POST.get("return") or "admin_bookings")
 
 
 #---------------------- login/logout views ----------------------

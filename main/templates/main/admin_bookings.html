@@ -66,6 +66,7 @@
         border-bottom: 1px solid #eee;
         padding: 10px;
       }
+      tr:nth-child(even) td { background: #fbfffd; }
 
       .badge {
         padding: 6px 10px;
@@ -87,6 +88,8 @@
       .btn-green { background: #16a34a; color: white; }
       .btn-red { background: #dc2626; color: white; }
       .btn-blue { background: #2563eb; color: white; }
+      .btn-ghost { background: transparent; color: #374151; border: 1px solid #e5e7eb; }
+      .btn-ghost:hover { background: #f3f4f6; }
 
       .filter {
         text-align: center;
@@ -134,7 +137,7 @@
 
           <div class="filter">
             <form method="get">
-              <input type="date" name="date" value="{{ request.GET.date|default:today }}">
+              <input type="date" name="date" value="{{ q_date|default:today }}">
               <button type="submit">ค้นหา</button>
             </form>
           </div>
@@ -172,15 +175,29 @@
               </td>
 
               <td>
-                {% if b.status == "confirmed" %}
-                  <button class="btn btn-blue">ดูรายละเอียด</button>
+                <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+                  {% if b.status != "confirmed" %}
+                    <form method="post" action="{% url 'admin_booking_confirm' b.id %}">
+                      {% csrf_token %}
+                      <input type="hidden" name="return" value="{{ request.get_full_path }}">
+                      <button class="btn btn-green" type="submit">ยืนยัน</button>
+                    </form>
+                  {% endif %}
 
-                {% elif b.status == "cancelled" %}
-                  -
-                {% else %}
-                  <button class="btn btn-green">ยืนยัน</button>
-                  <button class="btn btn-red">ยกเลิก</button>
-                {% endif %}
+                  {% if b.status != "cancelled" %}
+                    <form method="post" action="{% url 'admin_booking_cancel' b.id %}">
+                      {% csrf_token %}
+                      <input type="hidden" name="return" value="{{ request.get_full_path }}">
+                      <button class="btn btn-red" type="submit">ยกเลิก</button>
+                    </form>
+                  {% endif %}
+
+                  <form method="post" action="{% url 'admin_booking_delete' b.id %}" onsubmit="return confirm('ลบรายการนี้ถาวรหรือไม่?');">
+                    {% csrf_token %}
+                    <input type="hidden" name="return" value="{{ request.get_full_path }}">
+                    <button class="btn btn-ghost" type="submit">ลบ</button>
+                  </form>
+                </div>
               </td>
 
             </tr>

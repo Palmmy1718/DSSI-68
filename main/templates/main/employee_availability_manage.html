@@ -218,6 +218,7 @@
                 <th>เวลาสิ้นสุด</th>
                 <th>สถานะ</th>
                 <th>การจัดการ</th>
+                <th>เช็คการจอง</th>
               </tr>
             </thead>
             <tbody>
@@ -225,15 +226,20 @@
                 {% for slot in slots %}
                   <tr>
                     <td>{{ slot.date }}</td>
-                    <td>{{ slot.start_time }}</td>
+                    <td>{{ slot.start_time|time:"H:i" }}</td>
                     <td>
-                      {% with end_time=slot.start_time|add:slot.duration_minutes %}
-                        {{ slot.start_time|time:"H:i" }} - {{ end_time }}
+                      {% with sdt=slot.start_time %}
+                        {% with dur=slot.duration_minutes %}
+                          {{ slot.start_time|time:"H:i" }} - {{ slot.start_time|time:"H:i"|add:dur }}
+                        {% endwith %}
                       {% endwith %}
                     </td>
                     <td>{% if slot.is_booked %}❌ ไม่ว่าง{% else %}✅ ว่าง{% endif %}</td>
                     <td>
                       <a href="{% url 'employee_availability_delete' slot.id %}" class="danger-btn" onclick="return confirm('ยืนยันการลบเวลานี้หรือไม่?')">ลบ</a>
+                    </td>
+                    <td>
+                      <a class="back-btn" href="{% url 'booking_slots' employee.id %}?date={{ slot.date }}&duration={{ slot.duration_minutes }}" target="_blank">ดูหน้าจองวันนี้</a>
                     </td>
                   </tr>
                 {% endfor %}
