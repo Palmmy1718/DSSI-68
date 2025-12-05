@@ -49,10 +49,10 @@
         <div class="slot-list">
             {% for slot in slots %}
             <div class="time-slot">
-                <div class="time-text">⏰ {{ slot.time }}</div>
+                <div class="time-text">⏰ {{ slot.time_range }}</div>
                 {% if slot.available %}
                 <label class="selector">
-                    <input type="checkbox" name="times" value="{{ slot.time }}">
+                    <input type="checkbox" name="times" value="{{ slot.start_time }}">
                     <span>เลือก</span>
                 </label>
                 {% else %}

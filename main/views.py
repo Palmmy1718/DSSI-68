@@ -776,9 +776,15 @@ def booking_slots(request, employee_id):
 
     slot_list = []
     for slot in TIME_SLOTS:
+        # Calculate end time by adding duration
+        start_dt = datetime.combine(date_obj, slot)
+        end_dt = start_dt + timedelta(minutes=duration)
+        end_time = end_dt.time()
+        time_range = f"{slot.strftime('%H:%M')}-{end_time.strftime('%H:%M')}"
         conflict = is_conflict(employee, date_obj, slot, duration)
         slot_list.append({
-            "time": slot.strftime("%H:%M"),
+            "time_range": time_range,
+            "start_time": slot.strftime('%H:%M'),
             "available": not conflict
         })
 
