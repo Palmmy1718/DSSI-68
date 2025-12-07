@@ -31,7 +31,7 @@ urlpatterns = [
 
     # ------------------ คิวจอง ------------------
     path('bookings/', views.booking_list, name='booking_list'),
-    path('book-online/', views.book_online, name='book_online'),
+    # path('book-online/', views.book_online, name='book_online'),  <-- ลบออกแล้ว
     path('bookings/admin/', views.admin_bookings_view, name='admin_bookings'),
     path('bookings/admin/<int:pk>/confirm/', views.admin_booking_confirm, name='admin_booking_confirm'),
     path('bookings/admin/<int:pk>/cancel/', views.admin_booking_cancel, name='admin_booking_cancel'),

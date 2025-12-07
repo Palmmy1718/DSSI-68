@@ -1,211 +1,311 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
 
 <head>
-  <meta charset="UTF-8">
-  <title>รายการนวด - Admin</title>
-
+  <meta charset="utf-8">
+  <title>จัดการรายการนวด</title>
   <style>
+    /* --- ดีไซน์หลัก (Gradient Theme) --- */
     body {
       font-family: 'Kanit', sans-serif;
-      background: #f6fbf7;
       margin: 0;
-      color: #063d1d;
+      background: linear-gradient(135deg, #f2fff5, #e9f8ef);
+      color: #08361b;
     }
 
-    .layout-admin {
+    .shell {
       display: flex;
       min-height: 100vh;
     }
 
-    /* ================= Sidebar เหมือนหน้า /availability/ ================ */
-    .sidebar {
-      width: 260px;
-      min-height: 100vh;
-      background: #00260f;
-      padding: 30px 0;
+    /* Sidebar (เมนูซ้าย) */
+    .side {
+      width: 220px;
+      background: #07210f;
       color: #fff;
+      padding: 2rem 1rem;
       display: flex;
       flex-direction: column;
     }
 
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .sidebar li a {
+    .nav a {
       display: block;
-      padding: 16px 28px;
-      font-size: 1.15rem;
-      color: #ffffff;
+      color: #d1d5db;
+      padding: 10px 14px;
       text-decoration: none;
-      transition: 0.25s ease;
-      border-radius: 12px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      transition: all 0.2s ease;
     }
 
-    .sidebar li a.active,
-    .sidebar li a:hover {
-      background: #1ea64b;
+    .nav a:hover,
+    .nav a.active {
+      background: #14532d;
       color: #fff;
-      font-weight: 600;
     }
 
-    /* ================= Content ================= */
-    .content-area {
+    /* Main Content */
+    .main {
       flex: 1;
-      padding: 40px;
-    }
-
-    .page-box {
-      background: rgba(255, 255, 255, 0.92);
       padding: 2rem;
+    }
+
+    .page {
+      background: rgba(255, 255, 255, 0.9);
       border-radius: 20px;
+      padding: 2.5rem;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-      max-width: 1100px;
-      margin: auto;
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+      backdrop-filter: blur(12px);
     }
 
-    .page-title {
+    h1 {
+      text-align: center;
+      color: #064e3b;
       font-size: 2rem;
-      margin-bottom: 20px;
-      font-weight: 700;
-      color: #063d1d;
+      margin-bottom: 2rem;
     }
 
-    .add-btn {
-      float: right;
-      background: white;
-      border: 2px solid #063d1d;
+    /* --- ปุ่ม --- */
+    .btn-add-wrapper {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+
+    .btn-add {
+      background: linear-gradient(90deg, #15803d, #16a34a);
+      color: white;
+      border: none;
       padding: 10px 20px;
       border-radius: 30px;
-      color: #063d1d;
-      font-weight: 600;
+      cursor: pointer;
       text-decoration: none;
-      transition: 0.2s ease;
+      font-weight: 500;
+      display: inline-block;
+      transition: 0.3s;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .btn-add:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(21, 128, 61, 0.3);
     }
 
-    .add-btn:hover {
-      background: #063d1d;
-      color: white;
+    .btn-cancel {
+        display: inline-block;
+        padding: 10px 20px;
+        color: #64748b;
+        text-decoration: none;
+        border: 1px solid #cbd5e1;
+        border-radius: 30px;
+        transition: 0.2s;
+    }
+    .btn-cancel:hover {
+        background: #f1f5f9;
+        color: #334155;
     }
 
-    .massage-card {
-      display: flex;
-      background: #ffffff;
-      padding: 20px;
-      margin-top: 20px;
+    /* --- ฟอร์ม (Form) --- */
+    .form-container {
+      background: #f9fdfa;
+      padding: 30px;
       border-radius: 16px;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
-      gap: 25px;
-      align-items: flex-start;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+      animation: slideDown 0.3s ease-out;
+    }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
     }
 
-    .massage-card img {
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 12px;
-      background: #eee;
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #14532d;
+      font-weight: 500;
     }
 
-    .massage-info h2 {
-      margin: 0;
-      font-size: 1.4rem;
-      color: #176a3a;
-      letter-spacing: 1px;
-    }
-
-    .massage-info p {
-      margin: 8px 0;
-      color: #444;
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-family: 'Kanit', sans-serif;
+      box-sizing: border-box;
       font-size: 1rem;
+      background: #fff;
     }
+    
+    .form-full { grid-column: span 2; }
 
-    .massage-actions {
+    .form-actions {
+      margin-top: 25px;
       display: flex;
       gap: 10px;
-      margin-top: 10px;
+      justify-content: flex-end;
     }
 
-    .massage-actions a {
-      padding: 8px 18px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      background: #176a3a;
-      color: #fff;
-      transition: 0.2s;
+    /* --- รายการ (List Styles) --- */
+    .massage-list { display: flex; flex-direction: column; gap: 15px; }
+
+    .massage-item {
+      background: white;
+      border-radius: 16px;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+      border: 1px solid #f0fdf4;
+      transition: transform 0.2s;
+    }
+    .massage-item:hover {
+        transform: translateY(-3px);
+        border-color: #bbf7d0;
     }
 
-    .massage-actions a.delete {
-      background: #b91c1c;
+    .massage-img {
+      width: 80px; height: 80px; border-radius: 12px;
+      background-color: #e5e7eb; object-fit: cover; flex-shrink: 0;
     }
 
-    .massage-actions a:hover {
-      opacity: 0.85;
+    .massage-info { flex: 1; }
+    .massage-title { font-size: 1.2rem; font-weight: 600; color: #14532d; margin-bottom: 5px; }
+    .massage-desc { color: #6b7280; font-size: 0.9rem; margin: 0; }
+    
+    /* สไตล์ปุ่มไอคอน */
+    .btn-icon {
+        width: 35px; height: 35px; border-radius: 8px;
+        display: flex; align-items: center; justify-content: center;
+        text-decoration: none; margin-left: 5px; transition: 0.2s;
+        font-size: 1.1rem;
     }
+    .btn-edit { background: #dcfce7; color: #166534; }
+    .btn-delete { background: #fee2e2; color: #991b1b; }
+    
+    .btn-edit:hover { background: #bbf7d0; }
+    .btn-delete:hover { background: #fecaca; }
 
-    .empty {
-      text-align: center;
-      color: #6b7280;
-      font-size: 1.1rem;
-      padding: 2.5rem;
-    }
   </style>
 </head>
 
 <body>
+  <div class="shell">
+    <aside class="side">
+      <nav class="nav">
+        <a href="{% url 'employee_list' %}">จัดการพนักงาน</a>
+        <a href="{% url 'employee_availability_list' %}">เวลาคิวว่าง</a>
+        <a href="{% url 'massage_admin' %}" class="active">รายการนวด</a>
+        <a href="{% url 'gallery_crud' %}">เพิ่มรูปภาพ</a>
+        <a href="{% url 'admin_bookings' %}">คิวจอง</a>
+        <a href="{% url 'logout' %}">ออกจากระบบ</a>
+      </nav>
+    </aside>
 
-  <div class="layout-admin">
+    <main class="main">
+      <div class="page">
+        
+        <div class="btn-add-wrapper">
+          {% if not add_mode and not edit_mode %}
+          <a href="?add=1" class="btn-add">+ เพิ่มรายการนวด</a>
+          {% endif %}
+        </div>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <ul>
-        <li><a href="{% url 'employee_list' %}">จัดการพนักงาน</a></li>
-        <li><a href="{% url 'employee_availability_list' %}">เวลาคิวว่าง</a></li>
-        <li><a href="{% url 'massage_admin' %}" class="active">รายการนวด</a></li>
-        <li><a href="{% url 'gallery_crud' %}">เพิ่มรูปภาพ</a></li>
-        <li><a href="{% url 'admin_bookings' %}">คิวจอง</a></li>
-        <li><a href="{% url 'logout' %}">ออกจากระบบ</a></li>
-      </ul>
-    </div>
+        <h1>รายการนวดทั้งหมด</h1>
 
-    <!-- Content -->
-    <div class="content-area">
-      <div class="page-box">
-
-        <a href="{% url 'massage_admin' %}?add=1" class="add-btn">+ รายการนวด</a>
-
-        <h1 class="page-title">รายการนวด</h1>
-
-        {% if massages %}
-          {% for m in massages %}
-          <div class="massage-card">
-            <img src="{{ m.image.url }}" alt="{{ m.name }}">
-
-            <div class="massage-info">
-              <h2>{{ m.name }}</h2>
-              <p>{{ m.description }}</p>
-
-              <div class="massage-actions">
-                <a href="{% url 'massage_edit' m.id %}">แก้ไข</a>
-                <a href="{% url 'massage_delete' m.id %}" class="delete"
-                onclick="return confirm('ลบบริการนวด “{{ m.name }}” ?');">ลบ</a>
-              </div>
+        {% if messages %}
+            {% for message in messages %}
+            <div style="background:{% if message.tags == 'success' %}#dcfce7{% else %}#fee2e2{% endif %}; 
+                        color:{% if message.tags == 'success' %}#166534{% else %}#991b1b{% endif %}; 
+                        padding:15px; border-radius:10px; margin-bottom:20px; text-align:center;">
+                {{ message }}
             </div>
-          </div>
-          {% endfor %}
-        {% else %}
-          <p class="empty">ยังไม่มีบริการนวดในระบบ</p>
+            {% endfor %}
         {% endif %}
 
+        {% if add_mode or edit_mode %}
+        <div class="form-container">
+            <h3 style="margin-top:0; color:#14532d;">
+                {% if edit_mode %}แก้ไขข้อมูล: {{ massage_obj.name }}{% else %}เพิ่มข้อมูลบริการใหม่{% endif %}
+            </h3>
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-grid">
+                    <div class="form-group form-full">
+                        <label>ชื่อบริการ *</label>
+                        <input type="text" name="name" required placeholder="เช่น นวดแผนไทย" 
+                               value="{{ massage_obj.name|default:'' }}">
+                    </div>
+                    
+                    <div class="form-group form-full">
+                        <label>รูปภาพประกอบ {% if edit_mode %}(อัปโหลดใหม่เพื่อเปลี่ยนรูป){% endif %}</label>
+                        {% if edit_mode and massage_obj.image %}
+                            <div style="margin-bottom:10px;">
+                                <img src="{{ massage_obj.image.url }}" style="height:60px; border-radius:8px;">
+                                <span style="font-size:0.8rem; color:#666;">รูปปัจจุบัน</span>
+                            </div>
+                        {% endif %}
+                        <input type="file" name="image" accept="image/*" style="padding: 9px;">
+                    </div>
+
+                    <div class="form-group form-full">
+                        <label>รายละเอียด</label>
+                        <textarea name="description" rows="3" placeholder="รายละเอียดบริการ...">{{ massage_obj.description|default:'' }}</textarea>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-add">
+                        {% if edit_mode %}บันทึกการแก้ไข{% else %}บันทึกข้อมูล{% endif %}
+                    </button>
+                    <a href="{% url 'massage_admin' %}" class="btn-cancel">ยกเลิก</a>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+
+        <div class="massage-list">
+            {% for m in massages %}
+            <div class="massage-item">
+                {% if m.image %}
+                   <img src="{{ m.image.url }}" class="massage-img">
+                {% else %}
+                   <div class="massage-img" style="display:flex;align-items:center;justify-content:center;color:#cbd5e1;font-size:2rem;">💆</div>
+                {% endif %}
+
+                <div class="massage-info">
+                    <div class="massage-title">{{ m.name }}</div>
+                    <p class="massage-desc">{{ m.description|truncatechars:100 }}</p>
+                </div>
+
+                <div style="display:flex; gap:5px;">
+                    <a href="{% url 'massage_edit' m.id %}" class="btn-icon btn-edit" title="แก้ไข">✏️</a>
+                    
+                    <form action="{% url 'massage_delete' m.id %}" method="POST" onsubmit="return confirm('คุณแน่ใจหรือไม่ว่าจะลบ “{{ m.name }}” ?');" style="margin:0;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-icon btn-delete" title="ลบ" style="border:none; cursor:pointer;">
+                            🗑️
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% empty %}
+                <div style="text-align:center; padding:40px; color:#9ca3af;">
+                    <p>ยังไม่มีรายการนวดในระบบ</p>
+                </div>
+            {% endfor %}
+        </div>
+
       </div>
-    </div>
-
+    </main>
   </div>
-
 </body>
 </html>

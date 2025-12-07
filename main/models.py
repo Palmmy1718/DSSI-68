@@ -1,12 +1,11 @@
 from django.db import models
 
-
 class Employee(models.Model):
     display_name = models.CharField(max_length=120)
     role_title = models.CharField(max_length=120, blank=True)
     phone = models.CharField(max_length=40, blank=True)
-    photo_mime = models.CharField(max_length=100)
-    photo_data = models.BinaryField()
+    photo_mime = models.CharField(max_length=100, blank=True, null=True)
+    photo_data = models.BinaryField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -15,11 +14,10 @@ class Employee(models.Model):
         return self.display_name
 
 
-# ---------------------- NEW: SERVICE MODEL ----------------------
+# ---------------------- SERVICE MODEL (เก่า) ----------------------
 class Service(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-
     price_30 = models.IntegerField(blank=True, null=True)
     price_60 = models.IntegerField(blank=True, null=True)
     price_90 = models.IntegerField(blank=True, null=True)
@@ -27,15 +25,19 @@ class Service(models.Model):
 
     def __str__(self):
         return self.name
-# ----------------------------------------------------------------
 
 
+# ---------------------- MASSAGE MODEL (ใช้งานจริง) ----------------------
 class Massage(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    duration = models.IntegerField()  # เก็บเป็นนาที
-    image = models.CharField(max_length=255, blank=True)
+    description = models.TextField(blank=True, null=True)
+    
+    # ปรับเป็น IntegerField และใส่ default เพื่อไม่ให้ Error
+    price = models.IntegerField(default=0) 
+    duration = models.IntegerField(default=60) 
+    
+    # [แก้ไขสำคัญ] เปลี่ยนเป็น ImageField เพื่อเก็บไฟล์รูป
+    image = models.ImageField(upload_to='massage_images/', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -66,7 +68,6 @@ class GalleryImage(models.Model):
         return self.title or f"รูปที่ {self.id}"
 
 
-# ---------------------- NEW: PROMOTION MODEL ----------------------
 class Promotion(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
@@ -75,9 +76,10 @@ class Promotion(models.Model):
 
     def __str__(self):
         return self.title
-# ---------------------- BOOKING MODEL + STATUS ----------------------
-class Booking(models.Model):
 
+
+# ---------------------- BOOKING MODEL ----------------------
+class Booking(models.Model):
     STATUS_CHOICES = (
         ('pending', 'รออนุมัติ'),
         ('confirmed', 'ยืนยันแล้ว'),
