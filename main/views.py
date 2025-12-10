@@ -17,13 +17,13 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from bs4 import BeautifulSoup
-from google import genai
+import google.generativeai as genai
 
 from .forms import EmployeeForm
 from .models import Employee, AppointmentSlot, Booking, Massage, GalleryImage, Promotion
 
 logger = logging.getLogger(__name__)
-client = genai.Client(api_key="AIzaSyBU3lzxF_cemBOF3mh-qcFuoT9R0UUTojM")
+genai.configure(api_key="AIzaSyBU3lzxF_cemBOF3mh-qcFuoT9R0UUTojM")
 
 # ---------------------- 2. ADMIN VIEWS (MASSAGE) ----------------------
 
@@ -159,7 +159,8 @@ def site_promotion(request):
     return render(request, 'Promotion.html')
 
 def site_gallery(request):
-    return render(request, 'Gallery.html')
+    images = GalleryImage.objects.order_by('-created_at')
+    return render(request, 'Gallery.html', {'images': images})
 
 def contact(request):
     return render(request, 'contact.html')
@@ -255,6 +256,56 @@ def employee_add(request):
     else:
         form = EmployeeForm()
     return render(request, 'main/employee_form.html', {'form': form, 'title': 'เพิ่มพนักงาน', 'photo_url': None})
+
+# ---------------------- 8. GALLERY CRUD ----------------------
+
+@login_required
+def gallery_list(request):
+    gallery = GalleryImage.objects.order_by('-created_at')
+    return render(request, 'main/gallery_list.html', {'gallery': gallery})
+
+@login_required
+def gallery_add(request):
+    if request.method == 'POST':
+        image_file = request.FILES.get('image')
+        if not image_file:
+            messages.error(request, 'กรุณาอัปโหลดรูปภาพ')
+        else:
+            try:
+                g = GalleryImage(image=image_file)
+                g.save()
+                messages.success(request, 'เพิ่มรูปภาพสำเร็จ')
+                return redirect('gallery_crud')
+            except Exception as e:
+                messages.error(request, f'บันทึกล้มเหลว: {e}')
+    return render(request, 'main/gallery_form.html')
+
+@login_required
+def gallery_edit(request, pk):
+    g = get_object_or_404(GalleryImage, pk=pk)
+    if request.method == 'POST':
+        image_file = request.FILES.get('image')
+        if image_file:
+            g.image = image_file
+        title = request.POST.get('title')
+        if title is not None:
+            g.title = title
+        try:
+            g.save()
+            messages.success(request, 'แก้ไขรูปภาพสำเร็จ')
+            return redirect('gallery_crud')
+        except Exception as e:
+            messages.error(request, f'บันทึกล้มเหลว: {e}')
+    # ใช้ฟอร์มเดียวกับ add เพื่อความง่าย หรือสร้างเทมเพลตใหม่ภายหลัง
+    return render(request, 'main/gallery_form.html', {'item': g})
+
+@login_required
+@require_POST
+def gallery_delete(request, pk):
+    g = get_object_or_404(GalleryImage, pk=pk)
+    g.delete()
+    messages.success(request, 'ลบรูปภาพแล้ว')
+    return redirect('gallery_crud')
 
 @staff_required
 def employee_edit(request, pk):
