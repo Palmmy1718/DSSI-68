@@ -17,89 +17,39 @@ python -m venv .venv
 
 ## 📦 3. ติดตั้งไลบรารีหลัก & ไลบรารีเพิ่มเติมที่จำเป็น
 pip install -r requirements.txt
-pip install beautifulsoup4
-pip install google-api-python-client
-pip install google-generativeai
-pip install Pillow
-pip install PyMySQL
-pip install python-dotenv
 
 ---
 
-## 🗄 4. ตั้งค่า MySQL
-Database Name: dssi68
-User: root
-Password: RootPass123!
-Host: localhost
-Port: 3306
+## 4. ตั้งค่า MySQL + สร้างฐานข้อมูล + นำเข้าข้อมูล
+4.1 ตั้งค่าไฟล์ .env
+DB_NAME=dssi68_db
+DB_USER=dssi68_user
+DB_PASSWORD=NewPass123!
+DB_HOST=localhost
+DB_PORT=3307
 
-เพิ่มใน settings.py:
-import pymysql
-pymysql.install_as_MySQLdb()
-
----
-
-## 🧱 5. Migrate Database
-python manage.py migrate
-
----
-
-## ▶ 6. รันเซิร์ฟเวอร์
-python manage.py runserver
-เปิดเว็บที่: http://127.0.0.1:8000/
-
----
-
-## 🔑 7. สร้างผู้ดูแลระบบ (Admin)
-python manage.py createsuperuser
-
----
-
-## 🤖 8. ตั้งค่า Chat AI (Gemini)
-Library:
-google-genai==1.39.1
-
-Model:
-models/gemini-2.0-flash-lite
-
-ไฟล์ .env ต้องมี:
+GEMINI_API_KEY=YOUR_KEY
+GEMINI_MODEL_NAME=gemini-2.0-flash-lite-latest
+# optional
 GOOGLE_API_KEY=YOUR_KEY
 
----
+4.2 เปิด MySQL
+mysql -u dssi68_user -p -h localhost -P 3307
 
-## 📤 9. Export ข้อมูลเป็น data.json
-python manage.py dumpdata > data.json
+4.3 สร้าง Database + User (ทำครั้งแรกครั้งเดียว)
+CREATE DATABASE dssi68_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
----
+CREATE USER 'dssi68_user'@'%' IDENTIFIED BY 'NewPass123!';
+GRANT ALL PRIVILEGES ON dssi68_db.* TO 'dssi68_user'@'%';
+FLUSH PRIVILEGES;
 
-## 🧪 10. ทดสอบ MySQL
-python manage.py dbshell
+4.4 Migrate + Import ข้อมูล
+python manage.py migrate
+python manage.py loaddata data.json
 
----
 
-## ✨ ฟอร์แมตโค้ดใน VS Code จัดหน้า
-Shift + Alt + F
+## 5. รันเซิร์ฟเวอร์
+python manage.py runserver
 
----
-
-# 🎥 DEMO — Phase 1 + Phase 2 (ใช้ในคลิป)
-
-## ✔ Phase 1
-1. เปิดหน้า Home
-2. Login / Register
-3. เลือกบริการนวด
-4. เลือกพนักงาน
-5. จองคิว
-6. ดูรายการจอง
-
-## ✔ Phase 2
-1. แชทกับ AI (Gemini) — ถามตอบเกี่ยวกับบริการ
-2. Admin CRUD — แก้ไข/เพิ่มบริการ พนักงาน รูปภาพ
-3. โชว์ว่าใช้ MySQL จริง (หน้าเว็บหรือ dbshell)
-
-เวลาทั้งหมดไม่ควรเกิน 10 นาที
-
----
-
-## 🎯 พร้อมส่งงาน Phase 2
-โปรเจกต์นี้สามารถ Clone → Setup → Run → Demo ได้สมบูรณ์ตรงตามเงื่อนไข 5–8 นาที และ Demo 10 นาที
+## 6. สร้างผู้ดูแลระบบ (Admin)
+python manage.py createsuperuser

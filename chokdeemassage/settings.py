@@ -5,8 +5,8 @@ from django.utils.translation import gettext_lazy as _  # สำหรับข�
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# โหลดไฟล์ .env
-load_dotenv()
+# โหลดไฟล์ .env (ชี้ไฟล์ตรง ๆ กันพลาดเวลา run จาก working dir คนละที่)
+load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = 'django-insecure-4je3f5ebjr0s+@sd&3s0(^+%@2$(c1r@8$qqoso!)11$mbb7hy'
 DEBUG = True
@@ -53,7 +53,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chokdeemassage.wsgi.application'
 
-# -------------------- Database ( MySQL ) ---------
+# -------------------- Database ( MySQL ) --------------------
 import pymysql
 pymysql.install_as_MySQLdb()
 
@@ -71,7 +71,7 @@ DATABASES = {
     }
 }
 
-# -------------------------------------------------------------------------
+# ------------------------------------------------------------
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -116,6 +116,7 @@ LOGIN_REDIRECT_URL = 'employee_list'
 LOGOUT_REDIRECT_URL = 'login'
 
 # -------------------- Gemini API --------------------
-GEMINI_API_KEY = ("AIzaSyBU3lzxF_cemBOF3mh-qcFuoT9R0UUTojM")
-GEMINI_MODEL_NAME = "gemini-2.0-flash-lite-latest"
+# ดึงจาก .env แทนการ hardcode (รองรับทั้ง GEMINI_API_KEY และ GOOGLE_API_KEY)
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY", "")
+GEMINI_MODEL_NAME = os.getenv("GEMINI_MODEL_NAME", "gemini-2.0-flash-lite-latest")
 # ----------------------------------------------------
