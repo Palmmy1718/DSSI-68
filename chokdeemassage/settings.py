@@ -116,7 +116,6 @@ LOGIN_REDIRECT_URL = 'employee_list'
 LOGOUT_REDIRECT_URL = 'login'
 
 # -------------------- Gemini API --------------------
-# ดึงจาก .env แทนการ hardcode (รองรับทั้ง GEMINI_API_KEY และ GOOGLE_API_KEY)
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY", "")
 GEMINI_MODEL_NAME = os.getenv("GEMINI_MODEL_NAME", "gemini-2.0-flash-lite-latest")
 # ----------------------------------------------------

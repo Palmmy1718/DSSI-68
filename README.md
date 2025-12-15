@@ -34,6 +34,12 @@ GEMINI_MODEL_NAME=gemini-2.0-flash-lite-latest
 GOOGLE_API_KEY=YOUR_KEY
 
 4.2 เปิด MySQL
+เช็กระบบ
+python manage.py check
+
+เช็กต่อฐานข้อมูล
+python manage.py check --database default
+
 mysql -u dssi68_user -p -h localhost -P 3307
 
 4.3 สร้าง Database + User (ทำครั้งแรกครั้งเดียว)

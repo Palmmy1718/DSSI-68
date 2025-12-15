@@ -1,10 +1,12 @@
 # ---------------------- 1. IMPORTS (ต้องอยู่บนสุด) ----------------------
+
 import logging
 import base64
 import os
+import google.generativeai as genai
+from django.conf import settings
 from datetime import datetime, timedelta, date, time
 
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -17,13 +19,32 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from bs4 import BeautifulSoup
-import google.generativeai as genai
+
 
 from .forms import EmployeeForm
 from .models import Employee, AppointmentSlot, Booking, Massage, GalleryImage, Promotion
 
 logger = logging.getLogger(__name__)
-genai.configure(api_key="AIzaSyBU3lzxF_cemBOF3mh-qcFuoT9R0UUTojM")
+
+# ---------------------- GEMINI UTILITY FUNCTION ----------------------
+def ask_gemini(prompt: str) -> str:
+    api_key = (
+        getattr(settings, "GEMINI_API_KEY", "") 
+        or os.getenv("GEMINI_API_KEY", "") 
+        or os.getenv("GOOGLE_API_KEY", "")
+    )
+    if not api_key:
+        return "ยังไม่ได้ตั้งค่า GEMINI_API_KEY/GOOGLE_API_KEY ใน .env"
+
+    genai.configure(api_key=api_key)
+
+    model_name = getattr(settings, "GEMINI_MODEL_NAME", "") or os.getenv(
+        "GEMINI_MODEL_NAME", "gemini-2.0-flash-lite-latest"
+    )
+    model = genai.GenerativeModel(model_name)
+
+    resp = model.generate_content(prompt)
+    return getattr(resp, "text", "") or str(resp)
 
 # ---------------------- 2. ADMIN VIEWS (MASSAGE) ----------------------
 
@@ -731,64 +752,72 @@ def gallery_delete(request, pk):
 
 
 # ---------------------- 13. AI CHAT & GEMINI ----------------------
+import google.generativeai as genai
 
-def list_models(request):
-    try:
-        models = client.models.list()
-        model_names = [m.name for m in models]
-        return JsonResponse({"models": model_names})
-    except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+def _get_gemini_model():
+    api_key = getattr(settings, "GEMINI_API_KEY", "") or os.getenv("GEMINI_API_KEY", "") or os.getenv("GOOGLE_API_KEY", "")
+    if not api_key:
+        return None, "ยังไม่ได้ตั้งค่า GEMINI_API_KEY/GOOGLE_API_KEY ใน .env"
 
-def test_gemini(request):
-    try:
-        response = client.models.generate_content(
-            model="models/gemini-2.0-flash-lite",
-            contents="สวัสดีจาก Django!"
-        )
-        return JsonResponse({"reply": response.text})
-    except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+    model_name = getattr(settings, "GEMINI_MODEL_NAME", "") or os.getenv("GEMINI_MODEL_NAME", "gemini-2.0-flash-lite-latest")
+
+    # configure ครั้งเดียวต่อ request ก็พอ (ง่าย/ชัวร์)
+    genai.configure(api_key=api_key)
+    return genai.GenerativeModel(model_name), None
+
+def ask_gemini(prompt: str) -> str:
+    model, err = _get_gemini_model()
+    if err:
+        return err
+    resp = model.generate_content(prompt)
+    return getattr(resp, "text", "") or str(resp)
 
 @csrf_exempt
 def chat_api(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST only"}, status=400)
+
     user_message = request.POST.get("message", "").strip()
     if not user_message:
         return JsonResponse({"error": "ข้อความว่าง"}, status=400)
+
     service_info = load_service_data()
+
     promo_keywords = ["โปร", "promotion", "โปรโมชั่น", "โปรโมชัน", "ส่วนลด", "offer", "deal"]
     is_promo_question = any(word in user_message.lower() for word in promo_keywords)
+
     if is_promo_question:
         promos = Promotion.objects.filter(is_active=True).order_by("-updated_at")
-        if promos.exists():
-            promo_text = "\n".join([f"- {p.title}: {p.description}" for p in promos])
-        else:
-            promo_text = "ขณะนี้ยังไม่มีโปรโมชั่นพิเศษค่ะ"
+        promo_text = "\n".join([f"- {p.title}: {p.description}" for p in promos]) if promos.exists() else "ขณะนี้ยังไม่มีโปรโมชั่นพิเศษค่ะ"
         final_prompt = f"""
-        คุณคือแชตบอทของร้าน Chokdee Thai Massage in Hévíz
-        ข้อมูลโปรโมชั่นปัจจุบัน:
-        {promo_text}
-        ลูกค้าถามว่า: "{user_message}"
-        กรุณาตอบสั้นๆ และสุภาพ
-        """
+คุณคือแชตบอทของร้าน Chokdee Thai Massage in Hévíz
+ข้อมูลโปรโมชั่นปัจจุบัน:
+{promo_text}
+ลูกค้าถามว่า: "{user_message}"
+กรุณาตอบสั้นๆ และสุภาพ
+"""
     else:
         final_prompt = f"""
-        คุณคือแชตบอทของร้าน Chokdee Thai Massage in Hévíz
-        ข้อมูลบริการ:
-        {service_info}
-        ลูกค้าถามว่า: "{user_message}"
-        กรุณาตอบสั้นๆ และสุภาพ
-        """
+คุณคือแชตบอทของร้าน Chokdee Thai Massage in Hévíz
+ข้อมูลบริการ:
+{service_info}
+ลูกค้าถามว่า: "{user_message}"
+กรุณาตอบสั้นๆ และสุภาพ
+"""
+
     try:
-        response = client.models.generate_content(
-            model="models/gemini-2.0-flash-lite",
-            contents=final_prompt
-        )
-        return JsonResponse({"reply": response.text}, json_dumps_params={'ensure_ascii': False})
+        reply = ask_gemini(final_prompt)
+        return JsonResponse({"reply": reply}, json_dumps_params={"ensure_ascii": False})
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
 def chat_ui(request):
     return render(request, "chat.html")
+
+def list_models(request):
+    return JsonResponse({"models": ["not-implemented"]})
+
+def test_gemini(request):
+    reply = ask_gemini("สวัสดีจาก Django!")
+    return JsonResponse({"reply": reply}, json_dumps_params={"ensure_ascii": False})
+
