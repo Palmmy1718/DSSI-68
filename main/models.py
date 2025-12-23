@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.functional import cached_property
+
 
 class Employee(models.Model):
     display_name = models.CharField(max_length=120)
@@ -31,13 +33,24 @@ class Service(models.Model):
 class Massage(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    
+
     # ปรับเป็น IntegerField และใส่ default เพื่อไม่ให้ Error
-    price = models.IntegerField(default=0) 
-    duration = models.IntegerField(default=60) 
-    
-    # [แก้ไขสำคัญ] เปลี่ยนเป็น ImageField เพื่อเก็บไฟล์รูป
+    price = models.IntegerField(default=0)
+    duration = models.IntegerField(default=60)
+
+    # เก็บไฟล์รูป
     image = models.ImageField(upload_to='massage_images/', blank=True, null=True)
+
+    @cached_property
+    def image_exists(self) -> bool:
+        """
+        กันกรณี DB มีชื่อไฟล์ แต่ไฟล์จริงใน media หาย/ไม่มี
+        ใช้ใน template: {% if m.image_exists %} ... {% else %} รูปสำรอง {% endif %}
+        """
+        try:
+            return bool(self.image) and self.image.storage.exists(self.image.name)
+        except Exception:
+            return False
 
     def __str__(self):
         return self.name
@@ -63,6 +76,13 @@ class GalleryImage(models.Model):
     title = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField(upload_to='gallery/')
     created_at = models.DateTimeField(auto_now_add=True)
+
+    @cached_property
+    def image_exists(self) -> bool:
+        try:
+            return bool(self.image) and self.image.storage.exists(self.image.name)
+        except Exception:
+            return False
 
     def __str__(self):
         return self.title or f"รูปที่ {self.id}"

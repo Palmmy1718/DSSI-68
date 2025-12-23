@@ -143,7 +143,7 @@
       font-size: 1rem;
       background: #fff;
     }
-    
+
     .form-full { grid-column: span 2; }
 
     .form-actions {
@@ -180,7 +180,7 @@
     .massage-info { flex: 1; }
     .massage-title { font-size: 1.2rem; font-weight: 600; color: #14532d; margin-bottom: 5px; }
     .massage-desc { color: #6b7280; font-size: 0.9rem; margin: 0; }
-    
+
     /* สไตล์ปุ่มไอคอน */
     .btn-icon {
         width: 35px; height: 35px; border-radius: 8px;
@@ -190,10 +190,9 @@
     }
     .btn-edit { background: #dcfce7; color: #166534; }
     .btn-delete { background: #fee2e2; color: #991b1b; }
-    
+
     .btn-edit:hover { background: #bbf7d0; }
     .btn-delete:hover { background: #fecaca; }
-
   </style>
 </head>
 
@@ -212,7 +211,7 @@
 
     <main class="main">
       <div class="page">
-        
+
         <div class="btn-add-wrapper">
           {% if not add_mode and not edit_mode %}
           <a href="?add=1" class="btn-add">+ เพิ่มรายการนวด</a>
@@ -223,8 +222,8 @@
 
         {% if messages %}
             {% for message in messages %}
-            <div style="background:{% if message.tags == 'success' %}#dcfce7{% else %}#fee2e2{% endif %}; 
-                        color:{% if message.tags == 'success' %}#166534{% else %}#991b1b{% endif %}; 
+            <div style="background:{% if message.tags == 'success' %}#dcfce7{% else %}#fee2e2{% endif %};
+                        color:{% if message.tags == 'success' %}#166534{% else %}#991b1b{% endif %};
                         padding:15px; border-radius:10px; margin-bottom:20px; text-align:center;">
                 {{ message }}
             </div>
@@ -236,24 +235,31 @@
             <h3 style="margin-top:0; color:#14532d;">
                 {% if edit_mode %}แก้ไขข้อมูล: {{ massage_obj.name }}{% else %}เพิ่มข้อมูลบริการใหม่{% endif %}
             </h3>
-            
+
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-grid">
                     <div class="form-group form-full">
                         <label>ชื่อบริการ *</label>
-                        <input type="text" name="name" required placeholder="เช่น นวดแผนไทย" 
+                        <input type="text" name="name" required placeholder="เช่น นวดแผนไทย"
                                value="{{ massage_obj.name|default:'' }}">
                     </div>
-                    
+
                     <div class="form-group form-full">
                         <label>รูปภาพประกอบ {% if edit_mode %}(อัปโหลดใหม่เพื่อเปลี่ยนรูป){% endif %}</label>
-                        {% if edit_mode and massage_obj.image %}
+
+                        {% if edit_mode %}
                             <div style="margin-bottom:10px;">
-                                <img src="{{ massage_obj.image.url }}" style="height:60px; border-radius:8px;">
-                                <span style="font-size:0.8rem; color:#666;">รูปปัจจุบัน</span>
+                                {% if massage_obj.image_exists %}
+                                    <img src="{{ massage_obj.image.url }}" style="height:60px; border-radius:8px;">
+                                    <span style="font-size:0.8rem; color:#666;">รูปปัจจุบัน</span>
+                                {% else %}
+                                    <img src="{% static 'images/N6.png' %}" style="height:60px; border-radius:8px;">
+                                    <span style="font-size:0.8rem; color:#666;">ไม่มีรูป (ใช้รูปสำรอง)</span>
+                                {% endif %}
                             </div>
                         {% endif %}
+
                         <input type="file" name="image" accept="image/*" style="padding: 9px;">
                     </div>
 
@@ -275,10 +281,10 @@
         <div class="massage-list">
             {% for m in massages %}
             <div class="massage-item">
-                {% if m.image %}
-                   <img src="{{ m.image.url }}" class="massage-img">
+                {% if m.image_exists %}
+                   <img src="{{ m.image.url }}" class="massage-img" alt="{{ m.name }}">
                 {% else %}
-                   <div class="massage-img" style="display:flex;align-items:center;justify-content:center;color:#cbd5e1;font-size:2rem;">💆</div>
+                   <img src="{% static 'images/N6.png' %}" class="massage-img" alt="no image">
                 {% endif %}
 
                 <div class="massage-info">
@@ -288,7 +294,7 @@
 
                 <div style="display:flex; gap:5px;">
                     <a href="{% url 'massage_edit' m.id %}" class="btn-icon btn-edit" title="แก้ไข">✏️</a>
-                    
+
                     <form action="{% url 'massage_delete' m.id %}" method="POST" onsubmit="return confirm('คุณแน่ใจหรือไม่ว่าจะลบ “{{ m.name }}” ?');" style="margin:0;">
                         {% csrf_token %}
                         <button type="submit" class="btn-icon btn-delete" title="ลบ" style="border:none; cursor:pointer;">
