@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _  # สำหรับข�
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # โหลดไฟล์ .env (ชี้ไฟล์ตรง ๆ กันพลาดเวลา run จาก working dir คนละที่)
-load_dotenv(BASE_DIR / ".env")
+load_dotenv(BASE_DIR / ".env", override=True)
 
 SECRET_KEY = 'django-insecure-4je3f5ebjr0s+@sd&3s0(^+%@2$(c1r@8$qqoso!)11$mbb7hy'
 DEBUG = True
