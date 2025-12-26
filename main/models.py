@@ -127,6 +127,9 @@ class Booking(models.Model):
 
     class Meta:
         ordering = ['date', 'start_time']
+        constraints = [
+            models.UniqueConstraint(fields=["employee", "date", "start_time"], name="unique_employee_date_starttime")
+        ]
 
     def __str__(self):
         return f"{self.customer_name} - {self.date} {self.start_time}"

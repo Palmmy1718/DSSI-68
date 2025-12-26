@@ -147,51 +147,22 @@
               <th>เวลา</th>
               <th>วันที่</th>
               <th>ชื่อลูกค้า</th>
+              <th>เบอร์โทร</th>
               <th>พนักงาน</th>
-              <th>สถานะ</th>
+              <!-- <th>สถานะ</th> -->
               <th>การจัดการ</th>
             </tr>
 
             {% for b in bookings %}
-            <tr>
-              <td>{{ b.start_time|time:"H:i" }}</td>
-              <td>{{ b.date }}</td>
+            <tr class="day-{{ b.day_idx }}">
+              <td>{{ b.time_range }}</td>
+              <td class="day-color">{{ b.date }}</td>
               <td>{{ b.customer_name }}</td>
+              <td>{{ b.customer_phone|default:"-" }}</td>
               <td>{{ b.employee.display_name }}</td>
 
               <td>
-                {% if b.status %}
-                    {% if b.status == "confirmed" %}
-                      <span class="badge confirmed">ยืนยันแล้ว</span>
-                    {% elif b.status == "cancelled" %}
-                      <span class="badge cancelled">ยกเลิกแล้ว</span>
-                    {% else %}
-                      <span class="badge pending">รอคอนเฟิร์ม</span>
-                    {% endif %}
-                {% else %}
-                    <!-- fallback → pending -->
-                    <span class="badge pending">รอคอนเฟิร์ม</span>
-                {% endif %}
-              </td>
-
-              <td>
-                <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
-                  {% if b.status != "confirmed" %}
-                    <form method="post" action="{% url 'admin_booking_confirm' b.id %}">
-                      {% csrf_token %}
-                      <input type="hidden" name="return" value="{{ request.get_full_path }}">
-                      <button class="btn btn-green" type="submit">ยืนยัน</button>
-                    </form>
-                  {% endif %}
-
-                  {% if b.status != "cancelled" %}
-                    <form method="post" action="{% url 'admin_booking_cancel' b.id %}">
-                      {% csrf_token %}
-                      <input type="hidden" name="return" value="{{ request.get_full_path }}">
-                      <button class="btn btn-red" type="submit">ยกเลิก</button>
-                    </form>
-                  {% endif %}
-
+                <div style="display:flex; justify-content:center;">
                   <form method="post" action="{% url 'admin_booking_delete' b.id %}" onsubmit="return confirm('ลบรายการนี้ถาวรหรือไม่?');">
                     {% csrf_token %}
                     <input type="hidden" name="return" value="{{ request.get_full_path }}">
@@ -199,9 +170,15 @@
                   </form>
                 </div>
               </td>
-
             </tr>
             {% endfor %}
+<style>
+  .day-0 .day-color { color: #e53935; font-weight: bold; }
+  .day-1 .day-color { color: #8e24aa; font-weight: bold; }
+  .day-2 .day-color { color: #3949ab; font-weight: bold; }
+  .day-3 .day-color { color: #00897b; font-weight: bold; }
+  .day-4 .day-color { color: #fbc02d; font-weight: bold; }
+</style>
 
           </table>
 

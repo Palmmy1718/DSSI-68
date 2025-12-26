@@ -3,7 +3,7 @@
 import logging
 import base64
 import os
-import google.generativeai as genai
+from google import genai
 from django.conf import settings
 from datetime import datetime, timedelta, date, time
 
@@ -29,22 +29,22 @@ logger = logging.getLogger(__name__)
 # ---------------------- GEMINI UTILITY FUNCTION ----------------------
 def ask_gemini(prompt: str) -> str:
     api_key = (
-        getattr(settings, "GEMINI_API_KEY", "") 
-        or os.getenv("GEMINI_API_KEY", "") 
+        getattr(settings, "GEMINI_API_KEY", "")
+        or os.getenv("GEMINI_API_KEY", "")
         or os.getenv("GOOGLE_API_KEY", "")
     )
     if not api_key:
         return "ยังไม่ได้ตั้งค่า GEMINI_API_KEY/GOOGLE_API_KEY ใน .env"
-
-    genai.configure(api_key=api_key)
-
-    model_name = getattr(settings, "GEMINI_MODEL_NAME", "") or os.getenv(
-        "GEMINI_MODEL_NAME", "gemini-2.0-flash-lite-latest"
+    model_name = (
+        getattr(settings, "GEMINI_MODEL_NAME", "")
+        or os.getenv("GEMINI_MODEL_NAME", "gemini-2.5-flash")
     )
-    model = genai.GenerativeModel(model_name)
-
-    resp = model.generate_content(prompt)
-    return getattr(resp, "text", "") or str(resp)
+    client = genai.Client(api_key=api_key)
+    try:
+        resp = client.models.generate_content(model=model_name, contents=prompt)
+        return getattr(resp, "text", None) or str(resp)
+    except Exception as e:
+        return f"[Gemini Error] {str(e)}"
 
 # ---------------------- 2. ADMIN VIEWS (MASSAGE) ----------------------
 
@@ -492,6 +492,14 @@ TIME_SLOTS = [
 
 def is_conflict(employee, date_obj, start_time, duration):
     end_time = (datetime.combine(date_obj, start_time) + timedelta(minutes=duration)).time()
+    # Check Booking overlap (ignore cancelled)
+    bookings = Booking.objects.filter(employee=employee, date=date_obj).exclude(status="cancelled")
+    for b in bookings:
+        b_start = b.start_time
+        b_end = (datetime.combine(date_obj, b_start) + timedelta(minutes=b.duration_minutes or 60)).time()
+        if start_time < b_end and end_time > b_start:
+            return True
+    # Check AppointmentSlot overlap
     slots = AppointmentSlot.objects.filter(employee=employee, date=date_obj)
     for s in slots:
         s_end = (datetime.combine(s.date, s.start_time) + timedelta(minutes=s.duration_minutes)).time()
@@ -558,23 +566,28 @@ def booking_form(request):
         if not employee_obj: return render(request, "main/booking_result.html", {"success": False, "message": "ไม่พบพนักงานที่เลือก"})
         created_count = 0
         conflicts = []
+        from django.db import IntegrityError
         for t in times:
-            try: start_obj = datetime.strptime(t, "%H:%M").time()
+            try:
+                start_obj = datetime.strptime(t, "%H:%M").time()
             except ValueError:
                 conflicts.append(f"รูปแบบเวลาไม่ถูกต้อง: {t}")
                 continue
             if is_conflict(employee_obj, date_obj, start_obj, duration):
-                conflicts.append(f"คิวไม่ว่างที่เวลา {t}")
+                conflicts.append(f"คิวยังไม่ว่างที่เวลา {t}")
                 continue
-            Booking.objects.create(
-                employee=employee_obj,
-                customer_name=customer_name,
-                customer_phone=customer_phone,
-                date=date_obj,
-                start_time=start_obj,
-                duration_minutes=duration,
-            )
-            created_count += 1
+            try:
+                Booking.objects.create(
+                    employee=employee_obj,
+                    customer_name=customer_name,
+                    customer_phone=customer_phone,
+                    date=date_obj,
+                    start_time=start_obj,
+                    duration_minutes=duration,
+                )
+                created_count += 1
+            except IntegrityError:
+                conflicts.append(f"คิวยังไม่ว่างที่เวลา {t}")
         if created_count == 0:
             return render(request, "main/booking_result.html", {"success": False, "message": "ไม่สามารถจองได้: " + "; ".join(conflicts)})
         msg = f"จองสำเร็จ {created_count} รายการ"
@@ -598,15 +611,37 @@ def booking_list(request):
 
 @login_required
 def admin_bookings_view(request):
-    qs = Booking.objects.select_related("employee").order_by("date", "start_time")
+    qs = Booking.objects.select_related("employee").order_by("-date", "-start_time", "-id")
     q_date = request.GET.get("date")
     if q_date:
         try:
             qd = datetime.strptime(q_date, "%Y-%m-%d").date()
-            qs = qs.filter(date=qd)
+            qs = qs.filter(date=qd).order_by("-date", "-start_time", "-id")
         except Exception: pass
+    # Convert queryset to list and add time_range attribute
+    bookings = list(qs)
+    # Map date to day_idx (cycle 0-4)
+    date_to_idx = {}
+    idx = 0
+    for b in bookings:
+        # time_range
+        try:
+            start = b.start_time
+            duration = getattr(b, 'duration_minutes', 60) or 60
+            from datetime import datetime, timedelta
+            dt_start = datetime.combine(b.date, start)
+            dt_end = dt_start + timedelta(minutes=duration)
+            b.time_range = f"{start.strftime('%H:%M')}-{dt_end.strftime('%H:%M')}"
+        except Exception:
+            b.time_range = ""
+        # day_idx
+        d = b.date
+        if d not in date_to_idx:
+            date_to_idx[d] = idx
+            idx += 1
+        b.day_idx = date_to_idx[d] % 5
     return render(request, "main/admin_bookings.html", {
-        "bookings": qs,
+        "bookings": bookings,
         "today": date.today(),
         "q_date": q_date or "",
     })
@@ -751,26 +786,7 @@ def gallery_delete(request, pk):
     return redirect('gallery_crud')
 
 
-# ---------------------- 13. AI CHAT & GEMINI ----------------------
-import google.generativeai as genai
 
-def _get_gemini_model():
-    api_key = getattr(settings, "GEMINI_API_KEY", "") or os.getenv("GEMINI_API_KEY", "") or os.getenv("GOOGLE_API_KEY", "")
-    if not api_key:
-        return None, "ยังไม่ได้ตั้งค่า GEMINI_API_KEY/GOOGLE_API_KEY ใน .env"
-
-    model_name = getattr(settings, "GEMINI_MODEL_NAME", "") or os.getenv("GEMINI_MODEL_NAME", "gemini-2.0-flash-lite-latest")
-
-    # configure ครั้งเดียวต่อ request ก็พอ (ง่าย/ชัวร์)
-    genai.configure(api_key=api_key)
-    return genai.GenerativeModel(model_name), None
-
-def ask_gemini(prompt: str) -> str:
-    model, err = _get_gemini_model()
-    if err:
-        return err
-    resp = model.generate_content(prompt)
-    return getattr(resp, "text", "") or str(resp)
 
 @csrf_exempt
 def chat_api(request):
@@ -807,15 +823,29 @@ def chat_api(request):
 
     try:
         reply = ask_gemini(final_prompt)
+        if reply.startswith("[Gemini Error]"):
+            return JsonResponse({"reply": f"ขออภัย ระบบแชทขัดข้อง: {reply}"}, json_dumps_params={"ensure_ascii": False})
         return JsonResponse({"reply": reply}, json_dumps_params={"ensure_ascii": False})
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+        return JsonResponse({"reply": f"ขออภัย ระบบแชทขัดข้อง: {str(e)}"}, json_dumps_params={"ensure_ascii": False})
 
 def chat_ui(request):
     return render(request, "chat.html")
 
 def list_models(request):
-    return JsonResponse({"models": ["not-implemented"]})
+    api_key = (
+        getattr(settings, "GEMINI_API_KEY", "")
+        or os.getenv("GEMINI_API_KEY", "")
+        or os.getenv("GOOGLE_API_KEY", "")
+    )
+    if not api_key:
+        return JsonResponse({"models": [], "error": "No API key set"})
+    client = genai.Client(api_key=api_key)
+    try:
+        models = [m.name for m in client.models.list()]
+        return JsonResponse({"models": models}, json_dumps_params={"ensure_ascii": False})
+    except Exception as e:
+        return JsonResponse({"models": [], "error": str(e)})
 
 def test_gemini(request):
     reply = ask_gemini("สวัสดีจาก Django!")

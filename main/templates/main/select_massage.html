@@ -65,7 +65,7 @@
           {% for m in massages %}
           <div class="card">
               <div class="card-img">
-                  {% if m.image %}
+                  {% if m.image_exists %}
                       <img src="{{ m.image.url }}" alt="{{ m.name }}">
                   {% else %}
                       <div style="display:flex; align-items:center; justify-content:center; height:100%; color:#999;"><i class="fa-solid fa-spa fa-2x"></i></div>

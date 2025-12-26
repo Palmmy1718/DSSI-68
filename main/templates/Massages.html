@@ -59,29 +59,30 @@
       <section class="services-stack container">
 
         {% for m in massages %}
-        <div class="service-row">
-          
-          {% if m.image %}
-            <img class="service-photo" src="{{ m.image.url }}" alt="{{ m.name }}">
-          {% else %}
-            <div class="no-img-placeholder">
-                <i class="fa-solid fa-spa fa-2x"></i>
-            </div>
-          {% endif %}
+<div class="service-row">
 
-          <div class="service-text">
-            <h3>{{ m.name }}</h3>
-            <p>{{ m.description|default:"" }}</p>
-          </div>
-          
-        </div>
-        {% empty %}
-            <div style="text-align: center; padding: 60px; color: #999;">
-                <i class="fa-solid fa-box-open fa-3x" style="margin-bottom:15px; opacity:0.5;"></i>
-                <p>{% trans "No massage services available at the moment." %}</p>
-                <p>{% trans "Please add services in the Admin Panel." %}</p>
-            </div>
-        {% endfor %}
+  {% if m.image_exists %}
+    <img class="service-photo" src="{{ m.image.url }}" alt="{{ m.name }}">
+  {% else %}
+    <div class="no-img-placeholder" aria-label="{% trans 'No image available' %}">
+      <i class="fa-solid fa-spa fa-2x"></i>
+    </div>
+  {% endif %}
+
+  <div class="service-text">
+    <h3>{{ m.name }}</h3>
+    <p>{{ m.description|default:"" }}</p>
+  </div>
+
+</div>
+{% empty %}
+  <div style="text-align: center; padding: 60px; color: #999;">
+    <i class="fa-solid fa-box-open fa-3x" style="margin-bottom:15px; opacity:0.5;"></i>
+    <p>{% trans "No massage services available at the moment." %}</p>
+    <p>{% trans "Please add services in the Admin Panel." %}</p>
+  </div>
+{% endfor %}
+
 
       </section>
 
