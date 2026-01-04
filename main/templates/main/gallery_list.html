@@ -1,3 +1,4 @@
+{% extends 'main/admin_base.html' %}
 {% load static %}
 <!doctype html>
 <html lang="th">
@@ -122,6 +123,7 @@
     </style>
   </head>
 
+  {% block content %}
   <body>
     <div class="shell">
 
@@ -171,4 +173,5 @@
 
     </div>
   </body>
+  {% endblock %}
 </html>

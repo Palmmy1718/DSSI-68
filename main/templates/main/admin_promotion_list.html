@@ -1,0 +1,36 @@
+{% extends 'main/admin_base.html' %}
+{% block content %}
+<div class="page">
+  <h1>จัดการโปรโมชั่น</h1>
+  <div class="btn-add-wrapper">
+    <a href="{% url 'admin_promotion_add' %}" class="btn-add">+ เพิ่มโปรโมชั่นใหม่</a>
+  </div>
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>ชื่อโปรโมชั่น</th>
+        <th>รายละเอียด</th>
+        <th>สถานะ</th>
+        <th>อัปเดตล่าสุด</th>
+        <th>การจัดการ</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for promo in promotions %}
+      <tr>
+        <td>{{ promo.title }}</td>
+        <td>{{ promo.description|linebreaksbr }}</td>
+        <td>{{ promo.is_active|yesno:"เปิด,ปิด" }}</td>
+        <td>{{ promo.updated_at|date:'Y-m-d H:i' }}</td>
+        <td>
+          <a href="{% url 'admin_promotion_edit' promo.id %}" class="btn-edit">แก้ไข</a>
+          <a href="{% url 'admin_promotion_delete' promo.id %}" class="btn-delete" onclick="return confirm('ลบโปรโมชั่นนี้ถาวรหรือไม่?');">ลบ</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5">ยังไม่มีโปรโมชั่น</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

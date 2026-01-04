@@ -1,0 +1,10 @@
+{% extends 'main/admin_base.html' %}
+{% block content %}
+  <h1>ยืนยันการลบโปรโมชั่น</h1>
+  <p>คุณแน่ใจหรือไม่ว่าต้องการลบโปรโมชั่น <strong>{{ promo.title }}</strong> นี้?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn-delete">ลบ</button>
+    <a href="{% url 'admin_promotion_list' %}" class="btn-cancel">ยกเลิก</a>
+  </form>
+{% endblock %}

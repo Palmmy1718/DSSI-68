@@ -21,7 +21,7 @@ from django.views.decorators.http import require_POST
 from bs4 import BeautifulSoup
 
 
-from .forms import EmployeeForm
+from .forms import EmployeeForm, PromotionForm
 from .models import Employee, AppointmentSlot, Booking, Massage, GalleryImage, Promotion
 
 logger = logging.getLogger(__name__)
@@ -784,6 +784,45 @@ def gallery_delete(request, pk):
     image = get_object_or_404(GalleryImage, pk=pk)
     image.delete()
     return redirect('gallery_crud')
+
+
+# ---------------------- 13. PROMOTION MANAGEMENT (ADMIN) ----------------------
+
+@login_required
+def admin_promotion_list(request):
+    promotions = Promotion.objects.all().order_by('-updated_at')
+    return render(request, 'main/admin_promotion_list.html', {'promotions': promotions})
+
+@login_required
+def admin_promotion_add(request):
+    if request.method == 'POST':
+        form = PromotionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_promotion_list')
+    else:
+        form = PromotionForm()
+    return render(request, 'main/admin_promotion_form.html', {'form': form, 'add_mode': True})
+
+@login_required
+def admin_promotion_edit(request, pk):
+    promo = get_object_or_404(Promotion, pk=pk)
+    if request.method == 'POST':
+        form = PromotionForm(request.POST, instance=promo)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_promotion_list')
+    else:
+        form = PromotionForm(instance=promo)
+    return render(request, 'main/admin_promotion_form.html', {'form': form, 'edit_mode': True, 'promo': promo})
+
+@login_required
+def admin_promotion_delete(request, pk):
+    promo = get_object_or_404(Promotion, pk=pk)
+    if request.method == 'POST':
+        promo.delete()
+        return redirect('admin_promotion_list')
+    return render(request, 'main/admin_promotion_confirm_delete.html', {'promo': promo})
 
 
 

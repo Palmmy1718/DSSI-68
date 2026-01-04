@@ -68,4 +68,10 @@ urlpatterns = [
     # ------------------ Public Booking ------------------
     path('booking-slots/<int:employee_id>/', views.booking_slots, name='booking_slots'),
     path('booking-form/', views.booking_form, name='booking_form'),
+
+    # ------------------ โปรโมชั่น (Admin) ------------------
+    path('promotions-admin/', views.admin_promotion_list, name='admin_promotion_list'),
+    path('promotions-admin/add/', views.admin_promotion_add, name='admin_promotion_add'),
+    path('promotions-admin/<int:pk>/edit/', views.admin_promotion_edit, name='admin_promotion_edit'),
+    path('promotions-admin/<int:pk>/delete/', views.admin_promotion_delete, name='admin_promotion_delete'),
 ]

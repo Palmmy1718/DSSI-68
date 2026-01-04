@@ -1,5 +1,5 @@
 from django import forms
-from .models import Employee
+from .models import Employee, Promotion
 
 class EmployeeForm(forms.ModelForm):
     # ฟิลด์รับไฟล์สำหรับอัปโหลด (ไม่ผูกกับโมเดลโดยตรง)
@@ -9,3 +9,8 @@ class EmployeeForm(forms.ModelForm):
         model = Employee
         # ฟิลด์จริงตามโมเดล (ยกเว้น BLOB)
         fields = ['display_name', 'role_title', 'phone', 'is_active']
+
+class PromotionForm(forms.ModelForm):
+    class Meta:
+        model = Promotion
+        fields = ['title', 'description', 'is_active']

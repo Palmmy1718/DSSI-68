@@ -1,3 +1,4 @@
+{% extends 'main/admin_base.html' %}
 {% load static %}
 <!doctype html>
 <html lang="th">
@@ -205,6 +206,7 @@
         <a href="{% url 'massage_admin' %}" class="active">รายการนวด</a>
         <a href="{% url 'gallery_crud' %}">เพิ่มรูปภาพ</a>
         <a href="{% url 'admin_bookings' %}">คิวจอง</a>
+        <a href="{% url 'admin_promotion_list' %}"{% if 'admin/promotions' in request.path %} class="active"{% endif %}>โปรโมชั่น</a>
         <a href="{% url 'logout' %}">ออกจากระบบ</a>
       </nav>
     </aside>
@@ -212,13 +214,14 @@
     <main class="main">
       <div class="page">
 
+        {% block content %}
+        <h1>จัดการรายการนวด</h1>
+
         <div class="btn-add-wrapper">
           {% if not add_mode and not edit_mode %}
           <a href="?add=1" class="btn-add">+ เพิ่มรายการนวด</a>
           {% endif %}
         </div>
-
-        <h1>รายการนวดทั้งหมด</h1>
 
         {% if messages %}
             {% for message in messages %}
@@ -309,6 +312,7 @@
                 </div>
             {% endfor %}
         </div>
+        {% endblock %}
 
       </div>
     </main>

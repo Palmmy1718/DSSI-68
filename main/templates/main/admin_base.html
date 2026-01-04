@@ -1,0 +1,50 @@
+{% load static %}
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}แอดมินจัดการระบบ{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+  <style>
+    body { font-family: 'Kanit', sans-serif; margin: 0; background: linear-gradient(135deg, #f2fff5, #e9f8ef); color: #08361b; }
+    .shell { display: flex; min-height: 100vh; }
+    .side { width: 220px; background: #07210f; color: #fff; padding: 2rem 1rem; display: flex; flex-direction: column; }
+    .nav a { display: block; color: #d1d5db; padding: 10px 14px; text-decoration: none; border-radius: 6px; margin-bottom: 6px; transition: all 0.2s ease; }
+    .nav a.active, .nav a.selected { background: #17613a; color: #fff; }
+    .nav a:hover { background: #17613a; color: #fff; }
+    .main { flex: 1; padding: 2rem 2rem 2rem 0; }
+    .page { background: #f8fff9; border-radius: 16px; padding: 2rem; box-shadow: 0 2px 8px #0001; }
+    .btn-add-wrapper { margin-bottom: 1.5rem; }
+    .btn-add { background: #17613a; color: #fff; padding: 8px 18px; border-radius: 6px; text-decoration: none; font-weight: bold; }
+    .btn-add:hover { background: #0e3c22; }
+    .admin-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .admin-table th, .admin-table td { border: 1px solid #e0e0e0; padding: 8px 12px; }
+    .admin-table th { background: #e9f8ef; }
+    .btn-edit, .btn-delete, .btn-save, .btn-cancel { margin-right: 6px; }
+    .btn-edit { background: #e9f8ef; color: #17613a; border: none; padding: 6px 14px; border-radius: 5px; text-decoration: none; }
+    .btn-delete { background: #ffeaea; color: #b91c1c; border: none; padding: 6px 14px; border-radius: 5px; text-decoration: none; }
+    .btn-save { background: #17613a; color: #fff; border: none; padding: 6px 18px; border-radius: 5px; }
+    .btn-cancel { background: #e9f8ef; color: #17613a; border: none; padding: 6px 18px; border-radius: 5px; text-decoration: none; }
+    .form-group { margin-bottom: 1.2rem; }
+    label { display: block; margin-bottom: 0.3rem; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="side">
+      <nav class="nav">
+        <a href="{% url 'employee_list' %}" class="{% if 'employee' in request.path %}active{% endif %}">จัดการพนักงาน</a>
+        <a href="{% url 'employee_availability_list' %}" class="{% if 'availability' in request.path %}active{% endif %}">เวลาคิวว่าง</a>
+        <a href="{% url 'massage_admin' %}" class="{% if 'massage-admin' in request.path %}active{% endif %}">รายการนวด</a>
+        <a href="{% url 'gallery_crud' %}" class="{% if 'gallery' in request.path %}active{% endif %}">เพิ่มรูปภาพ</a>
+        <a href="{% url 'admin_bookings' %}" class="{% if 'bookings/admin' in request.path %}active{% endif %}">คิวจอง</a>
+        <a href="{% url 'admin_promotion_list' %}" class="{% if 'promotions-admin' in request.path %}active{% endif %}">โปรโมชั่น</a>
+        <a href="{% url 'logout' %}">ออกจากระบบ</a>
+      </nav>
+    </aside>
+    <main class="main">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>
