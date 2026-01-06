@@ -1,90 +1,139 @@
+{% extends 'main/admin_base.html' %}
 {% load static %}
-<!doctype html>
-<html lang="th">
-  <head>
-    <meta charset="utf-8">
-    <title>อัปโหลดรูปภาพ</title>
-    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
-    <style>
-      body {
-        font-family: 'Kanit', sans-serif;
-        background: #f8fff9;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-      }
 
-      .form-container {
-        background: #fff;
-        padding: 2.5rem;
-        border-radius: 16px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        width: 360px;
-        text-align: center;
-      }
+{% block title %}
+  {% if item %}แก้ไขรูปภาพ{% else %}อัปโหลดรูปภาพ{% endif %}
+{% endblock %}
 
-      h2 {
-        margin-top: 0;
-        margin-bottom: 1.5rem;
-        font-size: 1.6rem;
-        color: #0f172a;
-      }
+{% block content %}
+<style>
+  .page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:16px;
+  }
+  .page-header h1{
+    margin:0;
+    color:#064e3b;
+    font-size:2rem;
+    line-height:1.2;
+  }
 
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-      }
+  .notice{
+    margin:10px 0 16px;
+    padding:10px 12px;
+    border-radius:12px;
+    border:1px solid rgba(0,0,0,0.06);
+    background:rgba(255,255,255,0.85);
+  }
 
-      input[type="file"] {
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        background: #f9fafb;
-      }
+  .form-card{
+    background:rgba(255,255,255,0.92);
+    border:1px solid rgba(20,83,45,0.12);
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    padding:16px;
+  }
 
-      button {
-        background: #14532d;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 10px 20px;
-        font-weight: 600;
-        cursor: pointer;
-      }
+  .preview{
+    display:flex;
+    gap:14px;
+    align-items:center;
+    margin-bottom:14px;
+  }
+  .preview .thumb{
+    width:110px;
+    height:110px;
+    border-radius:16px;
+    overflow:hidden;
+    background:#eef2f7;
+    border:1px solid rgba(20,83,45,0.10);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:900;
+    color:#14532d;
+  }
+  .preview .thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
 
-      button:hover {
-        background: #166534;
-      }
+  .form-group{ margin-bottom:12px; }
+  label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:800;
+    color:#14532d;
+  }
+  input[type="file"], input[type="text"]{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid #cbd5e1;
+    border-radius:12px;
+    background:#fff;
+  }
 
-      a {
-        color: #3b0764;
-        font-size: 0.95rem;
-        text-decoration: none;
-      }
+  .form-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:14px;
+  }
+</style>
 
-      a:hover {
-        text-decoration: underline;
-      }
-    </style>
-  </head>
+<div class="page">
 
-  <body>
-    <div class="form-container">
-      <h2>เพิ่มรูปใหม่</h2>
+  <div class="page-header">
+    <h1>{% if item %}แก้ไขรูปภาพ{% else %}อัปโหลดรูปภาพ{% endif %}</h1>
+    <a class="btn-cancel" href="{% url 'gallery_crud' %}">กลับ</a>
+  </div>
 
-      <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <!-- ✅ ลบช่องชื่อรูปภาพออก เหลือเฉพาะอัปโหลดไฟล์ -->
-        <input type="file" name="image" accept="image/*" required>
-        <button type="submit">บันทึก</button>
-      </form>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="notice">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
 
-      <div style="margin-top: 1rem;">
-        <a href="{% url 'gallery_crud' %}">&larr; กลับไปแกลเลอรี</a>
+  <div class="form-card">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      {% if item and item.image %}
+        <div class="preview">
+          <div class="thumb">
+            <img src="{{ item.image.url }}" alt="preview">
+          </div>
+          <div style="color:#6b7280;">
+            รูปเดิมจะแสดงอยู่ตรงนี้<br>
+            ถ้าอยากเปลี่ยน ให้เลือกไฟล์ใหม่แล้วบันทึก
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="form-group">
+        <label>เลือกรูปภาพ</label>
+        <input type="file" name="image" accept="image/*" {% if not item %}required{% endif %}>
       </div>
-    </div>
-  </body>
-</html>
+
+      {# title ถูกใช้ตอน edit ใน view (gallery_edit) #}
+      {% if item %}
+        <div class="form-group">
+          <label>ชื่อรูป (ถ้าต้องการ)</label>
+          <input type="text" name="title" value="{{ item.title|default:'' }}" placeholder="เช่น ห้องนวด / บรรยากาศร้าน">
+        </div>
+      {% endif %}
+
+      <div class="form-actions">
+        <a class="btn-cancel" href="{% url 'gallery_crud' %}">ยกเลิก</a>
+        <button class="btn-save" type="submit">บันทึก</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

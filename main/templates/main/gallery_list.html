@@ -1,177 +1,167 @@
 {% extends 'main/admin_base.html' %}
 {% load static %}
-<!doctype html>
-<html lang="th">
-  <head>
-    <meta charset="utf-8">
-    <title>Gallery</title>
-    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
-    <style>
-      body {
-        font-family: 'Kanit', sans-serif;
-        margin: 0;
-        background: #f8fff9;
-      }
 
-      /* Layout */
-      .shell { display: flex; min-height: 100vh; }
-      .side {
-        width: 220px;
-        background: #07210f;
-        color: #fff;
-        padding: 2rem 1rem;
-        display: flex;
-        flex-direction: column;
-      }
-      .nav a {
-        display: block;
-        color: #d1d5db;
-        padding: 10px 14px;
-        text-decoration: none;
-        border-radius: 6px;
-        margin-bottom: 6px;
-        transition: all 0.2s ease;
-      }
-      .nav a:hover, .nav a.active {
-        background: #14532d;
-        color: #fff;
-      }
+{% block title %}Gallery{% endblock %}
 
-      .main { flex: 1; padding: 2rem; }
+{% block content %}
+<style>
+  .page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:16px;
+  }
+  .page-header h1{
+    margin:0;
+    color:#064e3b;
+    font-size:2rem;
+    line-height:1.2;
+  }
 
-      /* Header */
-      .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
-      }
-      .page-header h1 {
-        color: #0f172a;
-        margin: 0;
-      }
-      .add-btn {
-        background: #14532d;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 10px;
-        text-decoration: none;
-        font-weight: 600;
-        border: none;
-        cursor: pointer;
-      }
-      .add-btn:hover { background: #166534; }
+  .notice{
+    margin:10px 0 16px;
+    padding:10px 12px;
+    border-radius:12px;
+    border:1px solid rgba(0,0,0,0.06);
+    background:rgba(255,255,255,0.85);
+  }
 
-      /* Gallery grid */
-      .gallery-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 24px;
-      }
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));
+    gap:18px;
+  }
 
-      .gallery-item {
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        overflow: hidden;
-        text-align: center;
-        padding-bottom: 10px;
-        transition: transform 0.2s ease;
-      }
+  .g-card{
+    background:rgba(255,255,255,0.92);
+    border:1px solid rgba(20,83,45,0.12);
+    border-radius:16px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    overflow:hidden;
+    position:relative;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .g-card::before{
+    content:"";
+    position:absolute;
+    top:0; left:0;
+    width:100%;
+    height:6px;
+    background:linear-gradient(90deg, #22c55e, #14532d);
+  }
+  .g-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 30px rgba(0,0,0,0.10);
+  }
 
-      .gallery-item:hover {
-        transform: translateY(-4px);
-      }
+  .g-thumb{
+    height:200px;
+    background:#eef2f7;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .g-thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
 
-      .gallery-item img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        border-bottom: 1px solid #eee;
-      }
+  .g-body{
+    padding:12px 14px 14px;
+  }
+  .g-title{
+    font-weight:800;
+    color:#0f172a;
+    margin:0 0 10px;
+    font-size:1rem;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
 
-      .gallery-name {
-        font-weight: 600;
-        font-size: 1.05rem;
-        color: #111;
-        margin: 10px 0 5px;
-      }
+  .g-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    align-items:center;
+  }
 
-      .gallery-actions {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-      }
+  .btn-lite{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:6px 10px;
+    border-radius:10px;
+    border:1px solid #d1d5db;
+    background:#fff;
+    color:#14532d;
+    font-weight:700;
+    text-decoration:none;
+    cursor:pointer;
+    transition:.2s;
+  }
+  .btn-lite:hover{ background:#f3f4f6; }
 
-      .action-btn {
-        background: #f8fafc;
-        border: 1px solid #ccc;
-        padding: 5px 12px;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: 0.2s;
-        font-family: 'Kanit', sans-serif;
-      }
-      .action-btn:hover {
-        background: #e2f0dc;
-      }
-      .danger {
-        background: #f8d7da;
-        border-color: #f5c2c7;
-        color: #842029;
-      }
-    </style>
-  </head>
+  .btn-danger{
+    border-color:#fecaca;
+    background:#fee2e2;
+    color:#b91c1c;
+  }
+  .btn-danger:hover{ background:#fecaca; }
 
-  {% block content %}
-  <body>
-    <div class="shell">
+  .empty{
+    text-align:center;
+    color:#6b7280;
+    padding:30px 10px;
+  }
+</style>
 
-      <!-- Sidebar -->
-      <aside class="side">
-        <nav class="nav">
-          <a href="{% url 'employee_list' %}">จัดการพนักงาน</a>
-          <a href="{% url 'employee_availability_list' %}">เวลาคิวว่าง</a>
-          <a href="{% url 'massage_admin' %}">รายการนวด</a>
-          <a href="{% url 'gallery_crud' %}" class="active">เพิ่มรูปภาพ</a>
-          <a href="{% url 'admin_bookings' %}">คิวจอง</a>
-          <a href="{% url 'logout' %}">ออกจากระบบ</a>
-        </nav>
-      </aside>
+<div class="page">
 
-      <!-- Main content -->
-      <main class="main">
-        <header class="page-header">
-          <h1>Gallery</h1>
-          <a href="{% url 'gallery_add' %}" class="add-btn">+ อัปโหลดรูปภาพ</a>
-        </header>
+  <div class="page-header">
+    <h1>Gallery</h1>
+    <a class="btn-add" href="{% url 'gallery_add' %}">+ อัปโหลดรูปภาพ</a>
+  </div>
 
-        <section class="gallery-grid">
-          {% for photo in gallery %}
-            <div class="gallery-item">
-              {% if photo.image %}
-                <img src="{{ photo.image.url }}" alt="{{ photo.name }}">
-              {% else %}
-                <div style="height:200px;background:#eee;display:flex;align-items:center;justify-content:center;color:#666;">ไม่มีรูปภาพ</div>
-              {% endif %}
-              <div class="gallery-name">
-                {% if photo.name %}{{ photo.name }}{% endif %}
-              </div>
-              <div class="gallery-actions">
-                <a href="{% url 'gallery_edit' photo.id %}" class="action-btn">✏️ Edit</a>
-                <form method="post" action="{% url 'gallery_delete' photo.id %}" style="display:inline;">
-                  {% csrf_token %}
-                  <button type="submit" class="action-btn danger">🗑️ Delete</button>
-                </form>
-              </div>
-            </div>
-          {% empty %}
-            <p>ยังไม่มีรูปในแกลเลอรี</p>
-          {% endfor %}
-        </section>
-      </main>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="notice">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
 
-    </div>
-  </body>
-  {% endblock %}
-</html>
+  <section class="gallery-grid">
+    {% for photo in gallery %}
+      <article class="g-card">
+        <div class="g-thumb">
+          {% if photo.image %}
+            <img src="{{ photo.image.url }}" alt="{{ photo.title|default:'gallery' }}">
+          {% else %}
+            <div style="color:#64748b;font-weight:800;">ไม่มีรูปภาพ</div>
+          {% endif %}
+        </div>
+
+        <div class="g-body">
+          <div class="g-title">
+            {{ photo.title|default:"รูปภาพ" }}
+          </div>
+
+          <div class="g-actions">
+            <a class="btn-lite" href="{% url 'gallery_edit' photo.id %}">แก้ไข</a>
+
+            <form method="post" action="{% url 'gallery_delete' photo.id %}" style="margin:0;">
+              {% csrf_token %}
+              <button type="submit" class="btn-lite btn-danger">ลบ</button>
+            </form>
+          </div>
+        </div>
+      </article>
+    {% empty %}
+      <div class="empty">ยังไม่มีรูปในแกลเลอรี</div>
+    {% endfor %}
+  </section>
+
+</div>
+{% endblock %}

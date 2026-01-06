@@ -1,178 +1,112 @@
+{% extends 'main/admin_base.html' %}
 {% load static %}
-<!doctype html>
-<html lang="th">
-  <head>
-    <meta charset="utf-8">
-    <title>จัดการคิวจองลูกค้า</title>
 
-    <style>
-      body {
-        font-family: 'Kanit', sans-serif;
-        margin: 0;
-        background: #f8fff9;
-      }
+{% block title %}จัดการคิวจองลูกค้า{% endblock %}
 
-      .shell { display: flex; min-height: 100vh; }
-
-      .side {
-        width: 220px;
-        background: #07210f;
-        color: #fff;
-        padding: 2rem 1rem;
-        display: flex;
-        flex-direction: column;
-      }
-      .nav a {
-        display: block;
-        color: #d1d5db;
-        padding: 10px 14px;
-        text-decoration: none;
-        border-radius: 6px;
-        margin-bottom: 6px;
-        transition: all 0.2s ease;
-      }
-      .nav a:hover, .nav a.active {
-        background: #14532d;
-        color: #fff;
-      }
-
-      .main { flex: 1; padding: 2rem; }
-
-      .page {
-        background: #fff;
-        border-radius: 16px;
-        padding: 2rem;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        max-width: 900px;
-        margin: auto;
-      }
-
-      h1 {
-        text-align: center;
-        color: #064e3b;
-        margin-bottom: 1.5rem;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        text-align: center;
-      }
-      th {
-        background: #d9f1e1;
-        padding: 10px;
-      }
-      td {
-        border-bottom: 1px solid #eee;
-        padding: 10px;
-      }
-      tr:nth-child(even) td { background: #fbfffd; }
-
-      .badge {
-        padding: 6px 10px;
-        border-radius: 6px;
-        color: white;
-        font-size: 0.9rem;
-      }
-      .pending { background: #facc15; color: #111; }
-      .confirmed { background: #22c55e; }
-      .cancelled { background: #ef4444; }
-
-      .btn {
-        padding: 5px 10px;
-        border-radius: 6px;
-        border: none;
-        cursor: pointer;
-        font-family: 'Kanit', sans-serif;
-      }
-      .btn-green { background: #16a34a; color: white; }
-      .btn-red { background: #dc2626; color: white; }
-      .btn-blue { background: #2563eb; color: white; }
-      .btn-ghost { background: transparent; color: #374151; border: 1px solid #e5e7eb; }
-      .btn-ghost:hover { background: #f3f4f6; }
-
-      .filter {
-        text-align: center;
-        margin-bottom: 1rem;
-      }
-      .filter input {
-        padding: 6px 10px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-      }
-      .filter button {
-        background: #14532d;
-        color: white;
-        border: none;
-        padding: 6px 14px;
-        border-radius: 8px;
-        margin-left: 6px;
-        cursor: pointer;
-      }
-      .filter button:hover {
-        background: #166534;
-      }
-    </style>
-
-  </head>
-
-  <body>
-    <div class="shell">
-
-      <aside class="side">
-        <nav class="nav">
-          <a href="{% url 'employee_list' %}">จัดการพนักงาน</a>
-          <a href="{% url 'employee_availability_list' %}">เวลาคิวว่าง</a>
-          <a href="{% url 'massage_admin' %}">รายการนวด</a>
-          <a href="{% url 'gallery_crud' %}">เพิ่มรูปภาพ</a>
-          <a class="active" href="{% url 'admin_bookings' %}">คิวจอง</a>
-          <a href="{% url 'logout' %}">ออกจากระบบ</a>
-        </nav>
-      </aside>
-
-      <main class="main">
-        <div class="page">
-
-          <h1>จัดการคิวจองลูกค้า</h1>
-
-          <div class="filter">
-            <form method="get">
-              <input type="date" name="date" value="{{ q_date|default:today }}">
-              <button type="submit">ค้นหา</button>
-            </form>
-          </div>
-
-          <table>
-            <tr>
-              <th>เวลา</th>
-              <th>วันที่</th>
-              <th>ชื่อลูกค้า</th>
-              <th>เบอร์โทร</th>
-              <th>พนักงาน</th>
-              <!-- <th>สถานะ</th> -->
-              <th>การจัดการ</th>
-            </tr>
-
-            {% for b in bookings %}
-            <tr class="day-{{ b.day_idx }}">
-              <td>{{ b.time_range }}</td>
-              <td class="day-color">{{ b.date }}</td>
-              <td>{{ b.customer_name }}</td>
-              <td>{{ b.customer_phone|default:"-" }}</td>
-              <td>{{ b.employee.display_name }}</td>
-
-              <td>
-                <div style="display:flex; justify-content:center;">
-                  <form method="post" action="{% url 'admin_booking_delete' b.id %}" onsubmit="return confirm('ลบรายการนี้ถาวรหรือไม่?');">
-                    {% csrf_token %}
-                    <input type="hidden" name="return" value="{{ request.get_full_path }}">
-                    <button class="btn btn-ghost" type="submit">ลบ</button>
-                  </form>
-                </div>
-              </td>
-            </tr>
-            {% endfor %}
+{% block content %}
 <style>
+  /* โทนเดียวกับหน้าอื่น */
+  .page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:16px;
+  }
+  .page-header h1{
+    margin:0;
+    color:#064e3b;
+    font-size:2rem;
+    line-height:1.2;
+  }
+
+  /* ฟอร์มค้นหา */
+  .filter{
+    display:flex;
+    justify-content:center;
+    margin: 10px 0 18px;
+  }
+  .filter form{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(20,83,45,0.10);
+    border-radius: 14px;
+    padding: 10px 12px;
+  }
+  .filter input[type="date"]{
+    padding: 8px 10px;
+    border-radius: 12px;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    font-family: 'Kanit', sans-serif;
+  }
+  .filter button{
+    background:#14532d;
+    color:#fff;
+    border:none;
+    padding: 8px 14px;
+    border-radius: 12px;
+    cursor:pointer;
+    font-family: 'Kanit', sans-serif;
+    font-weight: 700;
+    transition: .2s;
+  }
+  .filter button:hover{ background:#166534; transform: translateY(-1px); }
+
+  /* ตาราง */
+  .table-wrap{
+    overflow:auto;
+    border-radius: 16px;
+    border: 1px solid rgba(20,83,45,0.10);
+    background: rgba(255,255,255,0.92);
+  }
+
+  table{
+    width:100%;
+    border-collapse: collapse;
+    text-align:center;
+    min-width: 760px;
+  }
+  thead th{
+    background: #d9f1e1;
+    padding: 12px 10px;
+    color:#064e3b;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  tbody td{
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: 12px 10px;
+    background: transparent;
+  }
+  tbody tr:nth-child(even) td{
+    background: rgba(251,255,253,0.9);
+  }
+
+  /* ปุ่มลบ */
+  .btn-ghost{
+    background: #ffffff;
+    color: #14532d;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 7px 12px;
+    cursor: pointer;
+    font-family: 'Kanit', sans-serif;
+    font-weight: 700;
+    transition: .2s;
+  }
+  .btn-ghost:hover{ background:#f3f4f6; }
+  .btn-danger{
+    background:#fee2e2;
+    border-color:#fecaca;
+    color:#b91c1c;
+  }
+  .btn-danger:hover{ background:#fecaca; }
+
+  /* สีวันที่ตามวัน (ของเดิม) */
   .day-0 .day-color { color: #e53935; font-weight: bold; }
   .day-1 .day-color { color: #8e24aa; font-weight: bold; }
   .day-2 .day-color { color: #3949ab; font-weight: bold; }
@@ -180,10 +114,60 @@
   .day-4 .day-color { color: #fbc02d; font-weight: bold; }
 </style>
 
-          </table>
+<div class="page">
 
-        </div>
-      </main>
-    </div>
-  </body>
-</html>
+  <div class="page-header">
+    <h1>จัดการคิวจองลูกค้า</h1>
+  </div>
+
+  <div class="filter">
+    <form method="get">
+      <input type="date" name="date" value="{{ q_date|default:today }}">
+      <button type="submit">ค้นหา</button>
+    </form>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>เวลา</th>
+          <th>วันที่</th>
+          <th>ชื่อลูกค้า</th>
+          <th>เบอร์โทร</th>
+          <th>พนักงาน</th>
+          <th>การจัดการ</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for b in bookings %}
+          <tr class="day-{{ b.day_idx }}">
+            <td>{{ b.time_range }}</td>
+            <td class="day-color">{{ b.date }}</td>
+            <td>{{ b.customer_name }}</td>
+            <td>{{ b.customer_phone|default:"-" }}</td>
+            <td>{{ b.employee.display_name }}</td>
+
+            <td>
+              <form method="post"
+                    action="{% url 'admin_booking_delete' b.id %}"
+                    onsubmit="return confirm('ลบรายการนี้ถาวรหรือไม่?');"
+                    style="margin:0; display:flex; justify-content:center;">
+                {% csrf_token %}
+                <input type="hidden" name="return" value="{{ request.get_full_path }}">
+                <button class="btn-ghost btn-danger" type="submit">ลบ</button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="6" style="padding:18px; color:#6b7280;">ยังไม่มีคิวจอง</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}

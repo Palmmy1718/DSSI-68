@@ -1,181 +1,133 @@
+{% extends 'main/admin_base.html' %}
 {% load static %}
-<!doctype html>
-<html lang="th">
-  <head>
-    <meta charset="utf-8">
-    <title>เวลาคิวว่าง</title>
-    <style>
-      body {
-        font-family: 'Kanit', sans-serif;
-        margin: 0;
-        background: linear-gradient(135deg, #f2fff5, #e9f8ef);
-        color: #08361b;
-      }
 
-      .shell {
-        display: flex;
-        min-height: 100vh;
-      }
+{% block title %}เวลาคิวว่าง{% endblock %}
 
-      /* Sidebar */
-      .side {
-        width: 220px;
-        background: #07210f;
-        color: #fff;
-        padding: 2rem 1rem;
-        display: flex;
-        flex-direction: column;
-      }
+{% block content %}
+<style>
+  .page {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    max-width: 1000px;
+    width: 100%;
+    backdrop-filter: blur(12px);
+    text-align: center;
+    margin: 0 auto;
+  }
 
-      .nav a {
-        display: block;
-        color: #d1d5db;
-        padding: 10px 14px;
-        text-decoration: none;
-        border-radius: 6px;
-        margin-bottom: 6px;
-        transition: all 0.2s ease;
-      }
+  h1 {
+    text-align: center;
+    color: #064e3b;
+    font-size: 2.1rem;
+    margin-bottom: 2.5rem;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
+  }
 
-      .nav a:hover, .nav a.active {
-        background: #14532d;
-        color: #fff;
-      }
+  .emp-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 35px;
+    justify-content: center;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
 
-      /* Main area */
-      .main {
-        flex: 1;
-        padding: 2rem;
-      }
+  .card {
+    background: white;
+    border-radius: 18px;
+    text-align: center;
+    padding: 2rem 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
 
-      .page {
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 20px;
-        padding: 2.5rem;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-        max-width: 1000px;
-        width: 100%;
-        backdrop-filter: blur(12px);
-        transition: all 0.3s ease;
-        text-align: center;
-      }
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 6px;
+    background: linear-gradient(90deg, #22c55e, #15803d);
+    border-radius: 18px 18px 0 0;
+  }
 
-      h1 {
-        text-align: center;
-        color: #064e3b;
-        font-size: 2.1rem;
-        margin-bottom: 2.5rem;
-        letter-spacing: 0.5px;
-        text-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
-      }
+  .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
 
-      /* Employee cards */
-      .emp-list {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr); /* บังคับให้มี 2 คอลัมน์ */
-        gap: 35px;
-        justify-content: center;
-        align-items: center;
-        max-width: 800px;
-        margin: 0 auto;
-      }
+  .name {
+    color: #14532d;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-top: 1rem;
+  }
 
-      .card {
-        background: white;
-        border-radius: 18px;
-        text-align: center;
-        padding: 2rem 1rem;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-      }
+  .role {
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+  }
 
-      .card::before {
-        content: "";
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 6px;
-        background: linear-gradient(90deg, #22c55e, #15803d);
-        border-radius: 18px 18px 0 0;
-      }
+  .btn {
+    background: linear-gradient(90deg, #15803d, #16a34a);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: 0.3s ease;
+    display: inline-block;
+  }
 
-      .card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-      }
+  .btn:hover {
+    background: linear-gradient(90deg, #166534, #22c55e);
+    transform: scale(1.07);
+    box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
+  }
 
-      .name {
-        color: #14532d;
-        font-size: 1.4rem;
-        font-weight: 600;
-        margin-top: 1rem;
-      }
+  .empty {
+    text-align: center;
+    color: #6b7280;
+    font-size: 1.1rem;
+    padding: 2rem;
+  }
 
-      .role {
-        color: #6b7280;
-        margin-bottom: 1.5rem;
-      }
+  @media (max-width: 900px) {
+    .emp-list { grid-template-columns: 1fr; }
+  }
+</style>
 
-      .btn {
-        background: linear-gradient(90deg, #15803d, #16a34a);
-        color: white;
-        border: none;
-        padding: 10px 18px;
-        border-radius: 10px;
-        cursor: pointer;
-        text-decoration: none;
-        font-size: 1rem;
-        font-weight: 500;
-        transition: 0.3s ease;
-      }
+<div class="page">
+  <h1>เลือกพนักงานเพื่อจัดการเวลาว่าง</h1>
 
-      .btn:hover {
-        background: linear-gradient(90deg, #166534, #22c55e);
-        transform: scale(1.07);
-        box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
-      }
-
-      .empty {
-        text-align: center;
-        color: #6b7280;
-        font-size: 1.1rem;
-        padding: 2rem;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="shell">
-      <aside class="side">
-        <nav class="nav">
-          <a href="{% url 'employee_list' %}">จัดการพนักงาน</a>
-          <a href="{% url 'employee_availability_list' %}" class="active">เวลาคิวว่าง</a>
-          <a href="{% url 'massage_admin' %}">รายการนวด</a>
-          <a href="{% url 'gallery_crud' %}">เพิ่มรูปภาพ</a>
-          <a href="{% url 'admin_bookings' %}">คิวจอง</a>
-          <a href="{% url 'logout' %}">ออกจากระบบ</a>
-        </nav>
-      </aside>
-
-      <main class="main">
-        <div class="page">
-          <h1>เลือกพนักงานเพื่อจัดการเวลาว่าง</h1>
-          <div class="emp-list">
-            {% for e in employees %}
-              <div class="card">
-                <div class="name">{{ e.display_name|upper }}</div>
-                <div class="role">{{ e.role_title|default:"-" }}</div>
-                <a href="{% url 'employee_availability_manage' e.id %}" class="btn">
-                  จัดการเวลาว่าง
-                </a>
-              </div>
-            {% empty %}
-              <div class="empty">ยังไม่มีพนักงานในระบบ</div>
-            {% endfor %}
+  <div class="emp-list">
+    {% for e in employees %}
+      <div class="card">
+        {% if e.photo_url %}
+          <img src="{{ e.photo_url }}" alt="{{ e.display_name }}"
+               style="height:90px;width:90px;object-fit:cover;border-radius:8px;">
+        {% else %}
+          <div style="width:90px;height:90px;background:#eee;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;margin:0 auto;">
+            {{ e.display_name|slice:":1" }}
           </div>
-        </div>
-      </main>
-    </div>
-  </body>
-</html>
+        {% endif %}
+
+        <div class="name">{{ e.display_name|upper }}</div>
+        <div class="role">{{ e.role_title|default:"-" }}</div>
+
+        <a href="{% url 'employee_availability_manage' e.id %}" class="btn">จัดการเวลาว่าง</a>
+      </div>
+    {% empty %}
+      <div class="empty">ยังไม่มีพนักงานในระบบ</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
