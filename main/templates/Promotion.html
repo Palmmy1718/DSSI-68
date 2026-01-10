@@ -39,21 +39,25 @@
                  alt="{% trans 'Promotion Banner' %}" 
                  style="max-width:520px; width:100%; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
 
-            <h3 style="margin-top:18px; color:#176a3a; font-size:1.8rem; font-weight:800;">
-                {% trans "Promotion 5 + 1" %}
-            </h3>
-
-            <p style="max-width:800px; margin:12px auto; color:#222; font-size:1.05rem;">
-                {% trans "Get 1 free massage of your choice when purchasing a 5-session massage card." %}
-            </p>
-
-            <p style="max-width:800px; margin:6px auto; color:#333;">
-                {% trans "How to use: Bring your completed 5-stamp card and present it to the staff to receive your free session." %}
-            </p>
-
-            <div style="margin-top:12px; font-weight:700; color:#176a3a;">
-                {% trans "Contact" %}: +3630-5814854
-            </div>
+            {% if promotions %}
+                {% for p in promotions %}
+                    <div class="promotion-box" style="margin-bottom:32px;">
+                        <h3 style="margin-top:18px; color:#176a3a; font-size:1.8rem; font-weight:800;">
+                            {{ p.title }}
+                        </h3>
+                        <p style="max-width:800px; margin:12px auto; color:#222; font-size:1.05rem; white-space:pre-line;">
+                            {{ p.description|linebreaksbr }}
+                        </p>
+                        <div style="margin-top:8px; color:#888; font-size:0.95rem;">
+                            <span>{% trans "Last updated" %}: </span>{{ p.updated_at|date:"Y-m-d H:i" }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div style="margin:32px 0; color:#c00; font-size:1.2rem; font-weight:600;">
+                    {% trans "No active promotions at the moment." %}
+                </div>
+            {% endif %}
 
         </div>
     </div>

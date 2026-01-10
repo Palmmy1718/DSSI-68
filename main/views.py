@@ -177,7 +177,8 @@ def site_team(request):
     return render(request, 'team.html', {'employees': employees})
 
 def site_promotion(request):
-    return render(request, 'Promotion.html')
+    promotions = Promotion.objects.filter(is_active=True).order_by('-updated_at')
+    return render(request, 'Promotion.html', {'promotions': promotions})
 
 def site_gallery(request):
     images = GalleryImage.objects.order_by('-created_at')

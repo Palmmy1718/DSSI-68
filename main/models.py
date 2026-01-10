@@ -31,8 +31,32 @@ class Service(models.Model):
 
 # ---------------------- MASSAGE MODEL (ใช้งานจริง) ----------------------
 class Massage(models.Model):
+
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
+    name_en = models.CharField(max_length=100, blank=True, null=True)
+    description_en = models.TextField(blank=True, null=True)
+    name_de = models.CharField(max_length=100, blank=True, null=True)
+    description_de = models.TextField(blank=True, null=True)
+    @property
+    def name_i18n(self):
+        from django.utils.translation import get_language
+        lang = get_language()
+        if lang == 'en' and self.name_en:
+            return self.name_en
+        elif lang == 'de' and self.name_de:
+            return self.name_de
+        return self.name
+
+    @property
+    def description_i18n(self):
+        from django.utils.translation import get_language
+        lang = get_language()
+        if lang == 'en' and self.description_en:
+            return self.description_en
+        elif lang == 'de' and self.description_de:
+            return self.description_de
+        return self.description
 
     # ปรับเป็น IntegerField และใส่ default เพื่อไม่ให้ Error
     price = models.IntegerField(default=0)
