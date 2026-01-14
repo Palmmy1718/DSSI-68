@@ -36,7 +36,18 @@
     border-radius: 14px;
     padding: 16px;
     margin-bottom: 18px;
+    position: relative;
+    overflow: hidden;
   }
+  .form-card::before{
+    content:"";
+    position:absolute;
+    top:0; left:0;
+    width:100%;
+    height:6px;
+    background: linear-gradient(90deg, #22c55e, #14532d);
+  }
+
   .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -45,11 +56,12 @@
   @media (max-width: 900px) {
     .form-row { grid-template-columns: 1fr; }
   }
+
   .form-group label {
     display: block;
     margin-bottom: 6px;
     color: #14532d;
-    font-weight: 600;
+    font-weight: 700;
   }
   .form-group input[type="text"],
   .form-group input[type="number"],
@@ -60,8 +72,9 @@
     border-radius: 10px;
     outline: none;
     background: #fff;
+    font-family: 'Kanit', sans-serif;
   }
-  .form-group textarea { min-height: 90px; resize: vertical; }
+  .form-group textarea { min-height: 110px; resize: vertical; }
 
   .form-actions {
     display: flex;
@@ -70,10 +83,11 @@
     margin-top: 12px;
   }
 
+  /* thumb ใช้ทั้งตาราง + preview */
   .thumb {
-    width: 68px;
-    height: 68px;
-    border-radius: 12px;
+    width: 75px;
+    height: 75px;
+    border-radius: 13px;
     overflow: hidden;
     background: #e5e7eb;
     display: flex;
@@ -89,10 +103,7 @@
     display: block;
   }
 
-  .actions-col {
-    white-space: nowrap;
-    text-align: right;
-  }
+  .actions-col { white-space: nowrap; text-align: right; }
 
   .btn-link {
     display: inline-block;
@@ -103,6 +114,7 @@
     background: #fff;
     color: #14532d;
     margin-left: 6px;
+    font-weight: 700;
   }
   .btn-link:hover { background: #f3f4f6; }
 
@@ -115,13 +127,117 @@
     background: #fee2e2;
     color: #b91c1c;
     margin-left: 6px;
+    font-weight: 800;
   }
   .btn-danger:hover { background: #fecaca; }
 
-  .empty {
-    text-align: center;
-    padding: 28px 10px;
-    color: #6b7280;
+  .empty { text-align: center; padding: 28px 10px; color: #6b7280; }
+
+  /* ===== EDIT UI UPGRADE ===== */
+  .edit-title{
+    margin: 2px 0 14px;
+    font-weight: 900;
+    color:#064e3b;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .edit-title .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:6px 10px;
+    border-radius:999px;
+    background: rgba(20,83,45,0.10);
+    border: 1px solid rgba(20,83,45,0.18);
+    color:#064e3b;
+    font-weight: 900;
+    font-size: .95rem;
+  }
+
+  .edit-grid{
+    display:grid;
+    grid-template-columns: 1.2fr .8fr;
+    gap:14px;
+    align-items:start;
+    margin-top: 6px;
+  }
+  @media (max-width: 980px){
+    .edit-grid{ grid-template-columns: 1fr; }
+  }
+
+  .preview-card{
+    background: rgba(20,83,45,0.04);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 14px;
+    padding: 12px;
+  }
+  .preview-card h3{
+    margin:0 0 10px;
+    color:#064e3b;
+    font-weight: 900;
+    font-size: 1.05rem;
+  }
+  .preview-box{
+    width:100%;
+    aspect-ratio: 4/3;
+    border-radius: 14px;
+    overflow:hidden;
+    background:#eef2f7;
+    border:1px solid rgba(0,0,0,0.08);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#64748b;
+    font-weight:900;
+  }
+  .preview-box img{
+    width:100%;
+    height:100%;
+    object-fit: cover;
+    display:block;
+  }
+  .preview-meta{
+    margin-top:10px;
+    color:#64748b;
+    font-weight:700;
+    font-size: .95rem;
+    line-height:1.4;
+  }
+
+  /* custom file button */
+  .file-hidden{
+    position:absolute;
+    left:-9999px;
+    width:1px;height:1px;
+    opacity:0;
+  }
+  .file-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-top: 6px;
+  }
+  .btn-soft{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(20,83,45,0.18);
+    background: rgba(20,83,45,0.10);
+    color:#064e3b;
+    font-weight: 900;
+    cursor:pointer;
+    transition:.2s;
+    font-family: 'Kanit', sans-serif;
+  }
+  .btn-soft:hover{ background: rgba(20,83,45,0.14); transform: translateY(-1px); }
+  .file-name{
+    color:#64748b;
+    font-weight:800;
   }
 </style>
 
@@ -174,55 +290,108 @@
     </div>
   {% endif %}
 
-  {# ---------- EDIT MODE ---------- #}
+  {# ---------- EDIT MODE (UPGRADED) ---------- #}
   {% if edit_mode and massage_obj %}
     <div class="form-card">
+
+      <div class="edit-title">
+        <span class="pill">✏️ กำลังแก้ไข: {{ massage_obj.name }}</span>
+      </div>
+
       <form method="post" enctype="multipart/form-data" action="{% url 'massage_edit' massage_obj.pk %}">
         {% csrf_token %}
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>ชื่อบริการนวด</label>
-            <input type="text" name="name" required value="{{ massage_obj.name }}">
-          </div>
+        <div class="edit-grid">
 
-          <div class="form-group">
-            <label>อัปโหลดรูปใหม่ (ถ้าต้องการ)</label>
-            <input type="file" name="image" accept="image/*">
-          </div>
+          <!-- LEFT: form fields -->
+          <div>
 
-          <div class="form-group" style="grid-column: 1 / -1;">
-            <label>รายละเอียด</label>
-            <textarea name="description">{{ massage_obj.description }}</textarea>
-          </div>
+            <div class="form-group">
+              <label>ชื่อบริการนวด</label>
+              <input type="text" name="name" required value="{{ massage_obj.name }}">
+            </div>
 
-          <div class="form-group" style="grid-column: 1 / -1;">
-            <label>รูปปัจจุบัน</label>
-            <div style="display:flex; gap:12px; align-items:center;">
-              <div class="thumb">
-                {% if massage_obj.image_exists %}
-                  <img src="{{ massage_obj.image.url }}" alt="{{ massage_obj.name }}">
-                {% else %}
-                  {{ massage_obj.name|slice:":1"|upper }}
-                {% endif %}
-              </div>
-              <div style="color:#6b7280;">
-                {% if massage_obj.image_exists %}
-                  มีรูปอยู่แล้ว (จะเปลี่ยนก็อัปโหลดใหม่ได้)
-                {% else %}
-                  ยังไม่มีรูป
-                {% endif %}
+            <div class="form-group">
+              <label>รายละเอียด</label>
+              <textarea name="description" placeholder="รายละเอียดบริการนวด...">{{ massage_obj.description }}</textarea>
+            </div>
+
+            <div class="form-group">
+              <label>อัปโหลดรูปใหม่ (ถ้าต้องการ)</label>
+
+              <input id="massageFile" class="file-hidden" type="file" name="image" accept="image/*">
+
+              <div class="file-row">
+                <button type="button" class="btn-soft" id="pickFileBtn">📁 เลือกไฟล์</button>
+                <button type="button" class="btn-soft" id="clearFileBtn">🧹 ล้างไฟล์</button>
+                <span class="file-name" id="fileName">ยังไม่ได้เลือกไฟล์</span>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div class="form-actions">
-          <a class="btn-cancel" href="{% url 'massage_admin' %}">ยกเลิก</a>
-          <button class="btn-save" type="submit">บันทึกการแก้ไข</button>
+            <div class="form-actions">
+              <a class="btn-cancel" href="{% url 'massage_admin' %}">ยกเลิก</a>
+              <button class="btn-save" type="submit">บันทึกการแก้ไข</button>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: preview -->
+          <div class="preview-card">
+            <h3>พรีวิวรูป</h3>
+
+            <div class="preview-box">
+              {% if massage_obj.image_exists %}
+                <img id="currentImg" src="{{ massage_obj.image.url }}" alt="{{ massage_obj.name }}">
+              {% else %}
+                <span id="noImgText">ยังไม่มีรูป</span>
+              {% endif %}
+              <img id="newPreview" alt="" style="display:none;">
+            </div>
+
+            <div class="preview-meta">
+              เลือกไฟล์ใหม่แล้วรูปจะพรีวิวตรงนี้ทันที<br>
+              รูปจริงจะเปลี่ยนเมื่อกด “บันทึกการแก้ไข”
+            </div>
+          </div>
+
         </div>
       </form>
     </div>
+
+    <script>
+      (function(){
+        const fileInput = document.getElementById('massageFile');
+        const pickBtn = document.getElementById('pickFileBtn');
+        const clearBtn = document.getElementById('clearFileBtn');
+        const fileName = document.getElementById('fileName');
+        const newPreview = document.getElementById('newPreview');
+
+        function setName(name){
+          fileName.textContent = name || 'ยังไม่ได้เลือกไฟล์';
+        }
+
+        function clearFile(){
+          fileInput.value = '';
+          newPreview.src = '';
+          newPreview.style.display = 'none';
+          setName('');
+        }
+
+        pickBtn.addEventListener('click', () => fileInput.click());
+        clearBtn.addEventListener('click', clearFile);
+
+        fileInput.addEventListener('change', () => {
+          const f = fileInput.files && fileInput.files[0];
+          if(!f){ clearFile(); return; }
+          setName(f.name);
+
+          if(!f.type.startsWith('image/')) return;
+          const url = URL.createObjectURL(f);
+          newPreview.src = url;
+          newPreview.style.display = 'block';
+        });
+      })();
+    </script>
   {% endif %}
 
   <table class="admin-table">
@@ -230,8 +399,6 @@
       <tr>
         <th style="width:90px;">รูป</th>
         <th>ชื่อบริการ</th>
-        <th style="width:110px;">ราคา</th>
-        <th style="width:120px;">ระยะเวลา</th>
         <th>รายละเอียด</th>
         <th class="actions-col" style="width:190px;">จัดการ</th>
       </tr>
@@ -253,14 +420,6 @@
             {{ m.name }}
           </td>
 
-          <td>
-            {{ m.price }} บาท
-          </td>
-
-          <td>
-            {{ m.duration }} นาที
-          </td>
-
           <td style="color:#334155;">
             {{ m.description|default:"-" }}
           </td>
@@ -272,7 +431,7 @@
         </tr>
       {% empty %}
         <tr>
-          <td colspan="6">
+          <td colspan="4">
             <div class="empty">ยังไม่มีรายการนวดในระบบ</div>
           </td>
         </tr>

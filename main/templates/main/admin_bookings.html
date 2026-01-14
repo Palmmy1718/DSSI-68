@@ -152,7 +152,6 @@
             <td>
               <form method="post"
                     action="{% url 'admin_booking_delete' b.id %}"
-                    onsubmit="return confirm('ลบรายการนี้ถาวรหรือไม่?');"
                     style="margin:0; display:flex; justify-content:center;">
                 {% csrf_token %}
                 <input type="hidden" name="return" value="{{ request.get_full_path }}">

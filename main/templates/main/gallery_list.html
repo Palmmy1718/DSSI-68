@@ -71,6 +71,7 @@
 
   .g-body{
     padding:12px 14px 14px;
+    min-height:60px;
   }
   .g-title{
     font-weight:800;
@@ -82,10 +83,11 @@
     white-space:nowrap;
   }
 
+  /* ✅ ปุ่มมาไว้ตรงกลาง */
   .g-actions{
     display:flex;
-    justify-content:flex-end;
-    gap:8px;
+    justify-content:center;   /* เปลี่ยนจาก flex-end เป็น center */
+    gap:10px;
     align-items:center;
   }
 
@@ -93,6 +95,8 @@
     display:inline-flex;
     align-items:center;
     justify-content:center;
+    gap:6px;
+    line-height:1;
     padding:6px 10px;
     border-radius:10px;
     border:1px solid #d1d5db;
@@ -102,8 +106,14 @@
     text-decoration:none;
     cursor:pointer;
     transition:.2s;
+    min-width:88px;           /* ✅ ทำให้ปุ่มกว้างเท่ากัน ดูบาลานซ์ */
   }
   .btn-lite:hover{ background:#f3f4f6; }
+
+  .btn-lite .icon{
+    font-size:1rem;
+    line-height:1;
+  }
 
   .btn-danger{
     border-color:#fecaca;
@@ -144,16 +154,20 @@
         </div>
 
         <div class="g-body">
-          <div class="g-title">
-            {{ photo.title|default:"รูปภาพ" }}
-          </div>
+          {% if photo.title %}
+            <div class="g-title">{{ photo.title }}</div>
+          {% endif %}
 
           <div class="g-actions">
-            <a class="btn-lite" href="{% url 'gallery_edit' photo.id %}">แก้ไข</a>
+            <a class="btn-lite" href="{% url 'gallery_edit' photo.id %}">
+              <span class="icon">✏️</span> แก้ไข
+            </a>
 
             <form method="post" action="{% url 'gallery_delete' photo.id %}" style="margin:0;">
               {% csrf_token %}
-              <button type="submit" class="btn-lite btn-danger">ลบ</button>
+              <button type="submit" class="btn-lite btn-danger">
+                <span class="icon">🗑️</span> ลบ
+              </button>
             </form>
           </div>
         </div>

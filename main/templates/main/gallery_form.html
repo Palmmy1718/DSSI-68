@@ -29,14 +29,56 @@
     background:rgba(255,255,255,0.85);
   }
 
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:10px 14px;
+    border-radius:12px;
+    border:1px solid transparent;
+    text-decoration:none;
+    font-weight:900;
+    cursor:pointer;
+    transition:.2s;
+    line-height:1;
+  }
+  .btn:active{ transform: translateY(1px); }
+
+  .btn-soft{
+    background: rgba(20,83,45,.10);
+    color:#064e3b;
+    border-color: rgba(20,83,45,.18);
+  }
+  .btn-soft:hover{ background: rgba(20,83,45,.14); }
+
+  .btn-primary{
+    background: linear-gradient(135deg, #14532d, #0f766e);
+    color:#fff;
+    box-shadow: 0 12px 25px rgba(20,83,45,.18);
+  }
+  .btn-primary:hover{ box-shadow: 0 16px 34px rgba(20,83,45,.22); }
+
   .form-card{
     background:rgba(255,255,255,0.92);
     border:1px solid rgba(20,83,45,0.12);
     border-radius:18px;
-    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
     padding:16px;
+    position:relative;
+    overflow:hidden;
   }
+  .form-card::before{
+    content:"";
+    position:absolute;
+    top:0; left:0;
+    width:100%;
+    height:6px;
+    background:linear-gradient(90deg, #22c55e, #14532d);
+  }
+  .form-card-inner{ padding-top: 6px; }
 
+  /* preview row */
   .preview{
     display:flex;
     gap:14px;
@@ -44,8 +86,8 @@
     margin-bottom:14px;
   }
   .preview .thumb{
-    width:110px;
-    height:110px;
+    width:120px;
+    height:120px;
     border-radius:16px;
     overflow:hidden;
     background:#eef2f7;
@@ -55,6 +97,7 @@
     justify-content:center;
     font-weight:900;
     color:#14532d;
+    flex:0 0 auto;
   }
   .preview .thumb img{
     width:100%;
@@ -63,14 +106,79 @@
     display:block;
   }
 
-  .form-group{ margin-bottom:12px; }
+  /* dropzone */
+  .dropzone{
+    border:2px dashed rgba(20,83,45,.25);
+    background: rgba(20,83,45,.06);
+    border-radius:16px;
+    padding:16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    transition:.2s;
+  }
+  .dropzone.dragover{
+    border-color: rgba(20,83,45,.55);
+    background: rgba(20,83,45,.10);
+    transform: translateY(-1px);
+  }
+
+  .dz-left{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    min-width:240px;
+  }
+  .dz-title{
+    margin:0;
+    font-weight:900;
+    color:#064e3b;
+    font-size:1.05rem;
+  }
+  .dz-sub{
+    margin:0;
+    color:#64748b;
+    font-weight:700;
+    font-size:.95rem;
+  }
+
+  .file-input{
+    position:absolute;
+    left:-9999px;
+    width:1px; height:1px;
+    opacity:0;
+  }
+
+  .previewBox{
+    width: 240px;
+    height: 150px;
+    border-radius: 14px;
+    border: 1px solid rgba(0,0,0,.08);
+    background: #eef2f7;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#64748b;
+    font-weight:900;
+    flex: 0 0 auto;
+  }
+  .previewBox img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .form-group{ margin-top:12px; }
   label{
     display:block;
     margin-bottom:6px;
-    font-weight:800;
+    font-weight:900;
     color:#14532d;
   }
-  input[type="file"], input[type="text"]{
+  input[type="text"]{
     width:100%;
     padding:10px 12px;
     border:1px solid #cbd5e1;
@@ -84,13 +192,21 @@
     gap:10px;
     margin-top:14px;
   }
+
+  @media (max-width: 780px){
+    .dropzone{ flex-direction:column; align-items:stretch; }
+    .previewBox{ width:100%; height: 210px; }
+    .preview{ flex-direction:column; align-items:flex-start; }
+    .form-actions{ justify-content:stretch; }
+    .form-actions .btn{ flex:1; }
+  }
 </style>
 
 <div class="page">
 
   <div class="page-header">
     <h1>{% if item %}แก้ไขรูปภาพ{% else %}อัปโหลดรูปภาพ{% endif %}</h1>
-    <a class="btn-cancel" href="{% url 'gallery_crud' %}">กลับ</a>
+    <a class="btn btn-soft" href="{% url 'gallery_crud' %}">↩ กลับ</a>
   </div>
 
   {% if messages %}
@@ -100,40 +216,116 @@
   {% endif %}
 
   <div class="form-card">
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
+    <div class="form-card-inner">
 
-      {% if item and item.image %}
-        <div class="preview">
-          <div class="thumb">
-            <img src="{{ item.image.url }}" alt="preview">
+      <!-- ✅ ลบข้อความแนะนำออกแล้ว (คงระยะไว้ให้ดูสวย) -->
+      <div style="height:8px;"></div>
+
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% if item and item.image %}
+          <div class="preview">
+            <div class="thumb">
+              <img src="{{ item.image.url }}" alt="preview">
+            </div>
+            <div style="color:#6b7280;font-weight:700;">
+              รูปเดิมจะแสดงอยู่ตรงนี้<br>
+              ถ้าอยากเปลี่ยน ให้เลือกไฟล์ใหม่แล้วบันทึก
+            </div>
           </div>
-          <div style="color:#6b7280;">
-            รูปเดิมจะแสดงอยู่ตรงนี้<br>
-            ถ้าอยากเปลี่ยน ให้เลือกไฟล์ใหม่แล้วบันทึก
+        {% endif %}
+
+        <input id="fileInput" class="file-input" type="file" name="image" accept="image/*" {% if not item %}required{% endif %}>
+
+        <div id="dropzone" class="dropzone">
+          <div class="dz-left">
+            <p class="dz-title">เลือกรูปภาพ</p>
+            <p class="dz-sub">รองรับ JPG/PNG (แนะนำไม่เกิน 5MB)</p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button type="button" class="btn btn-soft" id="pickBtn">📁 เลือกไฟล์</button>
+              <button type="button" class="btn btn-soft" id="clearBtn">🧹 ล้างรูป</button>
+            </div>
+          </div>
+
+          <div class="previewBox" id="previewBox">
+            <span id="previewText">ยังไม่ได้เลือกรูปใหม่</span>
+            <img id="previewImg" alt="" style="display:none;">
           </div>
         </div>
-      {% endif %}
 
-      <div class="form-group">
-        <label>เลือกรูปภาพ</label>
-        <input type="file" name="image" accept="image/*" {% if not item %}required{% endif %}>
-      </div>
+        {% if item %}
+          <div class="form-group">
+            <label>ชื่อรูป (ถ้าต้องการ)</label>
+            <input type="text" name="title" value="{{ item.title|default:'' }}" placeholder="เช่น ห้องนวด / บรรยากาศร้าน">
+          </div>
+        {% endif %}
 
-      {# title ถูกใช้ตอน edit ใน view (gallery_edit) #}
-      {% if item %}
-        <div class="form-group">
-          <label>ชื่อรูป (ถ้าต้องการ)</label>
-          <input type="text" name="title" value="{{ item.title|default:'' }}" placeholder="เช่น ห้องนวด / บรรยากาศร้าน">
+        <div class="form-actions">
+          <a class="btn btn-soft" href="{% url 'gallery_crud' %}">ยกเลิก</a>
+          <button class="btn btn-primary" type="submit">✅ บันทึก</button>
         </div>
-      {% endif %}
+      </form>
 
-      <div class="form-actions">
-        <a class="btn-cancel" href="{% url 'gallery_crud' %}">ยกเลิก</a>
-        <button class="btn-save" type="submit">บันทึก</button>
-      </div>
-    </form>
+    </div>
   </div>
 
 </div>
+
+<script>
+  const fileInput = document.getElementById('fileInput');
+  const pickBtn = document.getElementById('pickBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const dropzone = document.getElementById('dropzone');
+  const previewImg = document.getElementById('previewImg');
+  const previewText = document.getElementById('previewText');
+
+  function showPreview(file){
+    if(!file) return;
+    const url = URL.createObjectURL(file);
+    previewImg.src = url;
+    previewImg.style.display = 'block';
+    previewText.style.display = 'none';
+  }
+
+  function clearPreview(){
+    fileInput.value = '';
+    previewImg.src = '';
+    previewImg.style.display = 'none';
+    previewText.style.display = 'block';
+  }
+
+  pickBtn.addEventListener('click', () => fileInput.click());
+  clearBtn.addEventListener('click', clearPreview);
+
+  fileInput.addEventListener('change', () => {
+    const f = fileInput.files && fileInput.files[0];
+    if(f) showPreview(f);
+  });
+
+  ['dragenter','dragover'].forEach(evt => {
+    dropzone.addEventListener(evt, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.add('dragover');
+    });
+  });
+
+  ['dragleave','drop'].forEach(evt => {
+    dropzone.addEventListener(evt, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.remove('dragover');
+    });
+  });
+
+  dropzone.addEventListener('drop', (e) => {
+    const files = e.dataTransfer.files;
+    if(!files || !files.length) return;
+    const f = files[0];
+    if(!f.type.startsWith('image/')) return;
+    fileInput.files = files;
+    showPreview(f);
+  });
+</script>
 {% endblock %}
