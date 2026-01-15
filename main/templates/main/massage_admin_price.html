@@ -30,15 +30,31 @@
     padding: 12px 10px;
     border-bottom: 1px solid #e5e7eb;
     text-align: left;
+    vertical-align: middle;
   }
   .price-form-table th {
     background: #f0fdf4;
     color: #176B45;
-    font-weight: 700;
+    font-weight: 800;
   }
   .price-form-table tr:last-child td {
     border-bottom: none;
   }
+
+  .cell-input{
+    width: 180px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    outline: none;
+    background: #fff;
+    font-family: 'Kanit', sans-serif;
+  }
+  .cell-input:focus{
+    border-color: rgba(23,107,69,.55);
+    box-shadow: 0 0 0 3px rgba(23,107,69,.10);
+  }
+
   .form-actions {
     display: flex;
     gap: 10px;
@@ -49,14 +65,15 @@
     background: #176B45;
     color: #fff;
     padding: 10px 24px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: none;
-    font-weight: bold;
+    font-weight: 900;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.2s, transform .15s;
   }
   .btn-save:hover {
     background: #218c5a;
+    transform: translateY(-1px);
   }
 </style>
 
@@ -64,6 +81,7 @@
   <div class="page-header">
     <h1>เปลี่ยนแปลงราคานวด</h1>
   </div>
+
   {% if messages %}
     {% for message in messages %}
       <div class="notice {% if message.tags %}{{ message.tags }}{% endif %}">
@@ -71,28 +89,50 @@
       </div>
     {% endfor %}
   {% endif %}
+
   <form method="post" action="">
     {% csrf_token %}
+
     <table class="price-form-table">
       <thead>
         <tr>
           <th>ชื่อบริการ</th>
-          <th>ราคา (บาท)</th>
+          <th style="width:240px;">ระยะเวลา (นาที)</th>
+          <th style="width:280px;">ราคา (HUF)</th>
         </tr>
       </thead>
+
       <tbody>
         {% for m in massages %}
-        <tr>
-          <td>{{ m.name }}</td>
-          <td>
-            <input type="number" name="price_{{ m.id }}" value="{{ m.price }}" min="0" style="width:100px; padding:6px 8px; border-radius:6px; border:1px solid #cbd5e1;">
-          </td>
-        </tr>
+          <tr>
+            <td style="font-weight:700; color:#0f172a;">{{ m.name }}</td>
+
+            <td>
+              <select class="cell-input" name="duration_{{ m.id }}">
+                <option value="30"  {% if m.duration == 30 %}selected{% endif %}>30 นาที</option>
+                <option value="60"  {% if m.duration == 60 %}selected{% endif %}>60 นาที</option>
+                <option value="90"  {% if m.duration == 90 %}selected{% endif %}>90 นาที</option>
+                <option value="120" {% if m.duration == 120 %}selected{% endif %}>120 นาที</option>
+              </select>
+            </td>
+
+            <td>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <input class="cell-input" type="number"
+                       name="price_{{ m.id }}"
+                       value="{{ m.price }}"
+                       min="0"
+                       step="1">
+                <span style="font-weight:900; color:#064e3b;">HUF</span>
+              </div>
+            </td>
+          </tr>
         {% endfor %}
       </tbody>
     </table>
+
     <div class="form-actions">
-      <button class="btn-save" type="submit">บันทึกราคาใหม่</button>
+      <button class="btn-save" type="submit">บันทึกราคา/เวลาใหม่</button>
     </div>
   </form>
 </div>
