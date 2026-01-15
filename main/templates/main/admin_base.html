@@ -91,7 +91,8 @@
       <nav class="nav">
         <a href="{% url 'employee_list' %}" class="{% if 'employee' in request.path %}active{% endif %}">จัดการพนักงาน</a>
         <a href="{% url 'employee_availability_list' %}" class="{% if 'availability' in request.path %}active{% endif %}">เวลาคิวว่าง</a>
-        <a href="{% url 'massage_admin' %}" class="{% if 'massage-admin' in request.path %}active{% endif %}">รายการนวด</a>
+        <a href="{% url 'massage_admin' %}" class="{% if 'massage-admin' in request.path and not 'price' in request.path %}active{% endif %}">รายการนวด</a>
+        <a href="{% url 'massage_admin_price' %}" class="{% if 'massage-admin/price' in request.path %}active{% endif %}">เปลี่ยนแปลงราคา</a>
         <a href="{% url 'gallery_crud' %}" class="{% if 'gallery' in request.path %}active{% endif %}">เพิ่มรูปภาพ</a>
         <a href="{% url 'admin_bookings' %}" class="{% if 'bookings/admin' in request.path %}active{% endif %}">คิวจอง</a>
         <a href="{% url 'admin_promotion_list' %}" class="{% if 'promotions-admin' in request.path %}active{% endif %}">โปรโมชั่น</a>

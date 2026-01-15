@@ -1,0 +1,99 @@
+{% extends 'main/admin_base.html' %}
+{% load static %}
+
+{% block title %}เปลี่ยนแปลงราคานวด{% endblock %}
+
+{% block content %}
+<style>
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .page-header h1 {
+    margin: 0;
+    color: #064e3b;
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+  .price-form-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(20,83,45,0.07);
+  }
+  .price-form-table th, .price-form-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+  }
+  .price-form-table th {
+    background: #f0fdf4;
+    color: #176B45;
+    font-weight: 700;
+  }
+  .price-form-table tr:last-child td {
+    border-bottom: none;
+  }
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 18px;
+  }
+  .btn-save {
+    background: #176B45;
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-save:hover {
+    background: #218c5a;
+  }
+</style>
+
+<div class="page">
+  <div class="page-header">
+    <h1>เปลี่ยนแปลงราคานวด</h1>
+  </div>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="notice {% if message.tags %}{{ message.tags }}{% endif %}">
+        <p class="msg">{{ message }}</p>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <form method="post" action="">
+    {% csrf_token %}
+    <table class="price-form-table">
+      <thead>
+        <tr>
+          <th>ชื่อบริการ</th>
+          <th>ราคา (บาท)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in massages %}
+        <tr>
+          <td>{{ m.name }}</td>
+          <td>
+            <input type="number" name="price_{{ m.id }}" value="{{ m.price }}" min="0" style="width:100px; padding:6px 8px; border-radius:6px; border:1px solid #cbd5e1;">
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="form-actions">
+      <button class="btn-save" type="submit">บันทึกราคาใหม่</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

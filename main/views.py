@@ -124,6 +124,27 @@ def massage_delete(request, pk):
     messages.success(request, 'ลบรายการเรียบร้อย')
     return redirect('massage_admin')
 
+@login_required
+def massage_admin_price(request):
+    massages = Massage.objects.all().order_by('name')
+    if request.method == 'POST':
+        updated = 0
+        for m in massages:
+            price_val = request.POST.get(f'price_{m.id}')
+            try:
+                price = int(price_val)
+                if m.price != price:
+                    m.price = price
+                    m.save()
+                    updated += 1
+            except (TypeError, ValueError):
+                continue
+        if updated:
+            messages.success(request, f'อัปเดตราคา {updated} รายการเรียบร้อย')
+        else:
+            messages.info(request, 'ไม่มีการเปลี่ยนแปลงราคา')
+        return redirect('massage_admin_price')
+    return render(request, 'main/massage_admin_price.html', {'massages': massages})
 
 # ---------------------- 3. UTILITY FUNCTIONS ----------------------
 
