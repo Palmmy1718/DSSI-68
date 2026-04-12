@@ -34,15 +34,14 @@ urlpatterns = [
 
     # ------------------ คิวจอง ------------------
     path('bookings/', views.booking_list, name='booking_list'),
-    # path('book-online/', views.book_online, name='book_online'),  <-- ลบออกแล้ว
     path('bookings/admin/', views.admin_bookings_view, name='admin_bookings'),
     path('bookings/admin/<int:pk>/delete/', views.admin_booking_delete, name='admin_booking_delete'),
 
-    # ------------------ Gemini API ------------------
-    path('list-models/', views.list_models, name='list_models'),
-    path('test-gemini/', views.test_gemini, name='test_gemini'),
+    # ------------------ Gemini API (ปิดไว้ก่อน) ------------------
+    # path('list-models/', views.list_models, name='list_models'),
+    # path('test-gemini/', views.test_gemini, name='test_gemini'),
 
-    # ------------------ แชท ------------------
+    # ------------------ แชท (เปิดใช้งาน) ------------------
     path('chat/', views.chat_api, name='chat_api'),
     path('chat-ui/', views.chat_ui, name='chat_ui'),
 

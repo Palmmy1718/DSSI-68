@@ -1,9 +1,8 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="th">
-<head>
+{% load i18n %} <!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}"> <head>
     <meta charset="UTF-8">
-    <title>ตารางงาน - {{ emp.display_name }}</title>
+    <title>{% trans "Schedule" %} - {{ emp.display_name }}</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
@@ -86,8 +85,8 @@
 
 <div class="calendar-container">
     <div class="header-bar">
-        <a href="{% url 'home' %}" class="btn-back">← กลับหน้าแรก</a>
-        <h2>ตารางงานของ {{ emp.display_name|upper }}</h2>
+        <a href="{% url 'home' %}" class="btn-back">← {% trans "Back to Home" %}</a>
+        <h2>{% trans "Schedule of" %} {{ emp.display_name|upper }}</h2>
     </div>
 
     <div id="calendar"></div>
@@ -95,33 +94,38 @@
 
 <div id="dayModal" class="modal-overlay">
     <div class="modal-box">
-        <h3>ตารางวันที่ <span id="selected_date"></span></h3>
-        <p style="color:#666; font-size:14px;">ต้องการจองคิวในวันนี้ใช่ไหม?</p>
+        <h3>{% trans "Schedule for" %} <span id="selected_date"></span></h3>
+        <p style="color:#666; font-size:14px;">{% trans "Do you want to book on this date?" %}</p>
         
         <div style="margin-top:20px;">
             <button id="goBooking" class="modal-btn">
-                จองออนไลน์
+                {% trans "Book Online" %}
             </button>
             <button onclick="closeModal()" class="modal-btn" style="background:#888; color:white;">
-                ปิด
+                {% trans "Close" %}
             </button>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales-all.global.min.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
     let emp_id = "{{ emp.id }}";
     let selectedDateStr = ""; // ตัวแปรสำหรับเก็บวันที่ที่ถูกคลิก
-
     let calendarEl = document.getElementById('calendar');
+
+    // รับค่าภาษาปัจจุบันจาก Django (เช่น 'th', 'de', 'en')
+    let currentLang = "{{ LANGUAGE_CODE }}";
+    // ปรับ en-us ให้เป็น en เพื่อให้ FullCalendar เข้าใจ
+    if (currentLang === 'en-us') currentLang = 'en';
 
     let calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        locale: 'th', // ใช้ภาษาไทย (ถ้าต้องการ)
+        locale: currentLang, // ใช้ภาษาตามที่เลือก
         selectable: true,
         headerToolbar: {
             left: 'prev,next today',
@@ -146,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
     calendar.render();
 
     // -----------------------------------------------------------------
-    // จุดที่แก้ไข: ลิงก์ไปหน้า Booking Slots + ส่งวันที่ไปด้วย
+    // ลิงก์ไปหน้า Booking Slots + ส่งวันที่ไปด้วย
     // -----------------------------------------------------------------
     document.getElementById("goBooking").addEventListener("click", function () {
         if (selectedDateStr) {

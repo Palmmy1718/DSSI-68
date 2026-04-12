@@ -104,25 +104,57 @@
 
       <tbody>
         {% for m in massages %}
+          <!-- 30 นาที -->
           <tr>
-            <td style="font-weight:700; color:#0f172a;">{{ m.name }}</td>
-
-            <td>
-              <select class="cell-input" name="duration_{{ m.id }}">
-                <option value="30"  {% if m.duration == 30 %}selected{% endif %}>30 นาที</option>
-                <option value="60"  {% if m.duration == 60 %}selected{% endif %}>60 นาที</option>
-                <option value="90"  {% if m.duration == 90 %}selected{% endif %}>90 นาที</option>
-                <option value="120" {% if m.duration == 120 %}selected{% endif %}>120 นาที</option>
-              </select>
+            <td rowspan="4" style="vertical-align:top; font-weight:700; color:#0f172a; padding-top:18px;">
+                {{ m.name }}
             </td>
-
+            <td>30 นาที</td>
             <td>
               <div style="display:flex; align-items:center; gap:10px;">
                 <input class="cell-input" type="number"
-                       name="price_{{ m.id }}"
-                       value="{{ m.price }}"
-                       min="0"
-                       step="1">
+                       name="price_30_{{ m.id }}"
+                       value="{{ m.price_30 }}"
+                       min="0" step="1">
+                <span style="font-weight:900; color:#064e3b;">HUF</span>
+              </div>
+            </td>
+          </tr>
+          <!-- 60 นาที -->
+          <tr>
+            <td>60 นาที</td>
+            <td>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <input class="cell-input" type="number"
+                       name="price_60_{{ m.id }}"
+                       value="{{ m.price_60 }}"
+                       min="0" step="1">
+                <span style="font-weight:900; color:#064e3b;">HUF</span>
+              </div>
+            </td>
+          </tr>
+          <!-- 90 นาที -->
+          <tr>
+            <td>90 นาที</td>
+            <td>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <input class="cell-input" type="number"
+                       name="price_90_{{ m.id }}"
+                       value="{{ m.price_90 }}"
+                       min="0" step="1">
+                <span style="font-weight:900; color:#064e3b;">HUF</span>
+              </div>
+            </td>
+          </tr>
+          <!-- 120 นาที -->
+          <tr style="border-bottom: 2px solid #cbd5e1;"> <!-- ตีเส้นจบแต่ละ Group -->
+            <td>120 นาที</td>
+            <td>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <input class="cell-input" type="number"
+                       name="price_120_{{ m.id }}"
+                       value="{{ m.price_120 }}"
+                       min="0" step="1">
                 <span style="font-weight:900; color:#064e3b;">HUF</span>
               </div>
             </td>

@@ -1,5 +1,5 @@
-{% load static %}
-{% load i18n %}
+{% load static i18n langswitch %}
+{% load my_filters %}
 {% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
@@ -70,8 +70,8 @@
   {% endif %}
 
   <div class="service-text">
-    <h3>{{ m.name }}</h3>
-    <p>{{ m.description|default:"" }}</p>
+    <h3>{{ m.name|translate_db }}</h3>
+    <p>{{ m.description|translate_db }}</p>
   </div>
 
 </div>

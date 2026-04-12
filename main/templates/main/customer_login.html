@@ -1,10 +1,10 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
-<html lang="th">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เข้าสู่ระบบ</title>
+    <title>{% trans "เข้าสู่ระบบ" %}</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -182,11 +182,13 @@
     <div class="login-container">
 
         <div class="logo-wrap">
-            <img src="{% static 'images/logo.png' %}" alt="Chokdee Thai Massage">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/logo.png' %}" alt="{% trans 'Logo' %}">
+            </a>
         </div>
 
-        <h2>เข้าสู่ระบบ</h2>
-        <p class="subtitle">กรอกอีเมลและรหัสผ่านเพื่อเข้าสู่ระบบ</p>
+        <h2>{% trans "เข้าสู่ระบบ" %}</h2>
+        <p class="subtitle">{% trans "กรอกอีเมลและรหัสผ่านเพื่อเข้าสู่ระบบ" %}</p>
 
         {% if messages %}
         <div class="messages-box">
@@ -200,21 +202,21 @@
             {% csrf_token %}
 
             <div class="form-group">
-                <label for="id_email">อีเมล</label>
+                <label for="id_email">{% trans "อีเมล" %}</label>
                 <input id="id_email" type="email" name="email"
                        placeholder="example@email.com"
                        value="{{ request.POST.email|default:'' }}">
             </div>
 
             <div class="form-group">
-                <label for="id_password">รหัสผ่าน</label>
-                <input id="id_password" type="password" name="password" placeholder="กรอกรหัสผ่าน">
+                <label for="id_password">{% trans "รหัสผ่าน" %}</label>
+                <input id="id_password" type="password" name="password" placeholder="{% trans 'กรอกรหัสผ่าน' %}">
             </div>
 
-            <button type="submit">เข้าสู่ระบบ</button>
+            <button type="submit">{% trans "เข้าสู่ระบบ" %}</button>
         </form>
 
-        <p>ยังไม่มีบัญชี? <a href="{% url 'customer_register' %}">สมัครสมาชิก</a></p>
+        <p>{% trans "ยังไม่มีบัญชี?" %} <a href="{% url 'customer_register' %}">{% trans "สมัครสมาชิก" %}</a></p>
     </div>
 </body>
 </html>

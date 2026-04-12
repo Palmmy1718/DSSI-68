@@ -31,46 +31,59 @@ class Service(models.Model):
 
 # ---------------------- MASSAGE MODEL (ใช้งานจริง) ----------------------
 class Massage(models.Model):
-
     name = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
-    name_en = models.CharField(max_length=100, blank=True, null=True)
-    description_en = models.TextField(blank=True, null=True)
-    name_de = models.CharField(max_length=100, blank=True, null=True)
-    description_de = models.TextField(blank=True, null=True)
-    @property
-    def name_i18n(self):
+    description = models.TextField(blank=True, default="")
+
+    name_en = models.CharField(max_length=100, blank=True, default="")
+    description_en = models.TextField(blank=True, default="")
+
+    name_de = models.CharField(max_length=100, blank=True, default="")
+    description_de = models.TextField(blank=True, default="")
+
+    def _lang2(self) -> str:
         from django.utils.translation import get_language
-        lang = get_language()
-        if lang == 'en' and self.name_en:
+        return (get_language() or "th").split("-")[0]  # ✅ en-us -> en, de-de -> de
+
+    @property
+    def display_name(self):
+        lang = self._lang2()
+        if lang == "en" and self.name_en:
             return self.name_en
-        elif lang == 'de' and self.name_de:
+        if lang == "de" and self.name_de:
             return self.name_de
         return self.name
 
     @property
-    def description_i18n(self):
-        from django.utils.translation import get_language
-        lang = get_language()
-        if lang == 'en' and self.description_en:
+    def display_description(self):
+        lang = self._lang2()
+        if lang == "en" and self.description_en:
             return self.description_en
-        elif lang == 'de' and self.description_de:
+        if lang == "de" and self.description_de:
             return self.description_de
         return self.description
 
-    # ปรับเป็น IntegerField และใส่ default เพื่อไม่ให้ Error
+    # เผื่อคุณยังเรียกใช้ชื่อเก่าใน template
+    @property
+    def name_i18n(self):
+        return self.display_name
+
+    @property
+    def description_i18n(self):
+        return self.display_description
+
     price = models.IntegerField(default=0)
     duration = models.IntegerField(default=60)
 
-    # เก็บไฟล์รูป
+    # ราคาตามช่วงเวลา (เพิ่มใหม่)
+    price_30 = models.IntegerField(default=0)
+    price_60 = models.IntegerField(default=0)
+    price_90 = models.IntegerField(default=0)
+    price_120 = models.IntegerField(default=0)
+
     image = models.ImageField(upload_to='massage_images/', blank=True, null=True)
 
     @cached_property
     def image_exists(self) -> bool:
-        """
-        กันกรณี DB มีชื่อไฟล์ แต่ไฟล์จริงใน media หาย/ไม่มี
-        ใช้ใน template: {% if m.image_exists %} ... {% else %} รูปสำรอง {% endif %}
-        """
         try:
             return bool(self.image) and self.image.storage.exists(self.image.name)
         except Exception:
@@ -78,7 +91,6 @@ class Massage(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class AppointmentSlot(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='slots')

@@ -1,146 +1,243 @@
+/* =========================================
+   1. Global Styles & Background
+   ========================================= */
 body {
-  background: #eafbe2;
-  font-family: 'Fredoka', 'Kanit', sans-serif;
+  /* ใช้ Gradient สีเขียวอ่อนไล่ไปขาว ให้ดูนวลตา สบายใจ */
+  background: linear-gradient(180deg, #eafbe2 0%, #ffffff 100%);
+  background-attachment: fixed; /* พื้นหลังไม่ขยับเมื่อเลื่อน */
+  font-family: 'Kanit', 'Fredoka', sans-serif; /* สลับ Kanit ขึ้นก่อนเพื่อรองรับภาษาไทยสวยๆ */
   margin: 0;
   padding: 0;
+  color: #333;
 }
+
+/* =========================================
+   2. Navbar (แถบเมนู)
+   ========================================= */
+.navbar {
+  /* ลวดลายไทยจางๆ ที่พื้นหลัง */
+  background-image: url("../images/p2.png");
+  background-repeat: repeat-x;
+  background-size: contain;
+  background-position: center;
+  padding: 20px 0;
+  background-color: #f4fdf0; /* สีพื้นรองหลังรูปภาพ */
+}
+
 .nav-container {
   display: flex;
   align-items: center;
-  justify-content: center; /* ✅ จัดให้อยู่ตรงกลาง */
-  gap: 30px;
-  max-width: 90%;
+  justify-content: space-between; /* จัดโลโก้ซ้าย เมนูขวา (หรือ center ถ้าชอบแบบเดิม) */
+  gap: 40px;
+  max-width: 1100px; /* จำกัดความกว้างไม่ให้ยาวเกินไป */
+  width: 90%;
   margin: 0 auto;
-  background-color: white;
-  border-radius: 20px;
-  padding: 10px 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  
+  /* Glassmorphism Effect (กระจกฝ้า) */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  
+  border-radius: 50px; /* ขอบมนรี สวยงาม */
+  padding: 10px 40px;
+  box-shadow: 0 10px 25px rgba(19, 128, 52, 0.15); /* เงาสีเขียวจางๆ */
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .logo {
-  height: 80px;
-  width: 80px;
+  height: 70px;
+  width: 70px;
   object-fit: cover;
   border-radius: 50%;
-  border: 2px solid #138034;
+  /* กรอบสีทองอ่อนๆ ตัดกับเขียว */
+  border: 3px solid #d4af37; 
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
 }
 
-.nav-menu { /* ปรับเมนูให้อยู่ตรงกลาง */
+.logo:hover {
+  transform: scale(1.05) rotate(5deg); /* ลูกเล่นหมุนนิดๆ ตอนชี้ */
+}
+
+.nav-menu {
   list-style: none;
   display: flex;
-  gap: 25px;
-  margin: 0 auto;
+  gap: 35px;
+  margin: 0 auto; /* auto ถ้าอยากให้อยู่กลาง, 0 0 0 auto ถ้าอยากให้ชิดขวา */
   padding: 0;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.nav-menu li a { /* ปรับขนาดข้อความเมนู */
+.nav-menu li a {
   text-decoration: none;
-  font-family: 'Fredoka', sans-serif;
-  font-weight: 600;
-  font-size: 43px;
-  color: black;
-  transition: color 0.3s;
+  font-family: 'Kanit', sans-serif; /* ใช้ Kanit อ่านง่ายกว่า */
+  font-weight: 500;
+  font-size: 18px; /* ✅ ปรับลดจาก 43px (ใหญ่ไป) เป็น 18px ให้ดูหรู */
+  color: #444;
+  position: relative;
+  transition: all 0.3s ease;
+  padding: 5px 0;
+}
+
+/* เอฟเฟกต์ขีดเส้นใต้เมื่อเอาเมาส์ชี้ */
+.nav-menu li a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 3px;
+  bottom: 0;
+  left: 0;
+  background-color: #138034;
+  transition: width 0.3s;
+  border-radius: 2px;
 }
 
 .nav-menu li a:hover {
   color: #138034;
 }
 
-.navbar {
-  background-image: url("../images/p2.png"); /* << บรรทัดนี้คือตัวที่สร้างลายไทย */
-  background-repeat: repeat-x;
-  background-size: contain;
-  padding: 25px 0;
+.nav-menu li a:hover::after {
+  width: 100%;
 }
+
+/* =========================================
+   3. Promotion Section (ส่วนโปรโมชั่น)
+   ========================================= */
+
+/* หัวข้อโปรโมชั่น */
 .promotion-title {
-  background: #ffe88a;
-  color: #222;
-  font-size: 2.5rem;
-  font-weight: bold;
+  /* เปลี่ยนจากสีเหลืองทึบ เป็น Gradient ทอง */
+  background: linear-gradient(135deg, #ffe88a 0%, #ffd700 100%);
+  color: #0f5132;
+  font-size: 2rem;
+  font-weight: 700;
   text-align: center;
-  border-radius: 16px;
-  margin: 32px auto 24px auto;
-  padding: 18px 40px;
-  max-width: 320px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  letter-spacing: 2px;
+  border-radius: 50px; /* ทรงแคปซูล */
+  margin: 40px auto 30px auto;
+  padding: 15px 50px;
+  width: fit-content;
+  max-width: 90%;
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4); /* เงาสีทอง */
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
 }
+
+/* ประกายแสงบนปุ่ม */
+.promotion-title::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  transition: 0.5s;
+}
+
+.promotion-title:hover::before {
+  left: 100%; /* เอฟเฟกต์แสงวิ่งผ่าน */
+}
+
+/* กล่องโปรโมชั่นหลัก */
 .promotion-box {
-  background: #fff;
-  border-radius: 24px;
-  max-width: 600px;
-  margin: 0 auto 32px auto;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
-  padding: 32px 0 24px 0;
+  background: #ffffff;
+  border-radius: 20px;
+  max-width: 800px; /* ขยายให้กว้างขึ้น */
+  margin: 0 auto 40px auto;
+  /* เงานุ่มๆ ลอยตัว */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  padding: 40px;
   text-align: center;
+  border: 1px solid #f0f0f0;
+  position: relative;
 }
+
+/* รูปแบนเนอร์ */
 .promotion-banner {
   width: 100%;
-  max-width: 400px;
-  border-radius: 16px;
-  margin-bottom: 18px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  max-width: 500px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  transition: transform 0.3s;
 }
-.promotion-card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  padding: 24px 18px;
-  margin: 0 auto;
-  max-width: 400px;
+
+.promotion-banner:hover {
+  transform: scale(1.02); /* ขยายเล็กน้อยเมื่อชี้ */
 }
+
+/* ข้อความโปรโมชั่น */
 .promotion-main {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #176a3a;
-  margin-bottom: 12px;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #138034;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
+
 .promotion-desc {
-  font-size: 1.2rem;
-  color: #222;
-  margin-bottom: 18px;
+  font-size: 1.25rem;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
-.promotion-how {
-  font-size: 1.1rem;
-  color: #333;
-  margin-bottom: 18px;
-}
+
+/* ข้อมูลติดต่อในกล่อง */
 .promotion-contact {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  font-size: 1.3rem;
+  gap: 15px;
+  background-color: #e8f5e9; /* พื้นหลังสีเขียวอ่อน */
+  padding: 10px 25px;
+  border-radius: 30px;
+  color: #138034;
   font-weight: 700;
-  color: #176a3a;
-}
-.promotion-icon {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
-}
-.promotion-phone {
-  font-size: 1.3rem;
-  font-weight: bold;
+  font-size: 1.2rem;
+  transition: background 0.3s;
 }
 
-/* --- 5. ส่วนแผนที่และที่อยู่ (Map & Address) --- */
+.promotion-contact:hover {
+  background-color: #c8e6c9;
+}
 
+/* =========================================
+   4. Footer / Address
+   ========================================= */
 .address-box {
-  background-image: url("../images/bg-pattern.png");
-  background-color: #004b29;
+  background-image: url("../images/bg-pattern.png"); /* ลายไทยถ้ามี */
+  background-color: #0f3d24; /* เขียวเข้มจัดๆ */
   text-align: center;
-  padding: 15px 0;
-  margin-top: 60px;
+  padding: 30px 0;
+  margin-top: 80px;
+  color: white;
+  border-top: 4px solid #d4af37; /* ขอบทองด้านบน */
+}
+
+.address-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
 .address-container a {
-  color: white;
+  color: #ffffff;
   text-decoration: none;
-  font-size: 1.2em;
-  font-weight: 600;
+  font-family: 'Kanit', sans-serif;
+  font-size: 1.1em;
+  font-weight: 400;
+  opacity: 0.9;
+  transition: opacity 0.3s;
 }
 
 .address-container a:hover {
+  opacity: 1;
   text-decoration: underline;
+  color: #ffe88a; /* เปลี่ยนเป็นสีทองเมื่อชี้ */
 }

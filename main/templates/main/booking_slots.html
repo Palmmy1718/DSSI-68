@@ -1,11 +1,8 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="th">
-<head>
+{% load i18n %} <!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}"> <head>
     <meta charset="UTF-8">
-    <title>เลือกเวลานัดหมาย</title>
-
-    <style>
+    <title>{% trans "Select Appointment Time" %}</title> <style>
         :root { --green-700:#14532d; --green-600:#166534; --bg:#eef7f1; --card:#fff; --muted:#6b7280; }
         body { font-family: 'Kanit', sans-serif; background: var(--bg); margin: 0; padding: 24px 0; }
         .container { max-width: 720px; margin: 0 auto; background: var(--card); padding: 28px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
@@ -34,10 +31,12 @@
 <div class="container">
 
     <h2>{{ employee.display_name }} – {{ date }}</h2>
-    <div class="sub">เลือกช่วงเวลาที่ต้องการจองได้มากกว่าหนึ่งช่วง</div>
+    
+    <div class="sub">{% trans "You can select multiple time slots." %}</div>
+    
     <div class="toolbar">
-        <a href="javascript:history.back()" class="link-back">← กลับ</a>
-        <a id="toggleAll" class="select-all">เลือกทั้งหมด</a>
+        <a href="javascript:history.back()" class="link-back">← {% trans "Back" %}</a>
+        <a id="toggleAll" class="select-all">{% trans "Select All" %}</a>
     </div>
 
     <form action="{% url 'booking_form' %}" method="post" id="bookingForm">
@@ -53,18 +52,18 @@
                 {% if slot.available %}
                 <label class="selector">
                     <input type="checkbox" name="times" value="{{ slot.start_time }}">
-                    <span>เลือก</span>
+                    <span>{% trans "Select" %}</span>
                 </label>
                 {% else %}
-                <span class="full">เต็มแล้ว</span>
+                <span class="full">{% trans "Full" %}</span>
                 {% endif %}
             </div>
             {% endfor %}
         </div>
 
         <div class="actions">
-            <span id="selectedCount">เลือก 0 ช่วง</span>
-            <button type="submit" class="btn-book" id="submitBtn" disabled>จองที่เลือก</button>
+            <span id="selectedCount"></span>
+            <button type="submit" class="btn-book" id="submitBtn" disabled>{% trans "Book Selected" %}</button>
         </div>
     </form>
 
@@ -74,9 +73,28 @@
       const countEl = document.getElementById('selectedCount');
       const submitBtn = document.getElementById('submitBtn');
       const toggleAll = document.getElementById('toggleAll');
-      function update() { const n = boxes.filter(b => b.checked).length; countEl.textContent = `เลือก ${n} ช่วง`; submitBtn.disabled = n===0; }
+
+      // 9. เตรียมคำแปลสำหรับ JavaScript
+      const txtSelected = "{% trans 'Selected' %}";
+      const txtSlots = "{% trans 'slots' %}";
+
+      function update() { 
+          const n = boxes.filter(b => b.checked).length; 
+          
+          // 10. ใช้ตัวแปรคำแปลในการแสดงผล
+          countEl.textContent = `${txtSelected} ${n} ${txtSlots}`; 
+          
+          submitBtn.disabled = n === 0; 
+      }
+
       boxes.forEach(b => b.addEventListener('change', update));
-      toggleAll.addEventListener('click', () => { const all = boxes.every(b=>b.checked); boxes.forEach(b=>b.checked=!all); update(); });
+      
+      toggleAll.addEventListener('click', () => { 
+          const all = boxes.every(b => b.checked); 
+          boxes.forEach(b => b.checked = !all); 
+          update(); 
+      });
+      
       update();
     </script>
 

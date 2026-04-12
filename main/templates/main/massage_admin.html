@@ -48,10 +48,11 @@
     background: linear-gradient(90deg, #22c55e, #14532d);
   }
 
+  /* ปรับปรุง Grid ให้รองรับการแบ่งภาษา */
   .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
+    gap: 20px; /* เพิ่มช่องว่างเล็กน้อย */
   }
   @media (max-width: 900px) {
     .form-row { grid-template-columns: 1fr; }
@@ -63,6 +64,12 @@
     color: #14532d;
     font-weight: 700;
   }
+  
+  /* Label สำหรับภาษาเยอรมันให้สีต่างนิดหน่อย */
+  .form-group label.de-label {
+    color: #b91c1c; /* สีแดงเข้มเพื่อให้รู้ว่าโซนเยอรมัน */
+  }
+
   .form-group input[type="text"],
   .form-group input[type="number"],
   .form-group textarea {
@@ -239,16 +246,25 @@
     color:#64748b;
     font-weight:800;
   }
+
+  /* หัวข้อโซนภาษาใน Edit Mode */
+  .section-header {
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 15px 0 10px 0;
+    padding-bottom: 5px;
+    border-bottom: 2px solid rgba(0,0,0,0.05);
+  }
 </style>
 
 <div class="page">
-
 
   <div class="page-header">
     <h1>จัดการรายการนวด</h1>
     <div style="display: flex; gap: 10px;">
       <a class="btn-add" href="{% url 'massage_admin' %}?add=1">+ เพิ่มรายการนวด</a>
-      <a class="btn-add" style="background:#176B45; color:#fff;" href="{% url 'massage_admin_price' %}">เปลี่ยนแปลงราคา</a>
     </div>
   </div>
 
@@ -268,20 +284,34 @@
         {% csrf_token %}
 
         <div class="form-row">
-          <div class="form-group">
-            <label>ชื่อบริการนวด</label>
-            <input type="text" name="name" required placeholder="เช่น Thai Massage">
+          <div>
+            <div class="section-header" style="color: #14532d;">ข้อมูลทั่วไป (TH/EN)</div>
+            <div class="form-group">
+                <label>ชื่อบริการนวด</label>
+                <input type="text" name="name" required placeholder="เช่น Thai Massage">
+            </div>
+            <div class="form-group">
+                <label>รายละเอียด</label>
+                <textarea name="description" placeholder="รายละเอียดบริการนวด..."></textarea>
+            </div>
           </div>
 
-          <div class="form-group">
+          <div>
+            <div class="section-header" style="color: #b91c1c;">ข้อมูลภาษาเยอรมัน (DE)</div>
+            <div class="form-group">
+                <label class="de-label">ชื่อบริการ (German)</label>
+                <input type="text" name="name_de" placeholder="z.B. Traditionelle Thai-Massage">
+            </div>
+            <div class="form-group">
+                <label class="de-label">รายละเอียด (German)</label>
+                <textarea name="description_de" placeholder="Beschreibung auf Deutsch..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group mt-3">
             <label>รูปภาพ (ถ้ามี)</label>
             <input type="file" name="image" accept="image/*">
-          </div>
-
-          <div class="form-group" style="grid-column: 1 / -1;">
-            <label>รายละเอียด</label>
-            <textarea name="description" placeholder="รายละเอียดบริการนวด..."></textarea>
-          </div>
         </div>
 
         <div class="form-actions">
@@ -305,20 +335,28 @@
 
         <div class="edit-grid">
 
-          <!-- LEFT: form fields -->
           <div>
-
+            <div class="section-header" style="color: #14532d; margin-top:0;">ข้อมูลทั่วไป (TH/EN)</div>
             <div class="form-group">
               <label>ชื่อบริการนวด</label>
               <input type="text" name="name" required value="{{ massage_obj.name }}">
             </div>
-
             <div class="form-group">
               <label>รายละเอียด</label>
               <textarea name="description" placeholder="รายละเอียดบริการนวด...">{{ massage_obj.description }}</textarea>
             </div>
 
+            <div class="section-header" style="color: #b91c1c; margin-top:20px;">ข้อมูลภาษาเยอรมัน (DE)</div>
             <div class="form-group">
+                <label class="de-label">ชื่อบริการ (German)</label>
+                <input type="text" name="name_de" value="{{ massage_obj.name_de|default:'' }}" placeholder="z.B. Traditionelle Thai-Massage">
+            </div>
+            <div class="form-group">
+                <label class="de-label">รายละเอียด (German)</label>
+                <textarea name="description_de" placeholder="Beschreibung auf Deutsch...">{{ massage_obj.description_de|default:'' }}</textarea>
+            </div>
+
+            <div class="form-group mt-3">
               <label>อัปโหลดรูปใหม่ (ถ้าต้องการ)</label>
 
               <input id="massageFile" class="file-hidden" type="file" name="image" accept="image/*">
@@ -337,7 +375,6 @@
 
           </div>
 
-          <!-- RIGHT: preview -->
           <div class="preview-card">
             <h3>พรีวิวรูป</h3>
 
@@ -400,7 +437,7 @@
     <thead>
       <tr>
         <th style="width:90px;">รูป</th>
-        <th>ชื่อบริการ</th>
+        <th>ชื่อบริการ (TH)</th>
         <th>รายละเอียด</th>
         <th class="actions-col" style="width:190px;">จัดการ</th>
       </tr>
@@ -423,7 +460,7 @@
           </td>
 
           <td style="color:#334155;">
-            {{ m.description|default:"-" }}
+            {{ m.description|default:"-"|truncatechars:50 }}
           </td>
 
           <td class="actions-col">
@@ -433,8 +470,7 @@
         </tr>
       {% empty %}
         <tr>
-          <td colspan="4">
-            <div class="empty">ยังไม่มีรายการนวดในระบบ</div>
+          <td colspan="4"> <div class="empty">ยังไม่มีรายการนวดในระบบ</div>
           </td>
         </tr>
       {% endfor %}

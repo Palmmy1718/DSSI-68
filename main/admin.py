@@ -41,10 +41,11 @@ class PromotionAdmin(admin.ModelAdmin):
 
 @admin.register(Massage)
 class MassageAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "price", "duration")
-    search_fields = ("name", "description")
+    list_display = ("id", "name", "name_en", "name_de", "price", "duration")
+    search_fields = ("name", "name_en", "name_de", "description", "description_en", "description_de")
     list_filter = ("duration",)
     list_display_links = ("id", "name")
+    fields = ("name", "name_en", "name_de", "description", "description_en", "description_de", "price", "duration", "image")
 
 
 @admin.register(AppointmentSlot)

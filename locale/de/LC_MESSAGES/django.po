@@ -2,70 +2,818 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: web_palmmy\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-07 20:30+0700\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+# ==========================================
+# 1. Global / Navigation / Common
+# ==========================================
+
+#: .\chokdeemassage\settings.py:90
 msgid "Thai"
 msgstr "Thailändisch"
+
+#: .\chokdeemassage\settings.py:91
 msgid "English"
 msgstr "Englisch"
+
+#: .\chokdeemassage\settings.py:92
 msgid "German"
 msgstr "Deutsch"
 
-msgid "Chokdee Thai Massage"
-msgstr "Chokdee Thai Massage"
+#: .\main\templates\Contact.html:18 .\main\templates\Gallery.html:17
+#: .\main\templates\Massages.html:32 .\main\templates\Promotion.html:17
+#: .\main\templates\home.html:18 .\main\templates\team.html:17
 msgid "Logo"
 msgstr "Logo"
+
+#: .\main\templates\Contact.html:20 .\main\templates\Gallery.html:20
+#: .\main\templates\Massages.html:34 .\main\templates\Price.html:18
+#: .\main\templates\Promotion.html:20 .\main\templates\home.html:21
+#: .\main\templates\team.html:20
 msgid "Home"
 msgstr "Startseite"
+
+#: .\main\templates\Contact.html:21 .\main\templates\Gallery.html:21
+#: .\main\templates\Massages.html:35 .\main\templates\Massages.html:51
+#: .\main\templates\Price.html:19 .\main\templates\Promotion.html:21
+#: .\main\templates\home.html:22 .\main\templates\team.html:21
 msgid "Massages"
 msgstr "Massagen"
+
+#: .\main\templates\Contact.html:22 .\main\templates\Gallery.html:22
+#: .\main\templates\Massages.html:36 .\main\templates\Promotion.html:22
+#: .\main\templates\home.html:23 .\main\templates\team.html:22
 msgid "Price"
 msgstr "Preise"
-msgid "Prices"
-msgstr "Preise"
+
+#: .\main\templates\Contact.html:23 .\main\templates\Gallery.html:23
+#: .\main\templates\Massages.html:37 .\main\templates\Price.html:21
+#: .\main\templates\Promotion.html:6 .\main\templates\Promotion.html:23
+#: .\main\templates\Promotion.html:80 .\main\templates\home.html:24
+#: .\main\templates\team.html:23
 msgid "Promotion"
 msgstr "Angebote"
+
+#: .\main\templates\Contact.html:24 .\main\templates\Gallery.html:6
+#: .\main\templates\Gallery.html:24 .\main\templates\Gallery.html:33
+#: .\main\templates\Massages.html:38 .\main\templates\Price.html:22
+#: .\main\templates\Promotion.html:24 .\main\templates\home.html:25
+#: .\main\templates\team.html:24
 msgid "Gallery"
 msgstr "Galerie"
+
+#: .\main\templates\Contact.html:25 .\main\templates\Gallery.html:25
+#: .\main\templates\Massages.html:39 .\main\templates\Price.html:23
+#: .\main\templates\Promotion.html:25 .\main\templates\home.html:26
+#: .\main\templates\team.html:6 .\main\templates\team.html:25
+#: .\main\templates\team.html:32
 msgid "Team"
 msgstr "Team"
+
+#: .\main\templates\Contact.html:6 .\main\templates\Contact.html:26
+#: .\main\templates\Contact.html:32 .\main\templates\Gallery.html:26
+#: .\main\templates\Massages.html:40 .\main\templates\Price.html:24
+#: .\main\templates\Promotion.html:26 .\main\templates\home.html:27
+#: .\main\templates\team.html:26
 msgid "Contact"
 msgstr "Kontakt"
 
+#: .\main\templates\home.html:33
+msgid "Admin"
+msgstr "Admin"
+
+#: .\main\templates\Contact.html:47
+msgid "Address"
+msgstr "Adresse"
+
+#: .\main\templates\Contact.html:52
+msgid "Email"
+msgstr "E-Mail"
+
+#: .\main\templates\Contact.html:66
+msgid "Phone"
+msgstr "Telefon"
+
+# ==========================================
+# 2. Home Page
+# ==========================================
+
+#: .\main\templates\Massages.html:7 .\main\templates\Massages.html:46
+#: .\main\templates\home.html:7 .\main\templates\home.html:58
+msgid "Chokdee Thai Massage"
+msgstr "Chokdee Thai Massage"
+
+#: .\main\templates\home.html:60 .\main\templates\home.html:114
+msgid "CHOKDEE THAI MASSAGE"
+msgstr "CHOKDEE THAI MASSAGE"
+
+#: .\main\templates\home.html:61
 msgid "Opening hours"
 msgstr "Öffnungszeiten"
+
+#: .\main\templates\home.html:62
 msgid "By appointment only"
 msgstr "Nur nach Vereinbarung"
+
+#: .\main\templates\home.html:63
 msgid "Monday – Sunday"
 msgstr "Montag – Sonntag"
 
+#: .\main\templates\home.html:70
 msgid "Register"
 msgstr "Registrieren"
+
+#: .\main\templates\home.html:79
 msgid "Schedule"
 msgstr "Zeitplan"
+
+#: .\main\templates\home.html:103
 msgid "No employees available"
 msgstr "Keine Mitarbeiter verfügbar"
 
-msgid "Chatbot"
-msgstr "Chatbot"
-msgid "Type a message..."
-msgstr "Nachricht eingeben..."
-msgid "Send"
-msgstr "Senden"
-msgid "You"
-msgstr "Sie"
-msgid "Bot"
-msgstr "Bot"
-msgid "Error"
-msgstr "Fehler"
-
+#: .\main\templates\home.html:132
 msgid "8380 Hévíz, Rákóczi utca 10. Tel: +36 30 581 4854"
 msgstr "8380 Hévíz, Rákóczi Straße 10. Tel: +36 30 581 4854"
 
-msgid "Heviz Massage Prices"
-msgstr "Massagepreise in Hévíz"
+#: .\main\templates\Massages.html:93
+msgid "8380 HEVIZ RAKOCZI UTCA 10. +3630-5814854"
+msgstr "8380 Hévíz, Rákóczi Straße 10. Tel.: +3630-5814854"
+
+#: .\main\templates\Price.html:96
 msgid "8380 HEVIZ RAKOCZI UTCA 10. Phone: +3630-5814854"
 msgstr "8380 Hévíz, Rákóczi Straße 10. Tel: +3630-5814854"
+
+# ==========================================
+# 3. Massage Page
+# ==========================================
+
+#: .\main\templates\Massages.html:53
+msgid ""
+"ที่ร้านนวดของเราในเมืองเฮวีซ (Hévíz) คุณจะได้พบกับการนวดทั้งแบบแผนไทยดั้งเดิม "
+"และแบบทันสมัยซึ่งจะช่วยเติมพลังให้กับชีวิตประจำวันของคุณ ไม่ว่าจะเป็นการนวดแผนไทย นวดเท้า "
+"นวดน้ำมัน คุณจะได้สัมผัสกับความผ่อนคลายและการฟื้นฟูร่างกายอย่างสมบูรณ์แบบ ที่ CHOKDEE THAI "
+"MASSAGE"
+msgstr ""
+"In unserem Massagesalon in Hévíz finden Sie sowohl traditionelle Thai-"
+"Massage als auch moderne Techniken, die Ihren Alltag mit neuer Energie "
+"füllen. Ob Thai-Massage, Fußmassage oder Ölmassage – bei CHOKDEE THAI "
+"MASSAGE erleben Sie vollkommene Entspannung und körperliche Erholung."
+
+#: .\main\templates\Massages.html:55
+msgid "Please choose from the following massage services."
+msgstr "Bitte wählen Sie aus den folgenden Massageangeboten."
+
+#: .\main\templates\Massages.html:65
+msgid "No image available"
+msgstr "Kein Bild verfügbar"
+
+#: .\main\templates\Massages.html:79
+msgid "No massage services available at the moment."
+msgstr "Zurzeit sind keine Massageleistungen verfügbar."
+
+#: .\main\templates\Massages.html:80
+msgid "Please add services in the Admin Panel."
+msgstr "Bitte fügen Sie Leistungen im Admin-Bereich hinzu."
+
+# --- Service Descriptions ---
+
+msgid ""
+"การนวดนี้มีพื้นฐานจากแนวคิดที่ว่าอวัยวะต่าง ๆ ของร่างกายเชื่อมโยงกับจุดสะท้อนบนฝ่าเท้า "
+"การนวดจุดเหล่านี้จะช่วยกระตุ้นการไหลเวียนพลังงานภายในร่างกาย "
+"ฟื้นฟูความสดชื่นให้ขาและเท้าที่เมื่อยล้า พร้อมมอบความผ่อนคลายอย่างล้ำลึก"
+msgstr ""
+"Basiert auf dem Konzept, dass Körperorgane mit Reflexpunkten an den "
+"Fußsohlen verbunden sind. Die Stimulation dieser Punkte fördert den "
+"Energiefluss, revitalisiert müde Beine und sorgt für tiefe Entspannung."
+
+msgid ""
+"การนวดน้ำมันแบบไทยช่วยผ่อนคลายทั้งร่างกายและจิตใจอย่างล้ำลึก "
+"มอบความรู้สึกสบายอย่างเต็มที่ ช่วยลดความเครียด ขับสารพิษ กระตุ้นพลังงาน "
+"ฟื้นฟูร่างกายจากความเหนื่อยล้า และทำให้ผิวเนียนนุ่ม ชุ่มชื้น แลดูมีชีวิตชีวา"
+msgstr ""
+"Die Thai-Ölmassage entspannt Körper und Geist tief. Sie reduziert Stress, "
+"leitet Giftstoffe aus, steigert die Energie und pflegt die Haut weich und "
+"strahlend."
+
+msgid ""
+"การนวดชนิดนี้เหมาะสำหรับบรรเทาอาการปวดกล้ามเนื้อ ปวดข้อ "
+"อาการบาดเจ็บจากการออกกำลังกาย อาการเกร็ง และช่วยกระตุ้นการไหลเวียนโลหิต "
+"อีกทั้งยังช่วยบำรุงผิวพรรณให้แข็งแรงและสดใสขึ้นอีกด้วย"
+msgstr ""
+"Ideal bei Muskelschmerzen, Gelenkbeschwerden und Sportverletzungen. Diese "
+"Massage fördert die Durchblutung und lässt die Haut gesund und strahlend "
+"aussehen."
+
+msgid ""
+"การนวดนี้ช่วยบรรเทาอาการปวดศีรษะและความตึงบริเวณต้นคอโดยเน้นคลายความเครียดและจุดตึงของกล้ามเนื้อในส่วนที่ใช้งานหนัก "
+"ให้รู้สึกผ่อนคลายและโล่งสบาย"
+msgstr ""
+"Hilft gegen Kopfschmerzen und Nackenverspannungen, indem Stress und "
+"Muskelknoten in stark beanspruchten Bereichen gelöst werden."
+
+msgid ""
+"เป็นการผสมผสานท่ายืดเหยียดแบบโยคะ การกดจุด และการเคลื่อนไหวข้อต่อ "
+"โดยเน้นการกดจุดพลังงานสำคัญ 10 จุดด้วยจังหวะที่นุ่มนวลเพื่อช่วยกระตุ้นพลังงานและผ่อนคลายร่างกายอย่างล้ำลึก"
+msgstr ""
+"Eine Kombination aus Yoga-Dehnungen, Akupressur und Gelenkmobilisation. "
+"Fokussiert auf 10 Energielinien für tiefgehende Entspannung."
+
+#: .\main\templates\main\select_massage.html:7
+msgid "Select Service"
+msgstr "Service auswählen"
+
+#: .\main\templates\main\select_massage.html:48
+msgid "Back"
+msgstr "Zurück"
+
+#: .\main\templates\main\select_massage.html:53
+msgid "Therapist"
+msgstr "Masseur/in"
+
+#: .\main\templates\main\select_massage.html:54
+msgid "Date"
+msgstr "Datum"
+
+#: .\main\templates\main\select_massage.html:55
+msgid "Service"
+msgstr "Leistung"
+
+#: .\main\templates\main\select_massage.html:56
+msgid "Time"
+msgstr "Uhrzeit"
+
+#: .\main\templates\main\select_massage.html:83
+msgid "Select"
+msgstr "Auswählen"
+
+# ==========================================
+# 4. Other Pages
+# ==========================================
+
+#: .\main\templates\Price.html:20
+msgid "Prices"
+msgstr "Preise"
+
+#: .\main\templates\Gallery.html:37
+msgid "Workplace and shop environment photos"
+msgstr "Fotos der Räumlichkeiten und des Ladens"
+
+#: .\main\templates\Gallery.html:44
+msgid "No images in the gallery yet."
+msgstr "Noch keine Bilder in der Galerie."
+
+#: .\main\templates\Promotion.html:39
+msgid "Promotion Banner"
+msgstr "Aktionsbanner"
+
+#: .\main\templates\Promotion.html:52
+msgid "Last updated"
+msgstr "Zuletzt aktualisiert"
+
+#: .\main\templates\Promotion.html:58
+msgid "No active promotions at the moment."
+msgstr "Zurzeit keine aktiven Angebote."
+
+#: .\main\templates\chat.html:6
+msgid "Chokdee Chatbot"
+msgstr "Chokdee Chatbot"
+
+#: .\main\templates\chat.html:22
+msgid "พิมพ์ข้อความ..."
+msgstr "Nachricht eingeben..."
+
+#: .\main\templates\chat.html:26
+msgid "ส่ง"
+msgstr "Senden"
+
+#: .\main\templates\chat.html:30
+msgid "คุยกับแชตบอท"
+msgstr "Chat mit dem Bot"
+
+#: .\main\templates\chat.html:63
+msgid "คุณ:"
+msgstr "Sie:"
+
+#: .\main\templates\chat.html:79
+msgid "เกิดข้อผิดพลาด:"
+msgstr "Fehler aufgetreten:"
+
+#: .\main\templates\chat.html:82
+msgid "เกิดข้อผิดพลาด: ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์"
+msgstr "Fehler: Verbindung zum Server nicht möglich"
+
+#: .\main\templates\home.html:158
+msgid "Type a message..."
+msgstr "Nachricht eingeben..."
+
+#: .\main\templates\home.html:162
+msgid "Send"
+msgstr "Senden"
+
+#: .\main\templates\home.html:180
+msgid "You"
+msgstr "Sie"
+
+#: .\main\templates\home.html:194
+msgid "Bot"
+msgstr "Bot"
+
+#: .\main\templates\home.html:196
+msgid "Error"
+msgstr "Fehler"
+
+# ==========================================
+# 5. System & View Messages
+# ==========================================
+
+#: .\main\views.py:36
+msgid "ยังไม่ได้ตั้งค่า GEMINI_API_KEY/GOOGLE_API_KEY ใน .env"
+msgstr "GEMINI_API_KEY/GOOGLE_API_KEY ist in der .env-Datei nicht konfiguriert."
+
+#: .\main\views.py:62
+msgid "กรุณากรอกชื่อบริการนวด"
+msgstr "Bitte geben Sie den Namen der Massageleistung ein."
+
+#: .\main\views.py:73
+msgid "เพิ่มรายการนวดเรียบร้อย"
+msgstr "Massageleistung erfolgreich hinzugefügt."
+
+#: .\main\views.py:76 .\main\views.py:107
+#, python-format
+msgid "บันทึกไม่สำเร็จ: %(err)s"
+msgstr "Speichern fehlgeschlagen: %(err)s"
+
+#: .\main\views.py:95
+msgid "กรุณากรอกชื่อ"
+msgstr "Bitte geben Sie einen Namen ein."
+
+#: .\main\views.py:104
+msgid "แก้ไขข้อมูลเรียบร้อย"
+msgstr "Daten erfolgreich bearbeitet."
+
+#: .\main\views.py:121
+msgid "ลบรายการเรียบร้อย"
+msgstr "Eintrag erfolgreich gelöscht."
+
+#: .\main\views.py:141
+#, python-format
+msgid "อัปเดตราคา %(count)s รายการเรียบร้อย"
+msgstr "Preise für %(count)s Artikel erfolgreich aktualisiert."
+
+#: .\main\views.py:143
+msgid "ไม่มีการเปลี่ยนแปลงราคา"
+msgstr "Keine Preisänderungen."
+
+#: .\main\views.py:159
+#, python-format
+msgid "(ไม่สามารถโหลดข้อมูลราคาได้: %(err)s)"
+msgstr "(Preisdaten konnten nicht geladen werden: %(err)s)"
+
+#: .\main\views.py:267
+msgid "(จองแล้ว)"
+msgstr "(Gebucht)"
+
+#: .\main\views.py:281 .\main\views.py:597 .\main\views.py:660
+msgid "รูปแบบวันที่ไม่ถูกต้อง"
+msgstr "Ungültiges Datumsformat."
+
+#: .\main\views.py:323
+msgid "เพิ่มพนักงานแล้ว"
+msgstr "Mitarbeiter erfolgreich hinzugefügt."
+
+#: .\main\views.py:327
+msgid "เพิ่มพนักงาน"
+msgstr "Mitarbeiter hinzufügen"
+
+#: .\main\views.py:343
+msgid "กรุณาอัปโหลดรูปภาพ"
+msgstr "Bitte laden Sie ein Bild hoch."
+
+#: .\main\views.py:348
+msgid "เพิ่มรูปภาพสำเร็จ"
+msgstr "Bild erfolgreich hinzugefügt."
+
+#: .\main\views.py:351 .\main\views.py:370
+#, python-format
+msgid "บันทึกล้มเหลว: %(err)s"
+msgstr "Speichern fehlgeschlagen: %(err)s"
+
+#: .\main\views.py:367
+msgid "แก้ไขรูปภาพสำเร็จ"
+msgstr "Bild erfolgreich bearbeitet."
+
+#: .\main\views.py:379
+msgid "ลบรูปภาพแล้ว"
+msgstr "Bild gelöscht."
+
+#: .\main\views.py:395
+msgid "อัปเดตข้อมูลแล้ว"
+msgstr "Daten aktualisiert."
+
+#: .\main\views.py:401
+#, python-format
+msgid "แก้ไข: %(name)s"
+msgstr "Bearbeiten: %(name)s"
+
+#: .\main\views.py:411
+msgid "ลบพนักงานแล้ว"
+msgstr "Mitarbeiter gelöscht."
+
+#: .\main\views.py:424
+msgid "อัปเดตชื่อแล้ว"
+msgstr "Name aktualisiert."
+
+#: .\main\views.py:426
+msgid "ชื่อห้ามว่าง"
+msgstr "Der Name darf nicht leer sein."
+
+#: .\main\views.py:436
+msgid "กรุณาเลือกไฟล์รูป"
+msgstr "Bitte wählen Sie eine Bilddatei aus."
+
+#: .\main\views.py:441
+msgid "เปลี่ยนรูปแล้ว"
+msgstr "Bild geändert."
+
+#: .\main\views.py:452
+msgid "ลบรูปแล้ว"
+msgstr "Bild gelöscht."
+
+#: .\main\views.py:483
+msgid "เพิ่มเวลาว่างเรียบร้อย"
+msgstr "Verfügbare Zeit erfolgreich hinzugefügt."
+
+#: .\main\views.py:485
+msgid "ข้อมูลวันที่/เวลาไม่ถูกต้อง"
+msgstr "Ungültige Datums-/Zeitangaben."
+
+#: .\main\views.py:491 .\main\views.py:551
+msgid "ลบเวลาว่างแล้ว"
+msgstr "Verfügbare Zeit gelöscht."
+
+#: .\main\views.py:514
+msgid "กรุณากรอกข้อมูลให้ครบถ้วน"
+msgstr "Bitte füllen Sie alle Felder aus."
+
+#: .\main\views.py:523
+msgid "เวลาเริ่มต้องน้อยกว่าเวลาสิ้นสุด"
+msgstr "Die Startzeit muss vor der Endzeit liegen."
+
+#: .\main\views.py:529
+msgid "มีช่วงเวลานี้อยู่แล้ว กรุณาเลือกเวลาอื่น"
+msgstr "Dieser Zeitraum existiert bereits. Bitte wählen Sie eine andere Zeit."
+
+#: .\main\views.py:536
+msgid "เพิ่มเวลาว่างเรียบร้อยแล้ว"
+msgstr "Verfügbare Zeit wurde erfolgreich hinzugefügt."
+
+#: .\main\views.py:540
+#, python-format
+msgid "เกิดข้อผิดพลาด: %(err)s"
+msgstr "Ein Fehler ist aufgetreten: %(err)s"
+
+#: .\main\views.py:634
+msgid "กรุณาเลือกเวลาอย่างน้อย 1 ช่วง"
+msgstr "Bitte wählen Sie mindestens einen Zeitfenster aus."
+
+#: .\main\views.py:663
+msgid "ไม่พบพนักงานที่เลือก"
+msgstr "Ausgewählter Mitarbeiter nicht gefunden."
+
+#: .\main\views.py:673
+#, python-format
+msgid "รูปแบบเวลาไม่ถูกต้อง: %(t)s"
+msgstr "Ungültiges Zeitformat: %(t)s"
+
+#: .\main\views.py:677 .\main\views.py:691
+#, python-format
+msgid "คิวยังไม่ว่างที่เวลา %(t)s"
+msgstr "Um %(t)s ist kein Termin frei."
+
+#: .\main\views.py:696
+#, python-format
+msgid "ไม่สามารถจองได้: %(detail)s"
+msgstr "Buchung nicht möglich: %(detail)s"
+
+#: .\main\views.py:699
+#, python-format
+msgid "จองสำเร็จ %(count)s รายการ"
+msgstr "%(count)s Buchungen erfolgreich."
+
+#: .\main\views.py:701
+#, python-format
+msgid " (บางรายการไม่ได้: %(detail)s)"
+msgstr " (Einige fehlgeschlagen: %(detail)s)"
+
+#: .\main\views.py:713
+msgid "จองสำเร็จแล้ว!"
+msgstr "Erfolgreich gebucht!"
+
+#: .\main\views.py:767
+msgid "ยืนยันการจองเรียบร้อย"
+msgstr "Buchung erfolgreich bestätigt."
+
+#: .\main\views.py:777
+msgid "ยกเลิกการจองเรียบร้อย"
+msgstr "Buchung erfolgreich storniert."
+
+#: .\main\views.py:786
+msgid "ลบการจองแล้ว"
+msgstr "Buchung gelöscht."
+
+#: .\main\views.py:799 .\main\views.py:839
+msgid "รหัสผ่านไม่ตรงกัน"
+msgstr "Passwörter stimmen nicht überein."
+
+#: .\main\views.py:802 .\main\views.py:842
+msgid "ชื่อผู้ใช้นี้มีอยู่แล้ว"
+msgstr "Benutzername existiert bereits."
+
+#: .\main\views.py:805 .\main\views.py:845
+msgid "สมัครสมาชิกสำเร็จ! โปรดเข้าสู่ระบบ"
+msgstr "Registrierung erfolgreich! Bitte melden Sie sich an."
+
+#: .\main\views.py:819 .\main\views.py:871
+msgid "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"
+msgstr "Benutzername oder Passwort falsch."
+
+#: .\main\views.py:825 .\main\views.py:878
+msgid "ออกจากระบบเรียบร้อยแล้ว"
+msgstr "Erfolgreich abgemeldet."
+
+#: .\main\views.py:867
+#, python-format
+msgid "ยินดีต้อนรับ %(name)s!"
+msgstr "Willkommen %(name)s!"
+
+#: .\main\views.py:927
+msgid "POST only"
+msgstr "Nur POST"
+
+#: .\main\views.py:931
+msgid "ข้อความว่าง"
+msgstr "Leere Nachricht."
+
+#: .\main\views.py:940
+msgid "ขณะนี้ยังไม่มีโปรโมชั่นพิเศษค่ะ"
+msgstr "Zurzeit gibt es keine Sonderangebote."
+
+#: .\main\views.py:960 .\main\views.py:963
+#, python-format
+msgid "ขออภัย ระบบแชทขัดข้อง: %(detail)s"
+msgstr "Entschuldigung, das Chat-System ist gestört: %(detail)s"
+
+#: .\main\views.py:977
+msgid "ยังไม่ได้ตั้งค่า API key"
+msgstr "API-Schlüssel noch nicht gesetzt."
+
+#: .\main\views.py:988
+msgid "สวัสดีจาก Django!"
+msgstr "Hallo von Django!"
+
+# ==========================================
+# 6. Price Table
+# ==========================================
+
+msgid "ราคาค่าบริการนวด"
+msgstr "Preisliste"
+
+msgid "ชื่อบริการ"
+msgstr "Behandlung"
+
+msgid "30 นาที"
+msgstr "30 Min."
+
+msgid "60 นาที"
+msgstr "60 Min."
+
+msgid "90 นาที"
+msgstr "90 Min."
+
+msgid "120 นาที"
+msgstr "120 Min."
+
+msgid "นวดไทย"
+msgstr "Traditionelle Thai-Massage"
+
+msgid "นวดน้ำมัน"
+msgstr "Ölmassage"
+
+msgid "นวดเท้า"
+msgstr "Fußmassage"
+
+msgid "นวดสมุนไพร"
+msgstr "Kräuterstempelmassage"
+
+msgid "นวดหลัง คอ ศีรษะ"
+msgstr "Rücken-, Nacken- & Kopfmassage"
+
+msgid "นวดไทย + น้ำมัน + สมุนไพร"
+msgstr "Thai + Öl + Kräuter"
+
+# ==========================================
+# 7. Promotion / Register / Login
+# ==========================================
+
+msgid "โปร 5+1"
+msgstr "5+1 Angebot"
+
+msgid "ซื้อคอร์สนวด 5 ครั้ง รับฟรี 1 ครั้ง"
+msgstr "Eine freie Massage nach Wahl beim Kauf einer 5er Karte."
+
+msgid "5+1 Angebot"
+msgstr "5+1 Angebot"
+
+msgid "Eine freie Massge nach Wahl beim kauf einer 5er Karte."
+msgstr "Eine freie Massage nach Wahl beim Kauf einer 5er Karte."
+
+msgid "สมัครสมาชิก"
+msgstr "Registrieren"
+
+msgid "กรอกข้อมูลเพื่อสร้างบัญชีผู้ใช้งานใหม่"
+msgstr "Füllen Sie das Formular aus, um ein neues Konto zu erstellen"
+
+msgid "ชื่อผู้ใช้"
+msgstr "Benutzername"
+
+msgid "อีเมล"
+msgstr "E-Mail"
+
+msgid "รหัสผ่าน"
+msgstr "Passwort"
+
+msgid "ยืนยันรหัสผ่าน"
+msgstr "Passwort bestätigen"
+
+msgid "กรอกรหัสผ่านอีกครั้ง"
+msgstr "Passwort erneut eingeben"
+
+msgid "มีบัญชีแล้ว? เข้าสู่ระบบ"
+msgstr "Bereits ein Konto? Anmelden"
+
+msgid "เข้าสู่ระบบ"
+msgstr "Anmelden"
+
+msgid "กรอกอีเมลและรหัสผ่านเพื่อเข้าสู่ระบบ"
+msgstr "Geben Sie Ihre E-Mail und Ihr Passwort ein"
+
+msgid "ยังไม่มีบัญชี?"
+msgstr "Haben Sie noch kein Konto?"
+
+# ==========================================
+# 8. Database Titles & Extra
+# ==========================================
+
+msgid "การนวดแผนไทย"
+msgstr "Traditionelle Thai-Massage"
+
+msgid "การนวดกดจุดสะท้อนฝ่าเท้า"
+msgstr "Fußreflexzonenmassage"
+
+msgid "การนวดน้ำมันแบบไทย"
+msgstr "Thai-Ölmassage"
+
+msgid "การนวดประคบสมุนไพร"
+msgstr "Kräuterstempelmassage"
+
+msgid "การนวดศีรษะ คอ และหลังแบบไทย"
+msgstr "Thai-Kopf-, Nacken- und Rückenmassage"
+
+msgid "การนวดน้ำมันอโรม่า"
+msgstr "Aromaölmassage"
+
+msgid "นวดน้ำมันอโรม่า"
+msgstr "Aromaölmassage"
+
+msgid "เปิดใช้งาน"
+msgstr "Aktiviert"
+
+msgid "ปิดใช้งาน"
+msgstr "Deaktiviert"
+
+#, python-format
+msgid "เปลี่ยนสถานะเป็น %(status)s แล้ว"
+msgstr "Status wurde auf %(status)s geändert."
+
+msgid "ลบโปรโมชั่นเรียบร้อย"
+msgstr "Werbeaktion erfolgreich gelöscht."
+
+# ==========================================
+# 9. Calendar / Booking Page (Added)
+# ==========================================
+
+msgid "Back to Home"
+msgstr "Zurück zur Startseite"
+
+msgid "Schedule of"
+msgstr "Zeitplan von"
+
+msgid "Schedule for"
+msgstr "Termine für"
+
+msgid "Do you want to book on this date?"
+msgstr "Möchten Sie an diesem Datum buchen?"
+
+msgid "Book Online"
+msgstr "Online buchen"
+
+msgid "Close"
+msgstr "Schließen"
+
+msgid "Select Appointment Time"
+msgstr "Terminzeit wählen"
+
+msgid "You can select multiple time slots."
+msgstr "Sie können mehrere Zeitfenster auswählen."
+
+msgid "Select All"
+msgstr "Alle auswählen"
+
+msgid "Full"
+msgstr "Belegt"
+
+msgid "Selected"
+msgstr "Ausgewählt"
+
+msgid "slots"
+msgstr "Termine"
+
+msgid "Book Selected"
+msgstr "Auswahl buchen"
+
+# ==========================================
+# 10. Additional Translations from Screenshots
+# (Calendar & Booking System - Thai Source)
+# ==========================================
+
+msgid "กลับหน้าแรก"
+msgstr "Zurück zur Startseite"
+
+msgid "ตารางงานของ"
+msgstr "Zeitplan von"
+
+msgid "เลือกช่วงเวลาที่ต้องการจองได้มากกว่าหนึ่งช่วง"
+msgstr "Sie können mehrere Zeitfenster auswählen."
+
+msgid "ย้อนกลับ"
+msgstr "Zurück"
+
+msgid "กลับ"
+msgstr "Zurück"
+
+msgid "เลือกทั้งหมด"
+msgstr "Alle auswählen"
+
+msgid "เลือก"
+msgstr "Auswählen"
+
+msgid "จองที่เลือก"
+msgstr "Auswahl buchen"
+
+msgid "เลือก 0 ช่วง"
+msgstr "0 Zeitfenster ausgewählt"
+
+msgid "Selected 1 slots"
+msgstr "1 Zeitfenster ausgewählt"
+
+# ==========================================
+# 11. Booking Confirmation Page
+# ==========================================
+
+msgid "Confirm Booking"
+msgstr "Buchung bestätigen"
+
+msgid "Employee"
+msgstr "Mitarbeiter"
+
+# msgid "Date"  <-- ซ้ำกับบรรทัดที่ 324 (ลบออกแล้ว)
+
+msgid "Selected Time Slots"
+msgstr "Ausgewählte Zeitfenster"
+
+# msgid "Time"  <-- ซ้ำกับบรรทัดที่ 330 (ลบออกแล้ว)
+
+msgid "Duration"
+msgstr "Dauer"
+
+msgid "minutes"
+msgstr "Minuten"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Your Name"
+msgstr "Ihr Name"
+
+msgid "Phone Number"
+msgstr "Telefonnummer"
+
+msgid "Contact Phone Number"
+msgstr "Kontakt-Telefonnummer"
+
+# msgid "Back" <-- ซ้ำกับบรรทัดที่ 318 (ลบออกแล้ว)

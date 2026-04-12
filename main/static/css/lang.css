@@ -1,0 +1,3 @@
+.lang-flags{display:flex;gap:10px;align-items:center}
+.flag{width:28px;height:18px;object-fit:cover;border-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.flag-btn{text-decoration:none;display:inline-flex}

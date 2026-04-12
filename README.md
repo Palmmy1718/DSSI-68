@@ -59,3 +59,5 @@ python manage.py runserver
 
 ## 6. สร้างผู้ดูแลระบบ (Admin)
 python manage.py createsuperuser
+
+python manage.py compilemessages --ignore=.venv

@@ -1,10 +1,10 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
-<html lang="th">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>สมัครสมาชิก</title>
+    <title>{% trans "สมัครสมาชิก" %}</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -171,11 +171,13 @@
     <div class="register-container">
 
         <div class="logo-wrap">
-            <img src="{% static 'images/logo.png' %}" alt="Chokdee Thai Massage">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/logo.png' %}" alt="{% trans 'Logo' %}">
+            </a>
         </div>
 
-        <h2>สมัครสมาชิก</h2>
-        <p class="subtitle">กรอกข้อมูลเพื่อสร้างบัญชีผู้ใช้งานใหม่</p>
+        <h2>{% trans "สมัครสมาชิก" %}</h2>
+        <p class="subtitle">{% trans "กรอกข้อมูลเพื่อสร้างบัญชีผู้ใช้งานใหม่" %}</p>
 
         {% if messages %}
         <div class="messages-box">
@@ -189,29 +191,33 @@
             {% csrf_token %}
 
             <div class="form-group">
-                <label for="id_username">ชื่อผู้ใช้</label>
-                <input id="id_username" type="text" name="username" placeholder="เช่น palmmy" required>
+                <label for="id_username">{% trans "ชื่อผู้ใช้" %}</label>
+                <input id="id_username" type="text" name="username" placeholder="{% trans 'ชื่อผู้ใช้' %}" required>
             </div>
 
             <div class="form-group">
-                <label for="id_email">อีเมล</label>
+                <label for="id_email">{% trans "อีเมล" %}</label>
                 <input id="id_email" type="email" name="email" placeholder="example@email.com" required>
             </div>
 
             <div class="form-group">
-                <label for="id_password">รหัสผ่าน</label>
-                <input id="id_password" type="password" name="password" placeholder="กรอกรหัสผ่าน" required>
+                <label for="id_password">{% trans "รหัสผ่าน" %}</label>
+                <input id="id_password" type="password" name="password" placeholder="{% trans 'รหัสผ่าน' %}" required>
             </div>
 
             <div class="form-group">
-                <label for="id_confirm">ยืนยันรหัสผ่าน</label>
-                <input id="id_confirm" type="password" name="confirm" placeholder="กรอกรหัสผ่านอีกครั้ง" required>
+                <label for="id_confirm">{% trans "ยืนยันรหัสผ่าน" %}</label>
+                <input id="id_confirm" type="password" name="confirm" placeholder="{% trans 'กรอกรหัสผ่านอีกครั้ง' %}" required>
             </div>
 
-            <button type="submit">สมัครสมาชิก</button>
+            <button type="submit">{% trans "สมัครสมาชิก" %}</button>
         </form>
 
-        <p>มีบัญชีแล้ว? <a href="{% url 'customer_login' %}">เข้าสู่ระบบ</a></p>
+        <p>
+            <a href="{% url 'customer_login' %}">
+                {% trans "มีบัญชีแล้ว? เข้าสู่ระบบ" %}
+            </a>
+        </p>
     </div>
 </body>
 </html>

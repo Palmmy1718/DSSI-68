@@ -66,15 +66,16 @@
           <div class="card">
               <div class="card-img">
                   {% if m.image_exists %}
-                      <img src="{{ m.image.url }}" alt="{{ m.name }}">
+                      <img src="{{ m.image.url }}" alt="{{ m.display_name }}">
                   {% else %}
                       <div style="display:flex; align-items:center; justify-content:center; height:100%; color:#999;"><i class="fa-solid fa-spa fa-2x"></i></div>
                   {% endif %}
               </div>
               
               <div class="card-body">
-                  <h3 class="card-title">{{ m.name }}</h3>
-                  <p class="card-desc">{{ m.description|truncatechars:80 }}</p>
+                  <h3 class="card-title">{{ m.display_name }}</h3>
+                  
+                  <p class="card-desc">{{ m.display_description|truncatechars:80 }}</p>
                   
                   <div class="meta">
                       <span style="font-weight:600; color:#059669;">{{ m.duration }} min</span>

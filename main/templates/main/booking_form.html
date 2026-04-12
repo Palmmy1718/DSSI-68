@@ -1,9 +1,11 @@
 {% load static %}
+{% load i18n %}
+
 <!DOCTYPE html>
-<html lang="th">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
-    <title>ยืนยันการจอง</title>
+    <title>{% trans "Confirm Booking" %}</title>
 
     <style>
         body {
@@ -55,6 +57,7 @@
             border: 1px solid #ccc;
             margin-bottom: 15px;
             font-size: 16px;
+            box-sizing: border-box; /* เพิ่มเพื่อให้ padding ไม่ดันความกว้างเกิน */
         }
 
         .btn-submit {
@@ -66,6 +69,7 @@
             color: white;
             font-size: 18px;
             margin-top: 10px;
+            cursor: pointer;
         }
 
         .btn-submit:hover {
@@ -82,6 +86,7 @@
             color: white;
             border-radius: 12px;
             text-decoration: none;
+            box-sizing: border-box;
         }
 
         .btn-back:hover {
@@ -94,13 +99,14 @@
 
 <div class="container">
 
-    <h2>ยืนยันการจอง</h2>
+    <h2>{% trans "Confirm Booking" %}</h2>
 
     <div class="info-box">
-        <div class="info-item">พนักงาน: <b>{{ employee }}</b></div>
-        <div class="info-item">วันที่: <b>{{ date }}</b></div>
+        <div class="info-item">{% trans "Employee" %}: <b>{{ employee }}</b></div>
+        <div class="info-item">{% trans "Date" %}: <b>{{ date }}</b></div>
+        
         {% if times and times|length > 0 %}
-            <div class="info-item">ช่วงเวลาที่เลือก:</div>
+            <div class="info-item">{% trans "Selected Time Slots" %}:</div>
             <div class="info-item">
                 <ul style="margin:6px 0 0 18px;">
                     {% for t in times %}
@@ -109,9 +115,10 @@
                 </ul>
             </div>
         {% else %}
-            <div class="info-item">เวลา: <b>{{ time }}</b></div>
+            <div class="info-item">{% trans "Time" %}: <b>{{ time }}</b></div>
         {% endif %}
-        <div class="info-item">ระยะเวลา: <b>{{ duration }} นาที</b></div>
+        
+        <div class="info-item">{% trans "Duration" %}: <b>{{ duration }} {% trans "minutes" %}</b></div>
     </div>
 
     <form method="post">
@@ -128,16 +135,16 @@
         {% endif %}
         <input type="hidden" name="duration" value="{{ duration }}">
 
-        <label>ชื่อ *</label>
-        <input type="text" name="customer_name" required placeholder="ชื่อผู้จอง">
+        <label>{% trans "Name" %} *</label>
+        <input type="text" name="customer_name" required placeholder="{% trans 'Your Name' %}">
 
-        <label>เบอร์โทร *</label>
-        <input type="text" name="customer_phone" required placeholder="เบอร์โทรติดต่อ">
+        <label>{% trans "Phone Number" %} *</label>
+        <input type="text" name="customer_phone" required placeholder="{% trans 'Contact Phone Number' %}">
 
-        <button type="submit" class="btn-submit">ยืนยันการจอง</button>
+        <button type="submit" class="btn-submit">{% trans "Confirm Booking" %}</button>
     </form>
 
-    <a href="javascript:history.back()" class="btn-back">← กลับ</a>
+    <a href="javascript:history.back()" class="btn-back">← {% trans "Back" %}</a>
 
 </div>
 

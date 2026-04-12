@@ -1,8 +1,9 @@
+{% load static i18n %}
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>Chokdee Chatbot</title>
+    <title>{% trans "Chokdee Chatbot" %}</title>
     <link rel="stylesheet" href="{% static 'css/chat.css' %}">
 </head>
 <body>
@@ -15,11 +16,18 @@
             </div>
             <div id="chat-box"></div>
             <div id="chat-input-row">
-                <input type="text" id="chat-input" placeholder="พิมพ์ข้อความ..." onkeydown="if(event.key==='Enter'){sendMessage()}" autocomplete="off" />
-                <button id="chat-send-btn" onclick="sendMessage()">ส่ง</button>
+                <input
+                    type="text"
+                    id="chat-input"
+                    placeholder="{% trans 'พิมพ์ข้อความ...' %}"
+                    onkeydown="if(event.key==='Enter'){sendMessage()}"
+                    autocomplete="off"
+                />
+                <button id="chat-send-btn" onclick="sendMessage()">{% trans "ส่ง" %}</button>
             </div>
         </div>
-        <div id="chat-bubble" onclick="openChat()" title="คุยกับแชตบอท">
+
+        <div id="chat-bubble" onclick="openChat()" title="{% trans 'คุยกับแชตบอท' %}">
             💬
         </div>
     </div>
@@ -27,6 +35,7 @@
     <script>
     const chatPanel = document.getElementById('chat-panel');
     const chatBubble = document.getElementById('chat-bubble');
+
     function openChat() {
         chatPanel.style.display = 'flex';
         chatBubble.style.display = 'none';
@@ -36,39 +45,43 @@
         chatPanel.style.display = 'none';
         chatBubble.style.display = 'flex';
     }
+
     // แปลง markdown/ข้อความยาวเป็น HTML อ่านง่าย
     function formatBotReply(text) {
-        // แปลง **bold** เป็น <b>
         text = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-        // แปลง * bullet เป็น <li>
         text = text.replace(/\n\* /g, '<br>• ');
-        // แปลง \n เป็น <br>
         text = text.replace(/\n/g, '<br>');
         return text;
     }
+
     async function sendMessage() {
         const input = document.getElementById('chat-input');
         const message = input.value.trim();
         if (!message) return;
+
         const chatBox = document.getElementById('chat-box');
-        chatBox.innerHTML += `<div class=\"message user\"><b>คุณ:</b> ${message}</div>`;
+        chatBox.innerHTML += `<div class="message user"><b>{% trans "คุณ:" %}</b> ${message}</div>`;
         input.value = '';
         chatBox.scrollTop = chatBox.scrollHeight;
+
         try {
-            const res = await fetch("/chat/", {
+            const res = await fetch("{% url 'chat_api' %}", {
                 method: "POST",
-                headers: { "X-CSRFToken": "{{ csrf_token }}"},
+                headers: { "X-CSRFToken": "{{ csrf_token }}" },
                 body: new URLSearchParams({ message })
             });
+
             const data = await res.json();
+
             if (data.reply) {
-                chatBox.innerHTML += `<div class=\"message bot\"><b>Chokdee:</b> ${formatBotReply(data.reply)}</div>`;
+                chatBox.innerHTML += `<div class="message bot"><b>Chokdee:</b> ${formatBotReply(data.reply)}</div>`;
             } else {
-                chatBox.innerHTML += `<div class=\"message bot\" style=\"color:red;\">เกิดข้อผิดพลาด: ${data.error}</div>`;
+                chatBox.innerHTML += `<div class="message bot" style="color:red;">{% trans "เกิดข้อผิดพลาด:" %} ${data.error}</div>`;
             }
         } catch (e) {
-            chatBox.innerHTML += `<div class=\"message bot\" style=\"color:red;\">เกิดข้อผิดพลาด: ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์</div>`;
+            chatBox.innerHTML += `<div class="message bot" style="color:red;">{% trans "เกิดข้อผิดพลาด: ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์" %}</div>`;
         }
+
         chatBox.scrollTop = chatBox.scrollHeight;
     }
     </script>
