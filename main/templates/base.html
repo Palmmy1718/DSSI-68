@@ -1,0 +1,40 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Chokdee Thai Massage{% endblock %}</title>
+    
+    <!-- Base CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    {% include 'includes/navbar.html' %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Address Footer -->
+    <section class="address-box">
+        <div class="address-container">
+            <span class="map-icon"></span>
+            <a href="https://www.google.com/maps/place/Chokdee+Thai+Massage+in+Hévíz/"
+               target="_blank">
+               {% trans "8380 HEVIZ RAKOCZI UTCA 10. Phone: +3630-5814854" %}
+            </a>
+        </div>
+    </section>
+
+    <!-- Extra content blocks for pages that need it -->
+    {% block extra_content %}{% endblock %}
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

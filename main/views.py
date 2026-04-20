@@ -49,9 +49,16 @@ def ask_gemini(prompt: str) -> str:
         return f"[Gemini Error] {str(e)}"
 
 
+# ---------------------- DECORATOR: STAFF REQUIRED ----------------------
+
+def staff_required(view):
+    """Decorator to require user to be staff (admin) to access a view"""
+    return user_passes_test(lambda u: u.is_authenticated and u.is_staff)(view)
+
+
 # ---------------------- 2. ADMIN VIEWS (MASSAGE - แก้ไขแล้ว) ----------------------
 
-@login_required
+@staff_required
 def massage_admin_view(request):
     """หน้าหลักจัดการรายการนวด (แสดงรายการ + เพิ่มรายการ)"""
     add_mode = request.GET.get('add') == '1'
@@ -93,7 +100,7 @@ def massage_admin_view(request):
     })
 
 
-@login_required
+@staff_required
 def massage_edit(request, pk):
     m = get_object_or_404(Massage, pk=pk)
 
@@ -136,7 +143,7 @@ def massage_edit(request, pk):
     })
 
 
-@login_required
+@staff_required
 def massage_delete(request, pk):
     m = get_object_or_404(Massage, pk=pk)
     m.delete()
@@ -144,7 +151,7 @@ def massage_delete(request, pk):
     return redirect('massage_admin')
 
 
-@login_required
+@staff_required
 def massage_admin_price(request):
     massages = Massage.objects.all().order_by('name')
     if request.method == 'POST':
@@ -201,10 +208,6 @@ def _photo_url(emp: Employee):
     return None
 
 
-def staff_required(view):
-    return user_passes_test(lambda u: u.is_authenticated and u.is_staff)(view)
-
-
 def root_redirect(request):
     if request.user.is_authenticated:
         return redirect('admin_dashboard')
@@ -255,7 +258,9 @@ def site_massages(request):
 
 
 def site_price(request):
-    return render(request, 'Price.html')
+    return render(request, 'Price.html', {
+        'hide_navbar_extras': True
+    })
 
 
 def site_team(request):
@@ -267,7 +272,10 @@ def site_team(request):
 
 def site_promotion(request):
     promotions = Promotion.objects.filter(is_active=True).order_by('-updated_at')
-    return render(request, 'Promotion.html', {'promotions': promotions})
+    return render(request, 'Promotion.html', {
+        'promotions': promotions,
+        'hide_navbar_extras': True
+    })
 
 
 def site_gallery(request):
@@ -321,6 +329,43 @@ def employee_events(request, pk):
     return JsonResponse(events, safe=False, json_dumps_params={'ensure_ascii': False})
 
 
+def employee_booked_days(request, pk):
+    """คืน JSON วันที่ทุก slot จองเต็มหมด (background event สำหรับ FullCalendar)"""
+    emp = get_object_or_404(Employee, pk=pk, is_active=True)
+    from django.db.models import Count, Q as DQ
+    qs = AppointmentSlot.objects.filter(employee=emp)
+
+    start = request.GET.get('start')
+    end = request.GET.get('end')
+    if start:
+        try:
+            qs = qs.filter(date__gte=parse_date(start))
+        except Exception:
+            pass
+    if end:
+        try:
+            qs = qs.filter(date__lte=parse_date(end))
+        except Exception:
+            pass
+
+    day_stats = qs.values('date').annotate(
+        total=Count('id'),
+        booked=Count('id', filter=DQ(is_booked=True)),
+    ).filter(total__gt=0)
+
+    events = []
+    for day in day_stats:
+        if day['total'] == day['booked']:
+            events.append({
+                "start": day['date'].isoformat(),
+                "display": "background",
+                "color": "#ef4444",
+                "allDay": True,
+                "extendedProps": {"fullBooked": True},
+            })
+    return JsonResponse(events, safe=False)
+
+
 def employee_day_slots(request, pk, date):
     emp = get_object_or_404(Employee, pk=pk, is_active=True)
     try:
@@ -344,12 +389,12 @@ def employee_day_slots(request, pk, date):
 
 # ---------------------- 6. ADMIN DASHBOARD & EMPLOYEE CRUD ----------------------
 
-@login_required
+@staff_required
 def admin_dashboard(request):
     return redirect('employee_list')
 
 
-@login_required
+@staff_required
 def employee_list(request):
     employees = Employee.objects.order_by('-id')
     for e in employees:
@@ -377,13 +422,13 @@ def employee_add(request):
 
 # ---------------------- 7. GALLERY CRUD ----------------------
 
-@login_required
+@staff_required
 def gallery_list(request):
     gallery = GalleryImage.objects.order_by('-created_at')
     return render(request, 'main/gallery_list.html', {'gallery': gallery})
 
 
-@login_required
+@staff_required
 def gallery_add(request):
     if request.method == 'POST':
         image_file = request.FILES.get('image')
@@ -400,7 +445,7 @@ def gallery_add(request):
     return render(request, 'main/gallery_form.html')
 
 
-@login_required
+@staff_required
 def gallery_edit(request, pk):
     g = get_object_or_404(GalleryImage, pk=pk)
     if request.method == 'POST':
@@ -419,7 +464,7 @@ def gallery_edit(request, pk):
     return render(request, 'main/gallery_form.html', {'item': g})
 
 
-@login_required
+@staff_required
 @require_POST
 def gallery_delete(request, pk):
     g = get_object_or_404(GalleryImage, pk=pk)
@@ -543,13 +588,13 @@ def employee_availability(request, pk):
     return render(request, 'main/employee_time.html', {'employee': emp, 'slots': slots})
 
 
-@login_required
+@staff_required
 def employee_availability_list(request):
     employees = Employee.objects.all().order_by('display_name')
     return render(request, 'main/employee_availability_list.html', {'employees': employees})
 
 
-@login_required
+@staff_required
 def employee_availability_manage(request, pk):
     emp = get_object_or_404(Employee, pk=pk)
     slots = AppointmentSlot.objects.filter(employee=emp).order_by('date', 'start_time')
@@ -591,7 +636,7 @@ def employee_availability_manage(request, pk):
     return render(request, 'main/employee_availability_manage.html', {'employee': emp, 'slots': slots})
 
 
-@login_required
+@staff_required
 def employee_availability_delete(request, slot_id):
     slot = get_object_or_404(AppointmentSlot, pk=slot_id)
     emp_id = slot.employee.id
@@ -781,12 +826,12 @@ def book_slot(request, slot_id):
 
 # ---------------------- 10. BOOKING LIST (ADMIN) ----------------------
 
-@login_required
+@staff_required
 def booking_list(request):
     return admin_bookings_view(request)
 
 
-@login_required
+@staff_required
 def admin_bookings_view(request):
     qs = Booking.objects.select_related("employee").order_by("-date", "-start_time", "-id")
     q_date = request.GET.get("date")
@@ -824,7 +869,7 @@ def admin_bookings_view(request):
     })
 
 
-@login_required
+@staff_required
 @require_POST
 def admin_booking_confirm(request, pk):
     b = get_object_or_404(Booking, pk=pk)
@@ -834,7 +879,7 @@ def admin_booking_confirm(request, pk):
     return redirect(request.POST.get("return") or "admin_bookings")
 
 
-@login_required
+@staff_required
 @require_POST
 def admin_booking_cancel(request, pk):
     b = get_object_or_404(Booking, pk=pk)
@@ -844,7 +889,7 @@ def admin_booking_cancel(request, pk):
     return redirect(request.POST.get("return") or "admin_bookings")
 
 
-@login_required
+@staff_required
 @require_POST
 def admin_booking_delete(request, pk):
     b = get_object_or_404(Booking, pk=pk)
@@ -958,13 +1003,13 @@ def customer_logout_view(request):
 
 # ---------------------- 12. PROMOTION MANAGEMENT (ADMIN) ----------------------
 
-@login_required
+@staff_required
 def admin_promotion_list(request):
     promotions = Promotion.objects.all().order_by('-updated_at')
     return render(request, 'main/admin_promotion_list.html', {'promotions': promotions})
 
 
-@login_required
+@staff_required
 def admin_promotion_add(request):
     if request.method == 'POST':
         form = PromotionForm(request.POST)
@@ -976,7 +1021,7 @@ def admin_promotion_add(request):
     return render(request, 'main/admin_promotion_form.html', {'form': form, 'add_mode': True})
 
 
-@login_required
+@staff_required
 def admin_promotion_edit(request, pk):
     promo = get_object_or_404(Promotion, pk=pk)
     if request.method == 'POST':
@@ -989,7 +1034,7 @@ def admin_promotion_edit(request, pk):
     return render(request, 'main/admin_promotion_form.html', {'form': form, 'edit_mode': True})
 
 
-@login_required
+@staff_required
 @require_POST
 def admin_promotion_toggle(request, pk):
     promo = get_object_or_404(Promotion, pk=pk)
@@ -1000,7 +1045,7 @@ def admin_promotion_toggle(request, pk):
     return redirect('admin_promotion_list')
 
 
-@login_required
+@staff_required
 @require_POST
 def admin_promotion_delete(request, pk):
     promo = get_object_or_404(Promotion, pk=pk)

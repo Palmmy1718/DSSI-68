@@ -1,83 +1,77 @@
-{% load static i18n %}
-{% load my_filters %}
-<!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% trans "Promotion" %} - Chokdee Thai Massage</title>
-    <link rel="stylesheet" href="{% static 'css/promotion.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-</head>
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
 
-<body>
+{% block title %}{% trans "Promotion" %}{% endblock %}
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="{% url 'home' %}">
-                <img src="{% static 'images/logo.png' %}" alt="{% trans 'Logo' %}" class="logo">
-            </a>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/price.css' %}">
+<style>
+  .promotion-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin: 0 auto 32px;
+    max-width: 900px;
+    padding: 0 20px;
+  }
 
-            <ul class="nav-menu">
-                <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
-                <li><a href="{% url 'massages' %}">{% trans "Massages" %}</a></li>
-                <li><a href="{% url 'price' %}">{% trans "Price" %}</a></li>
-                <li><a href="{% url 'promotion' %}">{% trans "Promotion" %}</a></li>
-                <li><a href="{% url 'gallery' %}">{% trans "Gallery" %}</a></li>
-                <li><a href="{% url 'team' %}">{% trans "Team" %}</a></li>
-                <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
-            </ul>
-        </div>
-    </nav>
+  .promotion-item {
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    width: 100%;
+    text-align: center;
+    border-left: 6px solid #7a8c3a;
+  }
 
-    <div class="promotion-title">
-        {% trans "Promotion" %}
+  .promotion-item-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 15px;
+  }
+
+  .promotion-item-desc {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .no-promotion {
+    color: #c00;
+    font-size: 1.3rem;
+    font-weight: 600;
+    padding: 40px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="price-title">{% trans "Promotion" %}</div>
+
+    <div style="text-align: center; margin: 30px 0;">
+      <img src="{% static 'images/po1.png' %}" 
+           alt="{% trans 'Promotion Banner' %}" 
+           style="max-width: 500px; width: 100%; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.12);">
     </div>
 
-    <div style="padding: 0 20px;">
-        
-        <div style="text-align: center;">
-            <img src="{% static 'images/po1.png' %}" 
-                 alt="{% trans 'Promotion Banner' %}" 
-                 class="promotion-banner">
-        </div>
-
-        {% if promotions %}
-            {% for p in promotions %}
-                <div class="promotion-box">
-                    
-                    <div class="promotion-main">
-                        {{ p.title|translate_db }}
-                    </div>
-
-                    <div class="promotion-desc">
-                        {{ p.description|translate_db|linebreaksbr }}
-                    </div>
-
-                    <div style="margin-top:20px; color:#999; font-size:0.9rem;">
-                        <span>{% trans "Last updated" %}: </span>{{ p.updated_at|date:"Y-m-d H:i" }}
-                    </div>
-
-                </div>
-            {% endfor %}
-        {% else %}
-            <div class="promotion-box">
-                <div style="color:#c00; font-size:1.5rem; font-weight:600;">
-                    {% trans "No active promotions at the moment." %}
-                </div>
-            </div>
-        {% endif %}
-
+    <div class="promotion-content">
+      {% if promotions %}
+        {% for p in promotions %}
+          <div class="promotion-item">
+            <div class="promotion-item-title">{{ p.title }}</div>
+            <div class="promotion-item-desc">{{ p.description|linebreaksbr }}</div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="no-promotion">{% trans "No active promotions at the moment." %}</div>
+      {% endif %}
     </div>
 
-    <section class="address-box">
-        <div class="address-container">
-            <span style="font-size: 1.5rem;">📍</span>
-            <a href="https://maps.google.com/?q=8380+HEVIZ+RAKOCZI+UTCA+10" target="_blank">
-                {% trans "8380 HEVIZ RAKOCZI UTCA 10. +3630-5814854" %}
-            </a>
-        </div>
-    </section>
-
-</body>
-</html>
+{% endblock %}

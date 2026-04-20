@@ -29,6 +29,7 @@ urlpatterns = [
     # ปฏิทิน
     path('employees/<int:pk>/calendar/', views.employee_calendar, name='employee_calendar'),
     path('employees/<int:pk>/events/', views.employee_events, name='employee_events'),
+    path('employees/<int:pk>/booked-days/', views.employee_booked_days, name='employee_booked_days'),
     path('employees/<int:pk>/slots/<str:date>/', views.employee_day_slots, name='employee_day_slots'),
     path('employees/<int:pk>/availability/', views.employee_availability, name='employee_availability'),
 

@@ -1,0 +1,118 @@
+{% load static %}
+{% load i18n %}
+{% load langswitch %}
+
+<style>
+  .navbar {
+    background-image: url("{% static 'images/p2.png' %}");
+    background-repeat: repeat-x;
+    background-size: contain;
+    padding: 25px 0;
+  }
+
+  .nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    max-width: 90%;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 20px;
+    padding: 10px 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .logo {
+    height: 80px;
+    width: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #138034;
+  }
+
+  .nav-menu {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .nav-menu li a {
+    text-decoration: none;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 43px;
+    color: black;
+    transition: color 0.3s;
+  }
+
+  .nav-menu li a:hover {
+    color: #138034;
+  }
+
+  .admin-btn, .lang-flags {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .admin-icon, .flag {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+
+  .admin-icon:hover, .flag:hover {
+    transform: scale(1.1);
+  }
+
+  body {
+    background: #f7f3e9;
+    font-family: 'Fredoka', 'Kanit', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+</style>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+    <ul class="nav-menu">
+      <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+      <li><a href="{% url 'massages' %}">{% trans "Massages" %}</a></li>
+      <li><a href="{% url 'price' %}">{% trans "Prices" %}</a></li>
+      <li><a href="{% url 'promotion' %}">{% trans "Promotion" %}</a></li>
+      <li><a href="{% url 'gallery' %}">{% trans "Gallery" %}</a></li>
+      <li><a href="{% url 'team' %}">{% trans "Team" %}</a></li>
+      <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
+    </ul>
+    
+    <!-- Admin Button & Language Flags -->
+    {% if not hide_navbar_extras %}
+    <div style="display: flex; gap: 15px; align-items: center;">
+      <div class="admin-btn">
+        <a href="/adminx/">
+          <img src="{% static 'images/icon_user.jpg' %}" alt="{% trans 'Admin' %}" class="admin-icon">
+        </a>
+      </div>
+      
+      <div class="lang-flags">
+        <a class="flag-btn" href="{% switch_lang_url 'th' %}" title="ภาษาไทย">
+          <img src="{% static 'images/flag_thai.png' %}" alt="TH" class="flag">
+        </a>
+        <a class="flag-btn" href="{% switch_lang_url 'en' %}" title="English">
+          <img src="{% static 'images/flag_uk.png' %}" alt="EN" class="flag">
+        </a>
+        <a class="flag-btn" href="{% switch_lang_url 'de' %}" title="Deutsch">
+          <img src="{% static 'images/flag_de.png' %}" alt="DE" class="flag">
+        </a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</nav>

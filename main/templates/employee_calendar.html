@@ -79,6 +79,19 @@
         #goBooking:hover {
             background: #14532d;
         }
+        /* Fully-booked day badge */
+        .fc-fully-booked-badge {
+            display: block;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            background: #dc2626;
+            border-radius: 4px;
+            padding: 1px 4px;
+            margin: 2px auto 0;
+            width: fit-content;
+        }
     </style>
 </head>
 <body>
@@ -123,9 +136,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // ปรับ en-us ให้เป็น en เพื่อให้ FullCalendar เข้าใจ
     if (currentLang === 'en-us') currentLang = 'en';
 
+    // เก็บวันที่จองเต็มทั้งหมด
+    let fullyBookedDates = new Set();
+
     let calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        locale: currentLang, // ใช้ภาษาตามที่เลือก
+        locale: currentLang,
         selectable: true,
         headerToolbar: {
             left: 'prev,next today',
@@ -135,16 +151,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // เมื่อคลิกวันที่ในปฏิทิน
         dateClick: function(info) {
-            selectedDateStr = info.dateStr; // เก็บค่าวันที่ เช่น '2025-12-09'
-            
-            // แสดงวันที่ใน Modal
+            selectedDateStr = info.dateStr;
             document.getElementById("selected_date").innerText = info.dateStr;
-            // เปิด Modal
             document.getElementById("dayModal").style.display = "flex";
         },
 
-        // ดึง Event (คิวที่จองแล้ว) มาแสดง
-        events: `/employees/${emp_id}/events/`
+        // ทำ badge "เต็ม" บนวันที่จองเต็มทุก slot
+        dayCellDidMount: function(info) {
+            let dateStr = info.date.toISOString().slice(0, 10);
+            if (fullyBookedDates.has(dateStr)) {
+                let badge = document.createElement('span');
+                badge.className = 'fc-fully-booked-badge';
+                badge.innerText = '{% trans "เต็ม" %}';
+                info.el.querySelector('.fc-daygrid-day-top').appendChild(badge);
+            }
+        },
+
+        // ดึง Event (คิวที่จองแล้ว) มาแสดง + background event วันเต็ม
+        eventSources: [
+            {
+                url: `/employees/${emp_id}/events/`,
+            },
+            {
+                url: `/employees/${emp_id}/booked-days/`,
+                success: function(events) {
+                    fullyBookedDates.clear();
+                    events.forEach(function(ev) {
+                        fullyBookedDates.add(ev.start);
+                    });
+                    // re-render day cells เพื่อให้ badge แสดงถูกต้อง
+                    calendar.rerenderEvents();
+                }
+            }
+        ]
     });
 
     calendar.render();

@@ -1,19 +1,13 @@
+{% extends 'base.html' %}
 {% load static i18n langswitch %}
 {% load my_filters %}
 {% get_current_language as LANGUAGE_CODE %}
-<!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}">
-<head>
-  <meta charset="UTF-8">
-  <title>{% trans "Chokdee Thai Massage" %}</title>
-  <link rel="stylesheet" href="{% static 'css/massages.css' %}">
-  
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Kanit:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+{% block title %}{% trans "Chokdee Thai Massage" %}{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/massages.css' %}">
   <style>
-      body { font-family: 'Fredoka', 'Kanit', sans-serif; }
-      
       /* CSS สำหรับ Placeholder กรณีไม่มีรูป */
       .no-img-placeholder {
           width: 100%;
@@ -27,22 +21,9 @@
           border-radius: 12px;
       }
   </style>
-</head>
-<body>
-  <nav class="navbar">
-    <div class="nav-container">
-      <img src="{% static 'images/logo.png' %}" alt="{% trans 'Logo' %}" class="logo">
-      <ul class="nav-menu">
-        <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
-        <li><a href="{% url 'massages' %}">{% trans "Massages" %}</a></li>
-        <li><a href="{% url 'price' %}">{% trans "Price" %}</a></li>
-        <li><a href="{% url 'promotion' %}">{% trans "Promotion" %}</a></li>
-        <li><a href="{% url 'gallery' %}">{% trans "Gallery" %}</a></li>
-        <li><a href="{% url 'team' %}">{% trans "Team" %}</a></li>
-        <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
-      </ul>
-    </div>
-  </nav>
+{% endblock %}
+
+{% block content %}
 
   <section>
     <img src="{% static 'images/N6.png' %}" alt="{% trans 'Chokdee Thai Massage' %}" class="massages-banner">
@@ -88,15 +69,4 @@
 
     </div> 
   </section>
-
-  <section class="address-box">
-    <div class="address-container">
-      <span class="map-icon"></span>
-      <a href="https://www.google.com/maps/place/Chokdee+Thai+Massage+in+Hévíz/" target="_blank">
-        {% trans "8380 HEVIZ RAKOCZI UTCA 10. +3630-5814854" %}
-      </a>
-    </div>
-  </section>
-
-</body>
-</html>
+{% endblock %}
