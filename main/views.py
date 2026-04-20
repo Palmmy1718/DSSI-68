@@ -3,6 +3,7 @@
 import logging
 import base64
 import os
+from urllib.parse import urlencode
 from google import genai
 from django.conf import settings
 from datetime import datetime, timedelta, date, time
@@ -15,6 +16,8 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext as _
 from django.utils.dateparse import parse_date
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
@@ -206,6 +209,21 @@ def root_redirect(request):
     if request.user.is_authenticated:
         return redirect('admin_dashboard')
     return redirect('login')
+
+
+def _safe_next_url(request, fallback='home'):
+    next_url = request.GET.get('next') or request.POST.get('next')
+    if next_url and url_has_allowed_host_and_scheme(
+        next_url,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        return next_url
+    return reverse(fallback)
+
+
+def _customer_login_redirect(next_url):
+    return redirect(f"{reverse('customer_login')}?{urlencode({'next': next_url})}")
 
 
 # ---------------------- 4. FRONTEND PAGES ----------------------
@@ -614,6 +632,10 @@ def is_conflict(employee, date_obj, start_time, duration):
 
 
 def booking_slots(request, employee_id):
+    if not request.user.is_authenticated:
+        messages.info(request, _("กรุณาเข้าสู่ระบบก่อนจองคิว หากยังไม่มีบัญชี โปรดสมัครสมาชิกก่อน"))
+        return _customer_login_redirect(request.get_full_path())
+
     employee = get_object_or_404(Employee, pk=employee_id)
     date_str = request.GET.get("date")
     duration = int(request.GET.get("duration", 60))
@@ -648,6 +670,18 @@ def booking_slots(request, employee_id):
 
 
 def booking_form(request):
+    if not request.user.is_authenticated:
+        employee_id = request.POST.get("employee")
+        date_str = request.POST.get("date")
+        duration = request.POST.get("duration", 60)
+
+        next_url = reverse('home')
+        if employee_id and date_str:
+            next_url = f"{reverse('booking_slots', args=[employee_id])}?{urlencode({'date': date_str, 'duration': duration})}"
+
+        messages.info(request, _("กรุณาเข้าสู่ระบบก่อนจองคิว หากยังไม่มีบัญชี โปรดสมัครสมาชิกก่อน"))
+        return _customer_login_redirect(next_url)
+
     if request.method == "POST":
         employee_id = request.POST.get("employee")
         date_str = request.POST.get("date")
@@ -664,7 +698,7 @@ def booking_form(request):
                 "message": _("กรุณาเลือกเวลาอย่างน้อย 1 ช่วง")
             })
 
-        customer_name = request.POST.get("customer_name")
+        customer_name = request.POST.get("customer_name") or request.user.get_full_name() or request.user.username
         customer_phone = request.POST.get("customer_phone")
 
         employee_obj = None
@@ -681,6 +715,8 @@ def booking_form(request):
                 "date": date_str,
                 "duration": duration,
                 "times": times,
+                "customer_name": customer_name,
+                "customer_phone": customer_phone,
                 "error": None,
             })
 
@@ -857,9 +893,15 @@ def logout_view(request):
 
 
 def customer_register_view(request):
+    next_url = _safe_next_url(request)
+
+    if request.user.is_authenticated:
+        return redirect(next_url)
+
     storage = messages.get_messages(request)
-    for _ in storage:
+    for _message in storage:
         pass
+
     if request.method == "POST":
         username = request.POST.get('username')
         email = request.POST.get('email')
@@ -867,19 +909,24 @@ def customer_register_view(request):
         confirm = request.POST.get('confirm')
         if password != confirm:
             messages.error(request, _("รหัสผ่านไม่ตรงกัน"))
-            return redirect('customer_register')
+            return redirect(f"{reverse('customer_register')}?{urlencode({'next': next_url})}")
         if User.objects.filter(username=username).exists():
             messages.error(request, _("ชื่อผู้ใช้นี้มีอยู่แล้ว"))
-            return redirect('customer_register')
+            return redirect(f"{reverse('customer_register')}?{urlencode({'next': next_url})}")
         User.objects.create_user(username=username, email=email, password=password)
         messages.success(request, _("สมัครสมาชิกสำเร็จ! โปรดเข้าสู่ระบบ"))
-        return redirect('customer_login')
-    return render(request, 'main/customer_register.html')
+        return redirect(f"{reverse('customer_login')}?{urlencode({'next': next_url})}")
+    return render(request, 'main/customer_register.html', {'next_url': next_url})
 
 
 def customer_login_view(request):
+    next_url = _safe_next_url(request)
+
+    if request.user.is_authenticated:
+        return redirect(next_url)
+
     storage = messages.get_messages(request)
-    for _ in storage:
+    for _message in storage:
         pass
 
     if request.method == "POST":
@@ -896,11 +943,11 @@ def customer_login_view(request):
                     request,
                     _("ยินดีต้อนรับ %(name)s!") % {"name": user_obj.username}
                 )
-                return redirect('home')
+                return redirect(next_url)
 
         messages.error(request, _("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"))
 
-    return render(request, 'main/customer_login.html')
+    return render(request, 'main/customer_login.html', {'next_url': next_url})
 
 
 def customer_logout_view(request):

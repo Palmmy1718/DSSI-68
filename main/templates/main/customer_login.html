@@ -200,6 +200,7 @@
 
         <form method="POST">
             {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next_url|default:'' }}">
 
             <div class="form-group">
                 <label for="id_email">{% trans "อีเมล" %}</label>
@@ -216,7 +217,7 @@
             <button type="submit">{% trans "เข้าสู่ระบบ" %}</button>
         </form>
 
-        <p>{% trans "ยังไม่มีบัญชี?" %} <a href="{% url 'customer_register' %}">{% trans "สมัครสมาชิก" %}</a></p>
+        <p>{% trans "ยังไม่มีบัญชี?" %} <a href="{% url 'customer_register' %}?next={{ next_url|urlencode }}">{% trans "สมัครสมาชิก" %}</a></p>
     </div>
 </body>
 </html>

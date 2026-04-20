@@ -136,10 +136,10 @@
         <input type="hidden" name="duration" value="{{ duration }}">
 
         <label>{% trans "Name" %} *</label>
-        <input type="text" name="customer_name" required placeholder="{% trans 'Your Name' %}">
+        <input type="text" name="customer_name" required placeholder="{% trans 'Your Name' %}" value="{{ customer_name|default:'' }}">
 
         <label>{% trans "Phone Number" %} *</label>
-        <input type="text" name="customer_phone" required placeholder="{% trans 'Contact Phone Number' %}">
+        <input type="text" name="customer_phone" required placeholder="{% trans 'Contact Phone Number' %}" value="{{ customer_phone|default:'' }}">
 
         <button type="submit" class="btn-submit">{% trans "Confirm Booking" %}</button>
     </form>
